@@ -1260,18 +1260,12 @@
           ports:
             - port: 80
               targetPort: 8080
-    <映像名稱改成GCP的規範>
-        image: tvs-server:latest   ==>
-        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-server:v1
     <映像永遠開放從 tvs-repo 庫拉取>
         imagePullPolicy: Never   ==>
         imagePullPolicy: Always
 
     [檔案<改寫>: 排程映像]
     📂k8s/scheduler-cronjob.yaml:
-    <映像名稱改成GCP的規範>
-        image: tvs-scheduler:latest   ==>
-        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-scheduler:v1
     <映像永遠開放從 tvs-repo 庫拉取>
         imagePullPolicy: Never   ==>
         imagePullPolicy: Always
@@ -1291,6 +1285,13 @@
 
 
 4.7 建置與部屬 (本地編譯推送)
+    [檔案<改寫>: 映像檔符合GCP格式]
+    ★本地編譯推送必須版本號；線上編譯推送留空版本號(gke-deploy將注入版本號)
+    📂k8s/server.yaml:
+        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-server:v1
+    📂k8s/scheduler-cronjob.yaml:
+        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-scheduler:v1
+
     [指令: 掛載sql準備]
     kubectl delete configmap twvixstock-db-sql
     kubectl create configmap twvixstock-db-sql --from-file=scripts/twvixstock_db.sql
@@ -1301,11 +1302,14 @@
     docker push asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-server:v1
     docker push asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-scheduler:v1
 
-    [指令: 運行服務]
+    [指令: 運行與測試服務]
     kubectl apply -f k8s/
     kubectl get pods
     kubectl get services
         ⮕ 查看services EXTERNAL-IP(對外IP)
+    kubectl create job --from=cronjob/tvs-scheduler-cron manualtest1
+        ⮕ 立刻創建並只運行一次排程
+    kubectl logs -l job-name=manualtest1
 
     [指令: 終止服務]
     kubectl delete -f k8s/
@@ -1313,12 +1317,14 @@
     gcloud container clusters delete twvixstock-cluster --zone asia-east1-b
         ⮕ 刪除叢集
 
-指令
-kubectl get deployment tvs-server -o yaml | grep image:
-
 
 4.8 建置與部屬 (線上編譯推送)
-
+    [檔案<改寫>: 映像檔符合GCP格式]
+    ★本地編譯推送必須版本號；線上編譯推送留空版本號(gke-deploy將注入版本號)
+    📂k8s/server.yaml:
+        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-server
+    📂k8s/scheduler-cronjob.yaml:
+        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-scheduler
 
     [指令: 掛載sql準備]
     kubectl delete configmap twvixstock-db-sql
@@ -1326,22 +1332,81 @@ kubectl get deployment tvs-server -o yaml | grep image:
 
     [檔案: 線上編譯yaml]
     📂cloudbuild.yaml
-        [之後補上]
-        [之後補上]
-        [之後補上]
-        [之後補上]
-        [之後補上]
-        [之後補上]
-        [之後補上]
-        [之後補上]
-        [之後補上]
+    ★如果有多個images需要自動替換注入版本號時，gke-deploy則無法批次處理，需要分檔案
+        steps:
+          # 1. Build 
+          - name: 'gcr.io/cloud-builders/docker'
+            args: ['build', '-t', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}', '.', '--target', 'server']
+          - name: 'gcr.io/cloud-builders/docker'
+            args: ['build', '-t', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}', '.', '--target', 'scheduler']
+
+          # 2. Push
+          - name: 'gcr.io/cloud-builders/docker'
+            args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}']
+          - name: 'gcr.io/cloud-builders/docker'
+            args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}']
+
+          # 3. 部署 env
+          - name: 'gcr.io/cloud-builders/gke-deploy'
+            args:
+              - run
+              - --filename=k8s/env.yaml
+              - --location=asia-east1-b
+              - --cluster=twvixstock-cluster
+              - --output=output-env
+
+          # 4. 部署 mysql
+          - name: 'gcr.io/cloud-builders/gke-deploy'
+            args:
+              - run
+              - --filename=k8s/mysql.yaml
+              - --location=asia-east1-b
+              - --cluster=twvixstock-cluster
+              - --output=output-mysql
+
+          # 5. 部署 tvs-server
+          - name: 'gcr.io/cloud-builders/gke-deploy'
+            args:
+              - run
+              - --filename=k8s/server.yaml
+              - --location=asia-east1-b
+              - --cluster=twvixstock-cluster
+              - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}
+              - --output=output-server
+
+          # 6. 部署 tvs-scheduler
+          - name: 'gcr.io/cloud-builders/gke-deploy'
+            args:
+              - run
+              - --filename=k8s/scheduler-cronjob.yaml
+              - --location=asia-east1-b
+              - --cluster=twvixstock-cluster
+              - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}
+              - --output=output-scheduler
+        # 選項：將產生的 images 紀錄在 build 紀錄中
+        images:
+          - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}'
+          - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}'
+        # GCP 要求的 CLOUD_LOGGING_ONLY
+        options:
+          logging: CLOUD_LOGGING_ONLY
 
     [指令: 提交線上編譯]
     gcloud builds submit --config cloudbuild.yaml . \
         --substitutions=_TAG=v2
 
+    [指令: 查看與測試服務]
+    kubectl get services
+        ⮕ 查看services EXTERNAL-IP(對外IP)
+    kubectl create job --from=cronjob/tvs-scheduler-cron manualtest1
+        ⮕ 立刻創建並只運行一次排程
+    kubectl logs -l job-name=manualtest1
 
-
+    [指令: 終止服務]
+    kubectl delete -f k8s/
+        ⮕ 終止所有部屬
+    gcloud container clusters delete twvixstock-cluster --zone asia-east1-b
+        ⮕ 刪除叢集
 
 
 
@@ -1388,3 +1453,16 @@ kubectl get deployment tvs-server -o yaml | grep image:
 
     e. 觀察推送
       git push 後 > 服務 Cloud Build 頁面 > 紀錄
+
+
+
+
+
+
+檢查
+指令
+kubectl get deployment tvs-server -o yaml | grep image:
+kubectl get deployment tvs-scheduler -o yaml | grep image:
+
+kubectl get pods
+kubectl describe pods tvs-server-55869b9b79-8hpc6

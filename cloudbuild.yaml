@@ -1,41 +1,53 @@
-substitutions:
-  _TAG: "${SHORT_SHA}"  # 設定預設值，如果沒傳入就會用 $SHORT_SHA (用來給 git trigger 使用)
-
 steps:
-  # 1. Build Server
+  # 1. Build 
   - name: 'gcr.io/cloud-builders/docker'
-    args: 
-      - 'build'
-      - '-t'
-      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}'
-      - '.'
-      - '--target=server'
-
-  # 2. Build Scheduler
+    args: ['build', '-t', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}', '.', '--target', 'server']
   - name: 'gcr.io/cloud-builders/docker'
-    args: 
-      - 'build'
-      - '-t'
-      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}'
-      - '.'
-      - '--target=scheduler'
+    args: ['build', '-t', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}', '.', '--target', 'scheduler']
 
-  # 3. Push
+  # 2. Push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}']
 
-  # 4. Deploy
+  # 3. 部署 env
   - name: 'gcr.io/cloud-builders/gke-deploy'
     args:
       - run
-      - --filename=k8s/
+      - --filename=k8s/env.yaml
+      - --location=asia-east1-b
+      - --cluster=twvixstock-cluster
+      - --output=output-env
+
+  # 4. 部署 mysql
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+      - run
+      - --filename=k8s/mysql.yaml
+      - --location=asia-east1-b
+      - --cluster=twvixstock-cluster
+      - --output=output-mysql
+
+  # 5. 部署 tvs-server
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+      - run
+      - --filename=k8s/server.yaml
       - --location=asia-east1-b
       - --cluster=twvixstock-cluster
       - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}
-      - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}
+      - --output=output-server
 
+  # 6. 部署 tvs-scheduler
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+      - run
+      - --filename=k8s/scheduler-cronjob.yaml
+      - --location=asia-east1-b
+      - --cluster=twvixstock-cluster
+      - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}
+      - --output=output-scheduler
 # 選項：將產生的 images 紀錄在 build 紀錄中
 images:
   - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}'
