@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   server:
-    image: tvs_server
+    image: tvs-server
     container_name: my_server
     restart: always
     ports:
@@ -17,7 +17,7 @@ services:
       - mysql
 
   scheduler:
-    image: tvs_scheduler
+    image: tvs-scheduler
     container_name: my_scheduler
     environment:
       - DB_HOST=mysql

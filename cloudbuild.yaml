@@ -7,7 +7,7 @@ steps:
     args: 
       - 'build'
       - '-t'
-      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}'
+      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}'
       - '.'
       - '--target=server'
 
@@ -16,15 +16,15 @@ steps:
     args: 
       - 'build'
       - '-t'
-      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}'
+      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}'
       - '.'
       - '--target=scheduler'
 
   # 3. Push
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}']
+    args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}']
+    args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}']
 
   # 4. Deploy
   - name: 'gcr.io/cloud-builders/gke-deploy'
@@ -33,13 +33,13 @@ steps:
       - --filename=k8s/
       - --location=asia-east1-b
       - --cluster=twvixstock-cluster
-      - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}
-      - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}
+      - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}
+      - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}
 
 # 選項：將產生的 images 紀錄在 build 紀錄中
 images:
-  - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}'
-  - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}'
-# GCP 要求的
+  - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-server:${_TAG}'
+  - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs-scheduler:${_TAG}'
+# GCP 要求的 CLOUD_LOGGING_ONLY
 options:
   logging: CLOUD_LOGGING_ONLY

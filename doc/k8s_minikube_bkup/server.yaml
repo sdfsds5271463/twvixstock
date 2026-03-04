@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: tvs-server
-        image: tvs_server:latest  # 確保已在 minikube docker-env 內 build
+        image: tvs-server:latest  # 確保已在 minikube docker-env 內 build
         imagePullPolicy: Never    # 強制使用本地 image
         ports:
         - containerPort: 8080

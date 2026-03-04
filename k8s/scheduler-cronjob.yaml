@@ -13,8 +13,8 @@ spec:
       template:
         spec:
           containers:
-          - name: scheduler
-            image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_scheduler:v1
+          - name: tvs-scheduler
+            image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-scheduler:v1
             imagePullPolicy: Always
             envFrom:
             - configMapRef:

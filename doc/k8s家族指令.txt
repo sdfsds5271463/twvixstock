@@ -35,16 +35,16 @@
 2. 編譯映像
     [指令1: 至 minikube VM docker 內編譯]
     eval $(minikube docker-env)
-    docker build -t tvs_server --target server .
-    docker build -t tvs_scheduler --target scheduler .
+    docker build -t tvs-server --target server .
+    docker build -t tvs-scheduler --target scheduler .
     eval $(minikube docker-env -u)
     minikube image ls
 
     [指令2: 本地編譯後丟至 minikube]
-    docker build -t tvs_server --target server .
-    docker build -t tvs_scheduler --target scheduler .
-    minikube image load tvs_server:latest
-    minikube image load tvs_scheduler:latest
+    docker build -t tvs-server --target server .
+    docker build -t tvs-scheduler --target scheduler .
+    minikube image load tvs-server:latest
+    minikube image load tvs-scheduler:latest
     minikube image ls
 
 

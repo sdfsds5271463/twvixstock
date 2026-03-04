@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: tvs-server
-        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_server:v1
+        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-server:v1
         imagePullPolicy: Always    # 永遠拉 Repository 映像 
         ports:
         - containerPort: 8080

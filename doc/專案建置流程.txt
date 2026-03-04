@@ -803,12 +803,12 @@
 		CMD ["./server"]
 
     [檔案: Docker環境啟動]
-    📂docker-compose.yml
+    📂docker-compose.yaml
 		version: "3.9"
 
 		services:
 		  server:
-		    image: tvs_server
+		    image: tvs-server
 		    container_name: my_server
 		    restart: always
 		    ports:
@@ -823,7 +823,7 @@
 		      - mysql
 
 		  scheduler:
-		    image: tvs_scheduler
+		    image: tvs-scheduler
 		    container_name: my_scheduler
 		    environment:
 		      - DB_HOST=mysql
@@ -853,8 +853,8 @@
 
 2.2 編譯與啟動
 	[指令: 編譯動作]
-    docker build -t tvs_server --target server .
-    docker build -t tvs_scheduler --target scheduler .
+    docker build -t tvs-server --target server .
+    docker build -t tvs-scheduler --target scheduler .
 
     [指令: 服務運行]
     docker-compose up -d
@@ -864,7 +864,7 @@
     	⮕ 查看 http://127.0.0.1:8080/ 是不是有完整靜態網頁了，F12也能Ajax
 
     [測試: 排程]
-    docker ps -a |grep tvs_scheduler
+    docker ps -a |grep tvs-scheduler
     	⮕ 找到容器id給下面start
     docker start 05c235b6f61a
     	⮕ 將會插入資料到DB
@@ -958,6 +958,7 @@
 
 3.2 資料庫檔
     [指令: 掛載資源.sql]
+    kubectl delete configmap twvixstock-db-sql
     kubectl create configmap twvixstock-db-sql --from-file=scripts/twvixstock_db.sql
 
     [檔案: 資料庫部屬: 資料持久化(PVC)、部署(Deployment)、服務(Service)]
@@ -1048,7 +1049,7 @@
             spec:
               containers:
               - name: tvs-server
-                image: tvs_server:latest
+                image: tvs-server:latest
                 imagePullPolicy: Never    # 強制使用本地 image
                 ports:
                 - containerPort: 8080
@@ -1094,8 +1095,8 @@
               template:
                 spec:
                   containers:
-                  - name: scheduler
-                    image: tvs_scheduler:latest
+                  - name: tvs-scheduler
+                    image: tvs-scheduler:latest
                     imagePullPolicy: Never
                     envFrom:
                     - configMapRef:
@@ -1118,16 +1119,16 @@
 3.5 編譯映像
     [指令1: 至 minikube VM docker 內編譯]
     eval $(minikube docker-env)
-    docker build -t tvs_server --target server .
-    docker build -t tvs_scheduler --target scheduler .
+    docker build -t tvs-server --target server .
+    docker build -t tvs-scheduler --target scheduler .
     eval $(minikube docker-env -u)
     minikube image ls
 
     [指令2: 本地編譯後丟至 minikube]
-    docker build -t tvs_server --target server .
-    docker build -t tvs_scheduler --target scheduler .
-    minikube image load tvs_server:latest
-    minikube image load tvs_scheduler:latest
+    docker build -t tvs-server --target server .
+    docker build -t tvs-scheduler --target scheduler .
+    minikube image load tvs-server:latest
+    minikube image load tvs-scheduler:latest
     minikube image ls
 
 
@@ -1260,8 +1261,8 @@
             - port: 80
               targetPort: 8080
     <映像名稱改成GCP的規範>
-        image: tvs_server:latest   ==>
-        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_server:v1
+        image: tvs-server:latest   ==>
+        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-server:v1
     <映像永遠開放從 tvs-repo 庫拉取>
         imagePullPolicy: Never   ==>
         imagePullPolicy: Always
@@ -1269,14 +1270,14 @@
     [檔案<改寫>: 排程映像]
     📂k8s/scheduler-cronjob.yaml:
     <映像名稱改成GCP的規範>
-        image: tvs_scheduler:latest   ==>
-        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_scheduler:v1
+        image: tvs-scheduler:latest   ==>
+        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-scheduler:v1
     <映像永遠開放從 tvs-repo 庫拉取>
         imagePullPolicy: Never   ==>
         imagePullPolicy: Always
 
 
-4.6 建置與部屬 (本地編譯推送)
+4.6 部屬前確認
     [指令: 部屬環境確認]
     gcloud config get-value project
     gcloud config set project twvixstock
@@ -1288,14 +1289,17 @@
     eval $(minikube docker-env -u)
         ⮕ 離開 minikube 環境
 
-    [指令: 編譯與推送映像]
-    docker build --no-cache -t asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_server:v1 --target server .
-    docker build --no-cache -t asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_scheduler:v1 --target scheduler .
-    docker push asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_server:v1
-    docker push asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_scheduler:v1
 
+4.7 建置與部屬 (本地編譯推送)
     [指令: 掛載sql準備]
+    kubectl delete configmap twvixstock-db-sql
     kubectl create configmap twvixstock-db-sql --from-file=scripts/twvixstock_db.sql
+
+    [指令: 編譯與推送映像]
+    docker build --no-cache -t asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-server:v1 --target server .
+    docker build --no-cache -t asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-scheduler:v1 --target scheduler .
+    docker push asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-server:v1
+    docker push asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-scheduler:v1
 
     [指令: 運行服務]
     kubectl apply -f k8s/
@@ -1309,47 +1313,32 @@
     gcloud container clusters delete twvixstock-cluster --zone asia-east1-b
         ⮕ 刪除叢集
 
-
-4.7 建置與部屬 (線上編譯推送)
-
-撰寫 cloudbuild.yaml
-
-    steps:
-      # 1. Build & Push Server Image
-      - name: 'gcr.io/cloud-builders/docker'
-        args: ['build','-t', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}','.','--target', 'server']
-
-      # 2. Build & Push Scheduler Image
-      - name: 'gcr.io/cloud-builders/docker'
-        args: ['build','-t', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}','.','--target', 'scheduler']
-
-      # 推送至 Artifact Registry
-      - name: 'gcr.io/cloud-builders/docker'
-        args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}']
-
-      - name: 'gcr.io/cloud-builders/docker'
-        args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}']
-
-      # 3. 部署到 GKE
-      - name: 'gcr.io/cloud-builders/gke-deploy'
-        args:
-          - run
-          - --filename=k8s/
-          - --location=asia-east1
-          - --cluster=twvixstock-cluster
-          - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}
-          - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}
-
-    substitutions:
-      # 預設值：如果是 Git trigger，_TAG 會自動用 SHORT_SHA
-      _TAG= $SHORT_SHA
+指令
+kubectl get deployment tvs-server -o yaml | grep image:
 
 
+4.8 建置與部屬 (線上編譯推送)
 
 
+    [指令: 掛載sql準備]
+    kubectl delete configmap twvixstock-db-sql
+    kubectl create configmap twvixstock-db-sql --from-file=scripts/twvixstock_db.sql
 
-gcloud builds submit --config cloudbuild.yaml . \
-  --substitutions=_TAG=v2
+    [檔案: 線上編譯yaml]
+    📂cloudbuild.yaml
+        [之後補上]
+        [之後補上]
+        [之後補上]
+        [之後補上]
+        [之後補上]
+        [之後補上]
+        [之後補上]
+        [之後補上]
+        [之後補上]
+
+    [指令: 提交線上編譯]
+    gcloud builds submit --config cloudbuild.yaml . \
+        --substitutions=_TAG=v2
 
 
 
