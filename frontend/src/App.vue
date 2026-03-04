@@ -16,6 +16,7 @@ import HelloWorld from './components/HelloWorld.vue';
     const response = await fetch("/api/stockDB?start=2026-02-01&end=2026-12-31");
     const data = await response.text();
     console.log(data);
+    console.log(7788);
   },
 })
 export default class App extends Vue {}

@@ -1388,3 +1388,14 @@ gcloud builds submit --config cloudbuild.yaml . \
         git commit -m "first init"
         git push --set-upstream origin main
         git push
+
+
+    d. 設定 Cloud Build 觸發條件
+      1. 服務 Cloud Build 頁面 > 觸發條件 > 新建觸發條件
+      2. 需要填寫的部分(沒提到的留預設):
+        名稱 > github-twvixstock
+        存放區 > 連結新的存放區 > 連線 GitHub(將自動安裝必要套件) > 選擇GitHub正確的存放區
+        服務帳戶 > 選擇最高權限帳戶就好
+
+    e. 觀察推送
+      git push 後 > 服務 Cloud Build 頁面 > 紀錄
