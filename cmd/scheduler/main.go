@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fmt.Println("排程爬蟲啟動中000")
+	fmt.Println("排程爬蟲啟動中00")
 
 	// 1. 初始化
 	config.LoadConfig("")

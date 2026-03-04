@@ -39,6 +39,6 @@ func main() {
 
 	// 4. 啟動
 	port := fmt.Sprintf(":%d", config.AppConfig.Server.Port)
-	fmt.Printf("Server 啟動於000 %s\n", port)
+	fmt.Printf("Server 啟動於00 %s\n", port)
 	r.Run(port)
 }
