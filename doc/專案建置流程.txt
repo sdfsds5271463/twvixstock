@@ -1333,6 +1333,8 @@
     [檔案: 線上編譯yaml]
     📂cloudbuild.yaml
     ★如果有多個images需要自動替換注入版本號時，gke-deploy則無法批次處理，需要分檔案
+        substitutions:
+          _TAG: "${SHORT_SHA}" # 設定預設值，如果沒傳入就會用 $SHORT_SHA (用來給 git trigger 使用)
         steps:
           # 1. Build 
           - name: 'gcr.io/cloud-builders/docker'
@@ -1409,52 +1411,35 @@
         ⮕ 刪除叢集
 
 
+4.9 Github (線上編譯推送，繼承 4.8 全部設定)
+    [網站: 新建 github 專案]
+    https://github.com/
+        ⮕ Create a new repository
+    Repository name  輸入  twvixstock  創造
 
+    [指令: 密鑰產生]
+    ssh-keygen -t ed25519   #(選項都留空)
+        ⮕ 家目錄產生密鑰
+    網站github右上角頭像 > settings > SSH and GPG keys > new SSH Key > 貼上家目錄的/.ssh/id_ed25519.pub內容
 
-
-
-
-    b. 新建置github並推送專案
-      _a. 新建repository
-        1. github官網 https://github.com/
-        2. 找到左側按鈕 Create a new repository
-        3. 輸入Repository name 並創造
-            twvixstock
-
-
-      _b. 初始化git推送權限
-        0. (假設專案為 sdfsds5271463/twvixstock.git )
-        1. 如果子目錄有 .git 必須根除
-          rm -rf frontend/.git   
-          git rm -r --cached frontend
-        2. 初始化 (新版本git與github 將建議並預設使用main為主分支，也可以至github網站調整設定回舊版master)
-          git init
-          git branch -M main
-        3-1. 使用https認證權限(不建議)
-          git remote add origin https://github.com/sdfsds5271463/twvixstock.git
-        3-2. 使用ssh認證權限
-          輸入以下指令 (後連點enter留空路徑與密碼) 產生家目錄密鑰 (ed25519已經取代舊版的rsa)
-          ssh-keygen -t ed25519
-          網站github右上角頭像 > settings > SSH and GPG keys > new SSH Key > 貼上家目錄的/.ssh/id_ed25519.pub內容
-          git remote add origin git@github.com:sdfsds5271463/twvixstock.git
-      _c. 新增專案檔案並推送
-        git add .
-        git commit -m "first init"
-        git push --set-upstream origin main
-        git push
-
-
-    d. 設定 Cloud Build 觸發條件
-      1. 服務 Cloud Build 頁面 > 觸發條件 > 新建觸發條件
-      2. 需要填寫的部分(沒提到的留預設):
+    [網站: 設定 Cloud Build 觸發條件]
+    服務 Cloud Build 頁面 > 觸發條件 > 新建觸發條件
+    ★需要填寫的部分(沒提到的留預設):
         名稱 > github-twvixstock
         存放區 > 連結新的存放區 > 連線 GitHub(將自動安裝必要套件) > 選擇GitHub正確的存放區
         服務帳戶 > 選擇最高權限帳戶就好
 
-    e. 觀察推送
-      git push 後 > 服務 Cloud Build 頁面 > 紀錄
+    [指令: 初始化]
+    git init
+    git branch -M main
+    git remote add origin git@github.com:sdfsds5271463/twvixstock.git
+    git push --set-upstream origin main
 
-
+    [指令: git初次推送]
+    git add .
+    git commit -m "first init"
+    git push
+        ⮕ 自動觸發提交線上編譯，後續效果同 4.8
 
 
 
