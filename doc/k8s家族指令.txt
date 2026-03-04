@@ -1,0 +1,86 @@
+1. 確保 Minikube 正常執行
+    [安裝]
+    winget source update
+    winget install Kubernetes.minikube
+    minikube start --driver=docker
+        ⮕ 每次 docker_engine 啟動時要手動指令 minikube start
+
+    [啟動]
+    minikube status
+    minikube update-context   #更新本地設定
+    minikube start
+        ⮕ 啟動正常時，本地 docker ps 可以看到 minikube 容器
+        ⮕ 啟動正常時，kubectl get nodes 可以看到 minikube
+
+    [重啟]
+    minikube delete --all --purge   #刪除叢集
+    minikube start --driver=docker
+
+    [環境指派]
+    kubectl config get-contexts   #查看叢集
+    kubectl config use-context minikube   #切換叢集
+        ⮕ 未來可能會切換為 GKE
+    eval $(minikube docker-env)   #進入 minikube docker
+        ⮕ 進入後的 docker ps 將看到許多個 k8s 容器
+    eval $(minikube docker-env -u)   #離開 minikube docker
+        ⮕ 離開至本地 docker ps 將看到一個 minikube 容器
+
+    [運行服務]
+    kubectl apply -f k8s/   #若有更新重新執行此
+    kubectl get pods
+    minikube service server-service   #啟動指定名稱服務
+    kubectl delete -f k8s/   #徹底刪除所有設定及服務
+
+
+2. 編譯映像
+    [指令1: 至 minikube VM docker 內編譯]
+    eval $(minikube docker-env)
+    docker build -t tvs_server --target server .
+    docker build -t tvs_scheduler --target scheduler .
+    eval $(minikube docker-env -u)
+    minikube image ls
+
+    [指令2: 本地編譯後丟至 minikube]
+    docker build -t tvs_server --target server .
+    docker build -t tvs_scheduler --target scheduler .
+    minikube image load tvs_server:latest
+    minikube image load tvs_scheduler:latest
+    minikube image ls
+
+
+3. 運行服務
+    [指令: 運行與啟動服務]
+    kubectl apply -f k8s/
+    kubectl get pods
+        ⮕ 如果服務有先後相依性，過早啟動的暫時 Error 是正常，等自動重啟即可
+    minikube service server-service
+        ⮕ 將自動依據服務 server-service 開啟映射
+
+
+4. 管理指令
+    [指令: 資料庫管理]
+    kubectl get pods -l app=mysql
+        ⮕ 先取得 pod 名
+    kubectl exec -i mysql-c76fd468f-d4mhr -- mysql -u root -ptt123456 twvixstock_db < scripts/twvixstock_db.sql
+        ⮕ 運行 .sql
+    kubectl exec -it mysql-c76fd468f-d4mhr -- mysql -u root -ptt123456 twvixstock_db -e "SELECT * FROM stock LIMIT 5;"
+        ⮕ 執行 query
+
+    [指令: 排程管理]
+    kubectl get jobs
+        ⮕ 查看所有 job 名，有名稱就可以查看 log
+    kubectl create job --from=cronjob/tvs-scheduler-cron manualtest1
+        ⮕ 立刻創建並只運行一次排程
+    kubectl logs -l job-name=manualtest1
+        ⮕ 查看log
+    kubectl delete job manualtest1
+
+    [指令: 服務管理]
+    kubectl logs -l app=tvs-server
+        ⮕ 查看指定服務所有 pod 運行 log
+    kubectl logs -f -l app=tvs-server
+        ⮕ 持續追蹤服務所有 pod 運行 log
+    kubectl get pods -l app=tvs-server
+        ⮕ 查看服務 pod 名
+    kubectl logs tvs-server-5b4d99bbcd-s2xdw
+        ⮕ 查看指定服務單一 pod 運行 log

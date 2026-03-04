@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  server:
+    image: tvs_server
+    container_name: my_server
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=tt123456
+      - DB_NAME=twvixstock_db
+      - CRAWLER_TOKEN=secret_token_12345
+    depends_on:
+      - mysql
+
+  scheduler:
+    image: tvs_scheduler
+    container_name: my_scheduler
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=tt123456
+      - DB_NAME=twvixstock_db
+      - CRAWLER_TOKEN=secret_token_12345
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_server
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=tt123456
+      - MYSQL_DATABASE=twvixstock_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/twvixstock_db.sql:/docker-entrypoint-initdb.d/twvixstock_db.sql
+
+volumes:
+  mysql_data:

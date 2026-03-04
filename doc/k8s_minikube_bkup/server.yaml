@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tvs-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tvs-server
+  template:
+    metadata:
+      labels:
+        app: tvs-server
+    spec:
+      containers:
+      - name: tvs-server
+        image: tvs_server:latest  # 確保已在 minikube docker-env 內 build
+        imagePullPolicy: Never    # 強制使用本地 image
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: tvs-config
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: tvs-secret
+              key: DB_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-service
+spec:
+  type: NodePort   #minikube
+  selector:
+    app: tvs-server
+  ports:
+    - port: 8080   #minikube
+      targetPort: 8080
+      nodePort: 30080 # 本機存取埠

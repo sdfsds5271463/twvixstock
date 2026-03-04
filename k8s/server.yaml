@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tvs-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tvs-server
+  template:
+    metadata:
+      labels:
+        app: tvs-server
+    spec:
+      containers:
+      - name: tvs-server
+        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_server:v1
+        imagePullPolicy: Always    # 永遠拉 Repository 映像 
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: tvs-config
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: tvs-secret
+              key: DB_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-service
+spec:
+  type: LoadBalancer   #GKE     # type: NodePort   #minikube
+  selector:
+    app: tvs-server
+  ports:
+    - port: 80   #GKE     # - port: 8080   #minikube
+      targetPort: 8080
+      nodePort: 30080 # 本機存取埠

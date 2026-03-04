@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: tvs-scheduler-cron
+spec:
+  # 分 時 日 月 週 (跟 Linux crontab 一樣)
+  # "0 * * * *" 代表每小時的第 0 分鐘執行一次
+  schedule: "0 * * * *" 
+  jobTemplate:
+    spec:
+      # 執行完成後 300 秒（5 分鐘）自動刪除此 Job 與相關 Pod
+      ttlSecondsAfterFinished: 300
+      template:
+        spec:
+          containers:
+          - name: scheduler
+            image: tvs_scheduler:latest
+            imagePullPolicy: Never
+            envFrom:
+            - configMapRef:
+                name: tvs-config
+            env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tvs-secret
+                  key: DB_PASSWORD
+            - name: CRAWLER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tvs-secret
+                  key: CRAWLER_TOKEN
+          # 執行完後自動關閉，不要重啟
+          restartPolicy: OnFailure

@@ -1,0 +1,11 @@
+server:
+  port: 8080
+  mode: "debug"
+
+database:
+  host: "127.0.0.1"
+  port: 3306
+
+crawler:
+  base_url: "https://api.example.com/stock"
+  interval_hour: 1

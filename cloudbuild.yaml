@@ -1,0 +1,37 @@
+substitutions:
+  _TAG: "${SHORT_SHA}"  # 設定預設值，如果沒傳入就會用 $SHORT_SHA (用來給 git trigger 使用)
+
+steps:
+  # 1. Build Server
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - 'build'
+      - '-t'
+      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}'
+      - '.'
+      - '--target=server'
+
+  # 2. Build Scheduler
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - 'build'
+      - '-t'
+      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}'
+      - '.'
+      - '--target=scheduler'
+
+  # 3. Push
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}']
+
+  # 4. Deploy
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+      - run
+      - --filename=k8s/
+      - --location=asia-east1-b
+      - --cluster=twvixstock-cluster
+      - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}
+      - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}

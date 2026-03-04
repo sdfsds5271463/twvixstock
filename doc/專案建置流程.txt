@@ -1,0 +1,1390 @@
+從零開始的股票爬蟲系統:
+
+=======================================================================================
+第零章: 系統架構::
+=======================================================================================
+
+    twvixstock/
+    ├── cmd/
+    │   ├── server/          # Gin API 伺服器
+    │   └── scheduler/       # 爬蟲排程器
+    ├── internal/
+    │   ├── handler/         # 處理 HTTP 請求 (Gin)
+    │   ├── service/         # 核心業務邏輯 (例如：計算指標)
+    │   ├── repository/      # 資料庫操作 (SQL 語法)
+    │   ├── model/           # 定義 Struct (DB Schema)
+    │   ├── crawler/         # 爬蟲具體邏輯 (被 scheduler 調用)
+    │   └── config/          # 設定檔讀取邏輯 (建議從 root 移入 internal)
+    ├── frontend/            # Vue CLI 專案目錄
+    ├── scripts/             # 放一些部署用的 .sh 或 SQL 初始化腳本
+    ├── config/              # 存放 .yaml 設定檔
+    ├── Dockerfile.server
+    ├── Dockerfile.scheduler
+    ├── docker-compose.yaml
+    ├── cloudbuild.yaml
+    ├── .gitignore
+    ├── go.mod
+    └── k8s/                 # Kubernetes manifest 檔案
+
+
+
+. 關鍵觀念：從 Docker 到 K8s 的轉變功能Docker ComposeKubernetes容器單元ServicePod (通常包裹在 Deployment 內)內部溝通Service NameService (ClusterIP)資料持久化VolumesPersistentVolume (PV) & PVC環境變數environmentConfigMap & Secret排程任務手動或常駐CronJob (K8s 原生支持)
+
+
+    所有章節的指令都是在根目錄輸入
+
+
+
+=======================================================================================
+第一章: 本地建置::
+=======================================================================================
+1.i 章節目錄
+    1.1 根目錄
+        一切的開端
+    1.2 前端
+        將可以看到vue介面
+    1.3 後端
+        初次讓前後端連線測試
+    1.4 設定
+        加入伺服器與DB等設定檔
+    1.5 排程
+        創建一個可以爬蟲可以存DB的程序
+    1.6 資料庫GORM
+        定義模組並使用GORM進行DB連線
+    1.7 控制器與服務
+        完整MC架構
+	1.8 排程服務
+		重新將排程與爬蟲規整至MC架構
+	1.9 前端編譯執行
+		編譯vue並使用其靜態檔案運行伺服器
+    1.a 腳本建置
+        補足支援用腳本
+
+
+1.1 根目錄
+    [創建根目錄]
+    twvixstock/
+
+    [指令: go 初始]
+    go mod init twvixstock
+
+    [檔案: git例外]
+    📂.gitignore
+        .env
+        frontend/node_modules/
+        .git/
+        *.log
+        tmp/
+        
+
+1.2 前端
+    [指令: 安裝 vue cli]
+    npm install -g @vue/cli
+    vue create frontend
+    cd frontend
+    vue add typescript
+
+    [檔案<加入>: 本地測試伺服]
+    📂frontend/vue.config.js
+        devServer: {
+            port: 8081,
+            proxy: {
+                '/api': {
+                target: 'http://localhost:8080',
+                changeOrigin: true
+                }
+            },
+        }
+
+    [檔案<加入>: ajax測試]
+    📂frontend/src/App.vue
+        async created(){
+          //const response = await fetch("http://localhost:8080/api/hello");
+          const response = await fetch("/api/hello");
+          const data = await response.text();
+          console.log(data);
+        },
+
+    [測試: vue與ajax]
+    cd frontend
+    npm run serve
+        ⮕ 開啟 http://127.0.0.1:8081 的F12是不是有請求 http://127.0.0.1:8081/api/hello (找不到正常)
+
+
+1.3 後端
+    [檔案: 伺服器]
+    📂cmd/server/main.go
+        package main
+
+        import (
+            "net/http"
+            "github.com/gin-gonic/gin"
+        )
+
+        func main() {
+            r := gin.Default()  //gin 起始
+
+            // 允許跨域 (CORS) - 為了讓你的 Vue 前端能順利存取
+            r.Use(func(c *gin.Context) {
+                c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+                c.Next()
+            })
+
+            defer r.Run(":8080")  //gin 最終啟動 server
+
+            r.GET("/api/hello", func(c *gin.Context) {
+                c.String(http.StatusOK, "Hello String From Gin")
+            })
+        }
+
+    [測試: 前端連線後端]
+    go mod tidy
+    go run cmd/server/main.go
+        ⮕ 查看 http://127.0.0.1:8080/api/hello 是不是有文字
+        ⮕ 查看 http://127.0.0.1:8081 的F12是不是有請求成功
+
+
+1.4 設定
+    [檔案: env參數]
+    📂.env
+		# Database 
+		DB_HOST=localhost
+		DB_USER=allen
+		DB_PASSWORD=evelynn9527
+		DB_NAME=twvixstock_db
+
+		# 爬蟲 Token
+		CRAWLER_TOKEN=secret_token_12345
+
+    [檔案: 公用設定檔]
+    📂config/config.yaml
+        server:
+        port: 8080
+        mode: "debug"
+
+        database:
+        host: "127.0.0.1"
+        port: 3306
+
+        crawler:
+        base_url: "https://api.example.com/stock"
+        interval_hour: 1
+    
+    [檔案: 設定檔讀取程序]
+    📂internal/config/config.go
+        package config
+
+        import (
+            "log"
+            "os"
+
+            "github.com/joho/godotenv"
+            "github.com/spf13/viper"
+        )
+
+        type Config struct {
+            Server   ServerConfig
+            Database DatabaseConfig
+            Crawler  CrawlerConfig
+        }
+
+        type ServerConfig struct {
+            Port int
+            Mode string
+        }
+
+        type DatabaseConfig struct {
+            Host     string
+            Port     int
+            User     string
+            Password string
+            DBName   string
+        }
+
+        type CrawlerConfig struct {
+            BaseURL      string
+            IntervalHour int
+            Token        string
+        }
+
+        var AppConfig *Config
+
+        func LoadConfig(path string) {
+            if path == "" { path = "./config" }
+
+            // 1. 先讀取 .env (如果檔案存在)
+            if err := godotenv.Load(); err != nil {
+                log.Println("No .env file found, reading from system environment")
+            }
+
+            // 2. 設定 Viper 讀取 YAML
+            viper.SetConfigName("config") // 檔案名稱 (不含副檔名)
+            viper.SetConfigType("yaml")
+            viper.AddConfigPath(path) // 尋找路徑
+
+            if err := viper.ReadInConfig(); err != nil {
+                log.Fatalf("Error reading config file, %s", err)
+            }
+
+            // 3. 將資料對應到 Struct
+            err := viper.Unmarshal(&AppConfig)
+            if err != nil {
+                log.Fatalf("Unable to decode into struct, %v", err)
+            }
+
+            // 4. 從環境變數覆蓋讀取
+            AppConfig.Database.Host = os.Getenv("DB_HOST")
+            AppConfig.Database.User = os.Getenv("DB_USER")
+            AppConfig.Database.Password = os.Getenv("DB_PASSWORD")
+            AppConfig.Database.DBName = os.Getenv("DB_NAME")
+            AppConfig.Crawler.Token = os.Getenv("CRAWLER_TOKEN")
+
+            log.Println("Config loaded successfully")
+        }
+    
+    [檔案: 設定檔單元測試]
+    📂internal/config/config_test.go
+        package config
+
+        import "testing"
+        import "os"
+
+        func TestLoadConfig(t *testing.T) {
+            os.Chdir("../..")
+            LoadConfig("")
+            if AppConfig.Database.Host == "" {
+                t.Error("未能讀取到資料庫 Host 設定")
+            } else {
+                t.Logf("讀取成功，Host 為: %s", AppConfig.Database.Host)
+            }
+        }
+
+
+    [指令: go套件]
+    go mod tidy
+
+    [測試: 設定單元測試]
+    go test -v ./internal/config/
+        ⮕ 測試config單元
+    go test -v ./...
+        ⮕ 測試全部
+
+
+1.5 排程
+    [本地程序: 資料庫]
+    資料庫屬性:
+        twvixstock_db
+            utf8mb4
+            utf8mb4_unicode_ci
+
+    資料表框架:
+        .sql
+            SET NAMES utf8mb4;
+            SET FOREIGN_KEY_CHECKS = 0;
+            -- ----------------------------
+            DROP TABLE IF EXISTS `stock`;
+            CREATE TABLE `stock`  (
+            `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+            `type` enum('TAIEX','VIXTWN') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+            `date` date NULL DEFAULT NULL,
+            `close` decimal(10, 2) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`) USING BTREE,
+            INDEX `date`(`date`) USING BTREE
+            ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+            -- ----------------------------
+            SET FOREIGN_KEY_CHECKS = 1;
+
+    啟動資料庫:
+        127.0.0.1:3306 
+
+    [檔案: 排程爬蟲]
+    📂cmd/scheduler/main.go
+        package main
+
+        import (
+            "database/sql"
+            "fmt"
+            "log"
+            "twvixstock/internal/config"  // 引入config
+            _ "github.com/go-sql-driver/mysql"
+            "net/http"
+        )
+
+        func main() {
+            // 1. 初始化設定
+            config.LoadConfig("")
+
+            // 2. 連接資料庫
+            dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
+                config.AppConfig.Database.User,
+                config.AppConfig.Database.Password,
+                config.AppConfig.Database.Host,
+                config.AppConfig.Database.Port,
+                config.AppConfig.Database.DBName,
+            )
+            db, err := sql.Open("mysql", dsn)
+            if err != nil {
+                log.Fatal(err)
+            }
+            defer db.Close()
+
+            // 3. 執行爬蟲邏輯 (模擬)
+            fmt.Println("正在模擬爬取資料...")
+            data := fetchData(config.AppConfig.Crawler.Token)
+
+            // 4. 存入 DB
+            query := "INSERT INTO stock (type) VALUES (?)"
+            _, err = db.Exec(query, data)
+            if err != nil {
+                log.Printf("寫入資料失敗: %v", err)
+            } else {
+                fmt.Println("資料抓取並存入 DB 成功！")
+            }
+        }
+
+        func fetchData(token string) string {
+            // 這裡實作你的爬蟲邏輯 (http.Get 等等)
+            _ = token
+            res, err := http.Get("http://127.0.0.1:8081")
+            if(err != nil){ 
+                log.Printf("爬蟲失敗: %v", err)
+                return ""
+            }
+            defer res.Body.Close()
+            fmt.Println("爬蟲測試StatusCode:", res.StatusCode)  //200
+            return "TAIEX"
+        }
+
+    [指令: go套件]
+    go get github.com/go-sql-driver/mysql
+
+    [測試: 爬蟲請求與資料庫存取]
+    go run cmd/scheduler/main.go
+        ⮕ 小黑窗有回報 200 狀態
+        ⮕ DB有多資料
+
+
+1.6 資料庫GORM
+    [檔案: 資料庫模型]
+    📂internal/model/stock.go
+        package model
+
+        import (
+            "time"
+        )
+
+        // StockRecord 對應你的資料表
+        type StockRecord struct {
+            ID    uint      `gorm:"primaryKey;autoIncrement"`
+            Type  string    `gorm:"type:enum('TAIEX','VIXTWN');"`
+            Date  time.Time `gorm:"type:date;index"` // 建立索引提升查詢效率
+            Close float64   `gorm:"type:decimal(10,2);"`
+        }
+
+        // TableName 指定資料表名稱 (若不指定，GORM 預設會變複數 stock_records)
+        func (StockRecord) TableName() string {
+            return "stock"
+        }
+
+    [檔案: GORM初始化]
+    📂internal/repository/db.go
+        package repository
+
+        import (
+            "fmt"
+            "log"
+            "twvixstock/internal/config"
+            //"twvixstock/internal/model"
+
+            "gorm.io/driver/mysql"
+            "gorm.io/gorm"
+            "gorm.io/gorm/logger"
+        )
+
+        var DB *gorm.DB
+
+        // InitDB 初始化資料庫連線
+        func InitDB() {
+            // 執行 InitDB() 之前必須先有 config.LoadConfig("")
+            c := config.AppConfig.Database
+            
+            // 組裝 DSN (Data Source Name)
+            // 格式: user:password@tcp(host:port)/dbname?charset=utf8mb4&parseTime=True&loc=Local
+            dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+                c.User, c.Password, c.Host, c.Port, c.DBName)
+
+            db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+                Logger: logger.Default.LogMode(logger.Info), // 測試環境開啟 Log，可以看到 SQL 語法
+            })
+
+            if err != nil {
+                log.Fatalf("Failed to connect to database: %v", err)
+            }
+
+            // 自動遷移 (Auto Migration)
+            // 這會自動幫你在 MySQL 建立表，如果表已存在則會檢查欄位是否需要更新
+            // err = db.AutoMigrate(&model.StockRecord{})
+            // if err != nil {
+            //     log.Fatalf("Failed to migrate database: %v", err)
+            // }
+
+            DB = db
+            log.Println("Database connection established")
+        }
+
+    [檔案: GORM單元測試]
+    📂internal/repository/db_test.go
+        package repository
+
+        import (
+            "testing"
+            "twvixstock/internal/model"
+            "twvixstock/internal/config"
+            "time"
+            "os"
+
+            "github.com/stretchr/testify/assert"
+        )
+
+        func TestInitDBAndCRUD(t *testing.T) {
+            os.Chdir("../..")
+
+            // 2. 初始化實體 DB 連線
+            config.LoadConfig("")  //載入 .env
+            InitDB()  //初始 DB
+
+            // 檢查全域變數 DB 是否成功賦值
+            assert.NotNil(t, DB, "DB 連線不應為 nil")
+
+            // 3. 測試：寫入一筆測試資料
+            testRecord := model.StockRecord{
+                Type:  "TAIEX",
+                Date:  time.Now(),
+                Close: 18000.50,
+            }
+
+            // Create
+            result := DB.Create(&testRecord)
+            assert.NoError(t, result.Error, "寫入資料時不應有錯誤")
+            assert.NotZero(t, testRecord.ID, "寫入後 ID 應自動生成")
+
+            // 4. 測試：讀取剛寫入的資料
+            var fetchedRecord model.StockRecord
+            DB.First(&fetchedRecord, testRecord.ID)
+            assert.Equal(t, "TAIEX", fetchedRecord.Type)
+            assert.Equal(t, 18000.50, fetchedRecord.Close)
+
+            // 5. 測試：刪除該測試資料 (保持環境乾淨)
+            deleteResult := DB.Delete(&testRecord)
+            assert.NoError(t, deleteResult.Error)
+        }
+
+
+    [指令: go套件]
+    go get gorm.io/gorm
+    go get gorm.io/driver/mysql
+    go get github.com/stretchr/testify
+    go mod tidy
+
+    [測試: DB連線測試]
+    go test -v ./internal/repository
+        ⮕ 測試DB GORM單元
+    go test -v ./...
+        ⮕ 測試全部
+
+
+1.7 控制器與服務
+    [檔案: 股票DB服務]
+    📂internal/service/stock_service.go
+		package service
+
+		import (
+			"twvixstock/internal/model"
+			"twvixstock/internal/repository"
+			"time"
+		)
+
+		// GetStocksByDate 根據日期過濾資料
+		func GetStocksByDate(startDate string, endDate string) ([]model.StockRecord, error) {
+			var stocks []model.StockRecord
+
+			// 呼叫 Repository 層的 DB 物件進行查詢
+			db := repository.DB
+
+			if startDate != "" && endDate != "" {
+				db = db.Where("date BETWEEN ? AND ?", startDate, endDate)
+			}
+
+			err := db.Find(&stocks).Error
+			return stocks, err
+		}
+
+		// 爬蟲分析存入資料
+		func DataAnalysis(strdata []byte) (int, error){
+			_ = strdata
+			// 模擬假資料
+			val := model.StockRecord{
+				Type: "TAIEX",
+				Date: time.Now(),
+				Close: 123456,
+			}
+			data := []model.StockRecord{}
+			data = append(data, val)
+			data = append(data, val)
+
+			//插入DB
+			result := repository.DB.Create(&data)
+			if result.Error != nil {
+				return 0, result.Error
+			}
+
+			return len(data), nil
+		}
+
+    [檔案: 路由響應控制器]
+    📂 internal/handler/stock_handler.go
+		package handler
+
+		import (
+			"net/http"
+			"twvixstock/internal/service"
+
+			"github.com/gin-gonic/gin"
+		)
+
+		// StockDataShow 處理股票顯示請求
+		func StockDataShow(c *gin.Context) {
+			// 1. 取得 Query Parameters (例如: /api/stockDB?start=2023-01-01&end=2023-01-31)
+			startDate := c.Query("start")
+			endDate := c.Query("end")
+
+			// 2. 呼叫 Service 取得資料
+			stocks, err := service.GetStocksByDate(startDate, endDate)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "無法取得資料: " + err.Error()})
+				return
+			}
+
+			// 3. 回傳 JSON 給前端
+			c.JSON(http.StatusOK, stocks)
+		}
+
+    [檔案<改寫>: 路由響應控制器]
+    📂cmd/server/main.go
+        package main
+
+        import (
+            "fmt"
+            "twvixstock/internal/config"
+            "twvixstock/internal/handler"
+            "twvixstock/internal/repository"
+
+            "github.com/gin-gonic/gin"
+        )
+
+        func main() {
+            // 1. 初始化
+            config.LoadConfig("")
+            repository.InitDB()
+
+            // 2. 設定 Gin
+            r := gin.Default()
+
+            // 允許跨域 (CORS) - 為了讓你的 Vue 前端能順利存取
+            r.Use(func(c *gin.Context) {
+                c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+                c.Next()
+            })
+
+            // 根目錄靜態檔 (讓 vue 掛載用)
+            r.GET("/", func(c *gin.Context) {
+                c.File("./static/index.html")
+            })
+            r.Static("/css", "./static/css")
+            r.Static("/js", "./static/js")
+            r.Static("/img", "./static/img")
+
+            // 3. 設定路由群組
+            api := r.Group("/api")
+            {
+                api.GET("/stockDB", handler.StockDataShow)
+            }
+
+            // 4. 啟動
+            port := fmt.Sprintf(":%d", config.AppConfig.Server.Port)
+            fmt.Printf("Server 啟動於 %s\n", port)
+            r.Run(port)
+        }
+
+    [檔案<改寫>: 路由響應控制器]
+    📂frontend/src/App.vue
+        const response = await fetch("/api/hello");  ==>
+        const response = await fetch("/api/stockDB?start=2026-02-01&end=2026-12-31");
+
+    [測試: 伺服器MC]
+    go run cmd/server/main.go
+        ⮕ 查看 http://127.0.0.1:8080/api/stockDB?start=2026-02-01&end=2026-12-31
+
+
+1.8 排程服務
+    [檔案: 爬蟲控制器]
+    📂internal/crawler/crawler_handler.go
+		package crawler
+
+		import (
+			"fmt"
+			"log"
+			"net/http"
+			"twvixstock/internal/service"
+			"io"
+		)
+
+		func FetchData(token string) {
+			// 實作爬蟲
+			res, err := http.Get("http://allenweb.ddns.net:9527/api1/res.php?token="+token)
+			if(err != nil){ 
+				log.Printf("爬蟲失敗: %v", err)
+			}
+			defer res.Body.Close()
+			fmt.Println("爬蟲測試StatusCode:", res.StatusCode)  //200
+
+			body, _ := io.ReadAll(res.Body)
+
+			count, err := service.DataAnalysis(body)
+			if(err != nil){ 
+				log.Printf("資料解析失敗: %v", err)
+			}
+			fmt.Println("成功解析筆數:", count)  //200
+		}
+
+    [檔案: 爬蟲服務]
+    📂internal/service/stock_service.go
+    	⮕ 於 1.7 已經插入資料，詳見 twvixstock/internal/service.DataAnalysis
+
+    [檔案<更新>: 排程入口]
+    📂cmd/scheduler/main.go
+		package main
+
+		import (
+			"fmt"
+			"twvixstock/internal/config"
+			"twvixstock/internal/crawler"
+			"twvixstock/internal/repository"
+		)
+
+		func main() {
+			fmt.Println("排程爬蟲啟動中")
+
+			// 1. 初始化
+			config.LoadConfig("")
+			repository.InitDB()
+
+			// 2. 模擬爬蟲
+			crawler.FetchData(config.AppConfig.Crawler.Token)
+		}
+
+    [測試: 模擬爬蟲插入DB]
+    go run cmd/scheduler/main.go
+    	⮕ 查看DB有插入新資料了
+
+
+1.9 前端編譯執行
+	[指令: vue編譯]
+	cd frontend
+	npm run build
+	mv dist/ ../static
+
+    [檔案<改寫>: 控制器靜態掛載]
+    📂cmd/server/main.go
+    	⮕ 於 1.7 已經插入資料，主要內容為:
+            r.GET("/", func(c *gin.Context) {
+                c.File("./static/index.html")
+            })
+            r.Static("/css", "./static/css")
+            r.Static("/js", "./static/js")
+            r.Static("/img", "./static/img")
+
+	[測試: 靜態資源伺服器執行]
+	go run cmd/server/main.go
+		⮕ 查看 http://127.0.0.1:8080/ 是不是有完整靜態網頁了，F12也能Ajax
+
+    
+1.a 腳本建置
+    [檔案: 資料表sql]
+    📂scripts/twvixstock_db.sql
+        SET NAMES utf8mb4;
+        SET FOREIGN_KEY_CHECKS = 0;
+        -- ----------------------------
+        DROP TABLE IF EXISTS `stock`;
+        CREATE TABLE `stock`  (
+        `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+        `type` enum('TAIEX','VIXTWN') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+        `date` date NULL DEFAULT NULL,
+        `close` decimal(10, 2) NULL DEFAULT NULL,
+        PRIMARY KEY (`id`) USING BTREE,
+        INDEX `date`(`date`) USING BTREE
+        ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+        -- ----------------------------
+        SET FOREIGN_KEY_CHECKS = 1;
+        INSERT INTO `stock` (type, date, close) VALUES ('TAIEX', '2026-02-11', 17800.50);
+        INSERT INTO `stock` (type, date, close) VALUES ('VIXTWN', '2026-02-12', 15.20);
+
+    [檔案: 全單元測試]
+    📂scripts/run_all_tests.sh
+        #!/bin/bash
+        # scripts/run_all_tests.sh
+        echo "Running Go tests..."
+        go test ./internal/... -v
+
+        echo "Running Frontend tests..."
+        cd frontend && npm run test:unit
+
+    [指令: sh執行權限]
+    chmod +x scripts/*.sh
+
+    [測試: 全單元測試]
+    ./scripts/run_all_tests.sh     
+        ⮕ 單元GO測試正常，vue的因為我們還沒做所以會error
+
+
+
+=======================================================================================
+第二章: 在Docker運行::
+=======================================================================================
+2.i 章節目錄
+    2.1 編譯檔
+        本地編譯映像檔 Dockerfile 及 部屬環境檔 docker-compose.yml
+    2.2 編譯與啟動
+        運行 docker-compose.yml 啟動系統並管理
+
+
+2.1 編譯檔
+    [檔案: Docker編譯]
+    📂Dockerfile
+		# --- Build Frontend ---
+		FROM node:20 AS frontend-builder
+		WORKDIR /app/frontend
+		# 安裝package
+		COPY frontend/package*.json ./
+		RUN npm install
+		# 拷貝與編譯
+		COPY frontend .
+		RUN npm run build
+
+		# --- Build Stage ---
+		FROM golang:1.25-alpine AS builder
+		WORKDIR /app
+		# 安裝必要的系統工具
+		RUN apk add --no-cache git
+		# 複製並下載依賴
+		COPY go.mod go.sum ./
+		RUN go mod download
+		# 複製原始碼
+		COPY . .
+		# 編譯二進制檔案
+		RUN go build -o /app/bin/server ./cmd/server/main.go
+		RUN go build -o /app/bin/scheduler ./cmd/scheduler/main.go
+
+		# --- Final Stage: Scheduler ---
+		FROM alpine:latest AS scheduler
+		WORKDIR /root/
+		COPY --from=builder /app/bin/scheduler .
+		COPY --from=builder /app/config ./config
+		CMD ["./scheduler"]
+
+		# --- Final Stage: API Server ---
+		FROM alpine:latest AS server
+		WORKDIR /root/
+		COPY --from=frontend-builder /app/frontend/dist ./static
+		COPY --from=builder /app/bin/server .
+		COPY --from=builder /app/config ./config
+		# 如果有 .env (但在 Docker 中建議用環境變數)
+		EXPOSE 8080
+		CMD ["./server"]
+
+    [檔案: Docker環境啟動]
+    📂docker-compose.yml
+		version: "3.9"
+
+		services:
+		  server:
+		    image: tvs_server
+		    container_name: my_server
+		    restart: always
+		    ports:
+		      - "8080:8080"
+		    environment:
+		      - DB_HOST=mysql
+		      - DB_USER=root
+		      - DB_PASSWORD=tt123456
+		      - DB_NAME=twvixstock_db
+		      - CRAWLER_TOKEN=secret_token_12345
+		    depends_on:
+		      - mysql
+
+		  scheduler:
+		    image: tvs_scheduler
+		    container_name: my_scheduler
+		    environment:
+		      - DB_HOST=mysql
+		      - DB_USER=root
+		      - DB_PASSWORD=tt123456
+		      - DB_NAME=twvixstock_db
+		      - CRAWLER_TOKEN=secret_token_12345
+		    depends_on:
+		      - mysql
+
+		  mysql:
+		    image: mysql:8.0
+		    container_name: mysql_server
+		    restart: always
+		    environment:
+		      - MYSQL_ROOT_PASSWORD=tt123456
+		      - MYSQL_DATABASE=twvixstock_db
+		    ports:
+		      - "3306:3306"
+		    volumes:
+		      - mysql_data:/var/lib/mysql
+		      - ./scripts/twvixstock_db.sql:/docker-entrypoint-initdb.d/twvixstock_db.sql
+
+		volumes:
+		  mysql_data:
+
+
+2.2 編譯與啟動
+	[指令: 編譯動作]
+    docker build -t tvs_server --target server .
+    docker build -t tvs_scheduler --target scheduler .
+
+    [指令: 服務運行]
+    docker-compose up -d
+
+    [測試: 伺服器]
+    http://127.0.0.1:8080/
+    	⮕ 查看 http://127.0.0.1:8080/ 是不是有完整靜態網頁了，F12也能Ajax
+
+    [測試: 排程]
+    docker ps -a |grep tvs_scheduler
+    	⮕ 找到容器id給下面start
+    docker start 05c235b6f61a
+    	⮕ 將會插入資料到DB
+    http://127.0.0.1:8080/api/stockDB?start=2026-02-01&end=2026-12-31 
+    	⮕ 觀察資料異動 (也可以用 127.0.0.1:3306 / root / tt123456 登入DB觀察 )
+
+    [指令: 卸載服務]
+    docker-compose down -v
+
+
+
+=======================================================================================
+第三章: 在Minikube運行::
+=======================================================================================
+3.i 章節目錄
+    3.0 確保 Minikube 正常執行
+        Minikube的安裝啟動與運行
+    3.1 環境參數檔
+        ENV的ConfigMap & Secret
+    3.2 資料庫檔
+        掛載.sql資源並部屬 資料持久化+部屬+服務
+    3.3 伺服器檔
+        伺服器部屬+服務
+    3.4 排程檔
+        排程任務設置
+    3.5 編譯映像
+        將最新的編譯映像送至 Minikube
+    3.6 運行服務
+        依據 k8s/ 設定運行並啟動服務
+    3.7 管理指令
+        資料庫、排程、服務之 logs 與管理指令
+
+
+3.0 確保 Minikube 正常執行
+    [安裝]
+    winget source update
+    winget install Kubernetes.minikube
+    minikube start --driver=docker
+        ⮕ 每次 docker_engine 啟動時要手動指令 minikube start
+
+    [啟動]
+    minikube status
+    minikube update-context   #更新本地設定
+    minikube start
+        ⮕ 啟動正常時，本地 docker ps 可以看到 minikube 容器
+        ⮕ 啟動正常時，kubectl get nodes 可以看到 minikube
+
+    [重啟]
+    minikube delete --all --purge   #刪除叢集
+    minikube start --driver=docker
+
+    [環境指派]
+    kubectl config get-contexts   #查看叢集
+    kubectl config use-context minikube   #切換叢集
+        ⮕ 未來可能會切換為 GKE
+    eval $(minikube docker-env)   #進入 minikube docker
+        ⮕ 進入後的 docker ps 將看到許多個 k8s 容器
+    eval $(minikube docker-env -u)   #離開 minikube docker
+        ⮕ 離開至本地 docker ps 將看到一個 minikube 容器
+
+    [運行服務]
+    kubectl apply -f k8s/   #若有更新重新執行此
+    kubectl get pods
+    minikube service server-service   #啟動指定名稱服務
+    kubectl delete -f k8s/   #徹底刪除所有設定及服務
+
+
+3.1 環境參數檔
+    [檔案: k8s環境參數 ConfigMap & Secret]
+    📂k8s/env.yaml
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: tvs-config
+        data:
+          DB_HOST: "mysql-service" # 必須指向 K8s Service 名稱
+          DB_USER: "root"
+          DB_NAME: "twvixstock_db"
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: tvs-secret
+        type: Opaque
+        data:
+          # 注意：K8s Secret 內容必須是 Base64 編碼
+          # echo -n 'tt123456' | base64 -> dHQxMjM0NTY=
+          DB_PASSWORD: dHQxMjM0NTY= 
+          CRAWLER_TOKEN: c2VjcmV0X3Rva2VuXzEyMzQ1 # secret_token_12345
+
+
+3.2 資料庫檔
+    [指令: 掛載資源.sql]
+    kubectl create configmap twvixstock-db-sql --from-file=scripts/twvixstock_db.sql
+
+    [檔案: 資料庫部屬: 資料持久化(PVC)、部署(Deployment)、服務(Service)]
+    📂k8s/mysql.yaml
+        apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+          name: mysql-pvc
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+        ---
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: mysql
+        spec:
+          selector:
+            matchLabels:
+              app: mysql
+          template:
+            metadata:
+              labels:
+                app: mysql
+            spec:
+              containers:
+              - name: mysql
+                image: mysql:8.0
+                env:
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: tvs-secret
+                      key: DB_PASSWORD
+                - name: MYSQL_DATABASE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: tvs-config
+                      key: DB_NAME
+                ports:
+                - containerPort: 3306
+                volumeMounts:
+                - name: mysql-storage
+                  mountPath: /var/lib/mysql
+                # --- 將掛載sql檔為初始 ---
+                - name: init-sql
+                  mountPath: /docker-entrypoint-initdb.d
+              volumes:
+              - name: mysql-storage
+                persistentVolumeClaim:
+                  claimName: mysql-pvc
+              # --- 掛載的sql檔為twvixstock-db-sql ---
+              - name: init-sql
+                configMap:
+                  name: twvixstock-db-sql
+        ---
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: mysql-service
+        spec:
+          selector:
+            app: mysql
+          ports:
+            - port: 3306
+              targetPort: 3306
+
+
+3.3 伺服器檔
+    [檔案: 伺服器部屬: 部署(Deployment)、服務(Service)]
+    📂k8s/server.yaml
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: tvs-server
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: tvs-server
+          template:
+            metadata:
+              labels:
+                app: tvs-server
+            spec:
+              containers:
+              - name: tvs-server
+                image: tvs_server:latest
+                imagePullPolicy: Never    # 強制使用本地 image
+                ports:
+                - containerPort: 8080
+                envFrom:
+                - configMapRef:
+                    name: tvs-config
+                env:
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: tvs-secret
+                      key: DB_PASSWORD
+        ---
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: server-service
+        spec:
+          type: NodePort
+          selector:
+            app: tvs-server
+          ports:
+            - port: 8080
+              targetPort: 8080
+              nodePort: 30080 # 本機存取埠
+
+
+3.4 排程檔
+    [檔案: 排程部屬: 定期任務(CronJob)]
+    📂k8s/scheduler-cronjob.yaml
+        apiVersion: batch/v1
+        kind: CronJob
+        metadata:
+          name: tvs-scheduler-cron
+        spec:
+          # 分 時 日 月 週 (跟 Linux crontab 一樣)
+          # "0 * * * *" 代表每小時的第 0 分鐘執行一次
+          schedule: "0 * * * *" 
+          jobTemplate:
+            spec:
+              # 執行完成後 300 秒（5 分鐘）自動刪除此 Job 與相關 Pod
+              ttlSecondsAfterFinished: 300
+              template:
+                spec:
+                  containers:
+                  - name: scheduler
+                    image: tvs_scheduler:latest
+                    imagePullPolicy: Never
+                    envFrom:
+                    - configMapRef:
+                        name: tvs-config
+                    env:
+                    - name: DB_PASSWORD
+                      valueFrom:
+                        secretKeyRef:
+                          name: tvs-secret
+                          key: DB_PASSWORD
+                    - name: CRAWLER_TOKEN
+                      valueFrom:
+                        secretKeyRef:
+                          name: tvs-secret
+                          key: CRAWLER_TOKEN
+                  # 執行完後自動關閉，不要重啟
+                  restartPolicy: OnFailure
+
+
+3.5 編譯映像
+    [指令1: 至 minikube VM docker 內編譯]
+    eval $(minikube docker-env)
+    docker build -t tvs_server --target server .
+    docker build -t tvs_scheduler --target scheduler .
+    eval $(minikube docker-env -u)
+    minikube image ls
+
+    [指令2: 本地編譯後丟至 minikube]
+    docker build -t tvs_server --target server .
+    docker build -t tvs_scheduler --target scheduler .
+    minikube image load tvs_server:latest
+    minikube image load tvs_scheduler:latest
+    minikube image ls
+
+
+3.6 運行服務
+    [指令: 運行與啟動服務]
+    kubectl apply -f k8s/
+    kubectl get pods
+        ⮕ 如果服務有先後相依性，過早啟動的暫時 Error 是正常，等自動重啟即可
+    minikube service server-service
+        ⮕ 將自動依據服務 server-service 開啟映射
+
+
+3.7 管理指令
+    [指令: 資料庫管理]
+    kubectl get pods -l app=mysql
+        ⮕ 先取得 pod 名
+    kubectl exec -i mysql-c76fd468f-d4mhr -- mysql -u root -ptt123456 twvixstock_db < scripts/twvixstock_db.sql
+        ⮕ 運行 .sql
+    kubectl exec -it mysql-c76fd468f-d4mhr -- mysql -u root -ptt123456 twvixstock_db -e "SELECT * FROM stock LIMIT 5;"
+        ⮕ 執行 query
+
+    [指令: 排程管理]
+    kubectl get cronjobs
+        ⮕ 所有將會開啟 jobs 的預期計畫
+    kubectl get jobs
+        ⮕ 已啟動過的 job 表
+    kubectl create job --from=cronjob/tvs-scheduler-cron manualtest1
+        ⮕ 立刻創建並只運行一次排程
+    kubectl logs -l job-name=manualtest1
+        ⮕ 已啟動過的 job log
+    kubectl delete job manualtest1
+
+    [指令: 服務管理]
+    kubectl logs -l app=tvs-server
+        ⮕ 查看指定服務所有 pod 運行 log
+    kubectl logs -f -l app=tvs-server
+        ⮕ 持續追蹤服務所有 pod 運行 log
+    kubectl get pods -l app=tvs-server
+        ⮕ 查看服務 pod 名
+    kubectl logs tvs-server-5b4d99bbcd-s2xdw
+        ⮕ 查看指定服務單一 pod 運行 log
+
+
+
+=======================================================================================
+第四章: 在GKE運行::
+=======================================================================================
+4.i 章節目錄
+
+4.0 專案規劃
+    [規劃: 名詞準備]
+    專案名稱:  twvixstock
+    地區:  asia-east1(-b)
+    ArtifactRegistry名:  tvs-repo
+    叢集名:  twvixstock-cluster
+
+
+4.1 專案創建
+    [網站: 新建專案]
+    https://console.cloud.google.com/
+        ⮕ 新建專案 twvixstock
+
+    [指令: 安裝 gcloud 與初始登入(一次性)]
+    curl https://sdk.cloud.google.com | bash
+        ⮕ windows要再建安裝資料路徑環境變數，安裝完成後cli要重啟
+    gcloud init
+    gcloud auth login
+
+    [指令: 查看與切換專案]
+    gcloud config get-value project
+    gcloud config set project twvixstock
+        ⮕ 切換專案有標籤建議不用理它
+
+
+4.2 啟用API服務
+    [指令: 啟動服務 Cloud Run Admin API + Cloud Build API+  Artifact Registry API + Kubernetes Engine API ]
+    gcloud services enable run.googleapis.com
+    gcloud services enable cloudbuild.googleapis.com
+    gcloud services enable artifactregistry.googleapis.com
+    gcloud services enable container.googleapis.com
+    gcloud services list --enabled
+        ⮕ 查看服務清單
+
+
+4.3 建立 Artifact Registry
+    [指令: 建立倉庫 tvs-repo]
+    gcloud artifacts repositories create tvs-repo \
+      --repository-format=docker \
+      --location=asia-east1 \
+      --description="docker repository"
+
+    [指令: 設定 Docker 認證(一次性)]
+    gcloud auth configure-docker asia-east1-docker.pkg.dev
+        ⮕ 將自動修改設定  C:\Users\sdfsd\.docker\config.json  |  /home/sdfsd/.docker/config.json 
+        ⮕ .docker\config.json 設定檔將增加 { "credHelpers": { "asia-east1-docker.pkg.dev": "gcloud" }
+
+
+4.4 建立叢集
+    [指令: 建立叢集 twvixstock-cluster ]
+    gcloud container clusters create twvixstock-cluster \
+        --region asia-east1-b \
+        --num-nodes 2 \
+        --disk-size 30
+            ⮕ 地區不能只選 asia-east1 ，會創造 asia-east1-a/b/c 三個區
+            ⮕ 預設100G，這邊使用30G (免費帳總空間上限為250G)
+
+    [指令: 刪除叢集]
+    gcloud container clusters delete twvixstock-cluster --zone asia-east1-b
+        ⮕ 將刪除全部服務，就不會收費了
+
+    [指令: 查看磁碟用量]
+    gcloud config set project 別的專案
+    gcloud compute disks list
+        ⮕ 全部叢集磁碟用量，注意免費帳上限為 250G
+
+
+4.5 ymal檔修改
+    [檔案<改寫>: 伺服器端口與映像]
+    📂k8s/server.yaml:
+    <將固定開放端口改為GCP自動平衡端口>
+        spec:
+          type: NodePort   ==>
+        spec:
+          type: LoadBalancer
+    <對外入口改為80port>
+          ports:
+            - port: 8080
+              targetPort: 8080   ==>
+          ports:
+            - port: 80
+              targetPort: 8080
+    <映像名稱改成GCP的規範>
+        image: tvs_server:latest   ==>
+        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_server:v1
+    <映像永遠開放從 tvs-repo 庫拉取>
+        imagePullPolicy: Never   ==>
+        imagePullPolicy: Always
+
+    [檔案<改寫>: 排程映像]
+    📂k8s/scheduler-cronjob.yaml:
+    <映像名稱改成GCP的規範>
+        image: tvs_scheduler:latest   ==>
+        image: asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_scheduler:v1
+    <映像永遠開放從 tvs-repo 庫拉取>
+        imagePullPolicy: Never   ==>
+        imagePullPolicy: Always
+
+
+4.6 建置與部屬 (本地編譯推送)
+    [指令: 部屬環境確認]
+    gcloud config get-value project
+    gcloud config set project twvixstock
+        ⮕ 確認並設定正確 GCP 專案
+    kubectl config get-contexts
+    kubectl config use-context gke開頭的
+        ⮕ 確認並設定正確叢集
+    docker ps   #是否在 minikube 內
+    eval $(minikube docker-env -u)
+        ⮕ 離開 minikube 環境
+
+    [指令: 編譯與推送映像]
+    docker build --no-cache -t asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_server:v1 --target server .
+    docker build --no-cache -t asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_scheduler:v1 --target scheduler .
+    docker push asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_server:v1
+    docker push asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs_scheduler:v1
+
+    [指令: 掛載sql準備]
+    kubectl create configmap twvixstock-db-sql --from-file=scripts/twvixstock_db.sql
+
+    [指令: 運行服務]
+    kubectl apply -f k8s/
+    kubectl get pods
+    kubectl get services
+        ⮕ 查看services EXTERNAL-IP(對外IP)
+
+    [指令: 終止服務]
+    kubectl delete -f k8s/
+        ⮕ 終止所有部屬
+    gcloud container clusters delete twvixstock-cluster --zone asia-east1-b
+        ⮕ 刪除叢集
+
+
+4.7 建置與部屬 (線上編譯推送)
+
+撰寫 cloudbuild.yaml
+
+    steps:
+      # 1. Build & Push Server Image
+      - name: 'gcr.io/cloud-builders/docker'
+        args: ['build','-t', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}','.','--target', 'server']
+
+      # 2. Build & Push Scheduler Image
+      - name: 'gcr.io/cloud-builders/docker'
+        args: ['build','-t', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}','.','--target', 'scheduler']
+
+      # 推送至 Artifact Registry
+      - name: 'gcr.io/cloud-builders/docker'
+        args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}']
+
+      - name: 'gcr.io/cloud-builders/docker'
+        args: ['push', 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}']
+
+      # 3. 部署到 GKE
+      - name: 'gcr.io/cloud-builders/gke-deploy'
+        args:
+          - run
+          - --filename=k8s/
+          - --location=asia-east1
+          - --cluster=twvixstock-cluster
+          - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}
+          - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}
+
+    substitutions:
+      # 預設值：如果是 Git trigger，_TAG 會自動用 SHORT_SHA
+      _TAG= $SHORT_SHA
+
+
+
+
+
+gcloud builds submit --config cloudbuild.yaml . \
+  --substitutions=_TAG=v2
+
+
+
+
+
+
+
+
+
+
+    b. 新建置github並推送專案
+      _a. 新建repository
+        1. github官網 https://github.com/
+        2. 找到左側按鈕 Create a new repository
+        3. 輸入Repository name 並創造
+            twvixstock
+
+
+      _b. 初始化git推送權限
+        0. (假設專案為 sdfsds5271463/twvixstock.git )
+        1. 如果子目錄有 .git 必須根除
+          rm -rf frontend/.git   
+          git rm -r --cached frontend
+        2. 初始化 (新版本git與github 將建議並預設使用main為主分支，也可以至github網站調整設定回舊版master)
+          git init
+          git branch -M main
+        3-1. 使用https認證權限(不建議)
+          git remote add origin https://github.com/sdfsds5271463/twvixstock.git
+        3-2. 使用ssh認證權限
+          輸入以下指令 (後連點enter留空路徑與密碼) 產生家目錄密鑰 (ed25519已經取代舊版的rsa)
+          ssh-keygen -t ed25519
+          網站github右上角頭像 > settings > SSH and GPG keys > new SSH Key > 貼上家目錄的/.ssh/id_ed25519.pub內容
+          git remote add origin git@github.com:sdfsds5271463/twvixstock.git
+      _c. 新增專案檔案並推送
+        git add .
+        git commit -m "first init"
+        git push --set-upstream origin main
+        git push
