@@ -35,3 +35,11 @@ steps:
       - --cluster=twvixstock-cluster
       - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}
       - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}
+
+# 選項：將產生的 images 紀錄在 build 紀錄中
+images:
+  - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_server:${_TAG}'
+  - 'asia-east1-docker.pkg.dev/$PROJECT_ID/tvs-repo/tvs_scheduler:${_TAG}'
+# GCP 要求的
+options:
+  logging: CLOUD_LOGGING_ONLY
