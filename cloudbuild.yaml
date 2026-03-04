@@ -1,3 +1,4 @@
+substitutions: _TAG: "${SHORT_SHA}"  # 設定預設值，如果沒傳入就會用 $SHORT_SHA (用來給 git trigger 使用)
 steps:
   # 1. Build 
   - name: 'gcr.io/cloud-builders/docker'
