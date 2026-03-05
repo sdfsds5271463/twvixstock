@@ -1,5 +1,3 @@
 <template>
-  <router-view />
+  <h1>NotFound</h1>
 </template>
-
-
