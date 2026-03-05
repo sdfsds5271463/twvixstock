@@ -48,6 +48,8 @@ func TaiexAnalysis(ioBytes []byte) (count int, err error){
 		dateStr := v["date"].(string)  //2026-02-09
 		date, _ := time.Parse(time.RFC3339, dateStr+"T00:00:00+08:00")  //用 +8時區字串轉
 
+fmt.Println( dateStr, date.Format("2006/01/02 15:04:05 -07"), date.Unix() )
+
 		val := model.StockRecord{
 			Type: "TAIEX",
 			Date: date,
@@ -104,6 +106,8 @@ func VixtwnAnalysis(strArr []string) (count int, err error){
 				//時間參數準備
 				dateStr = fmt.Sprintf("%s-%s-%s", dateStr[0:4],dateStr[4:6],dateStr[6:8]) //2026-03-02
 				date, _ := time.Parse(time.RFC3339, dateStr+"T00:00:00+08:00")  //用 +8時區字串轉
+
+fmt.Println( dateStr, date.Format("2006/01/02 15:04:05 -07"), date.Unix() )
 
 				val := model.StockRecord{
 					Type: "VIXTWN",
