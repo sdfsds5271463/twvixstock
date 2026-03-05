@@ -23,20 +23,23 @@ func main() {
 		c.Next()
 	})
 
-	// 根目錄靜態檔 (讓 vue 掛載用)
-	r.GET("/", func(c *gin.Context) {
-		c.File("./static/index.html")
-	})
-	r.Static("/css", "./static/css")
-	r.Static("/js", "./static/js")
-	r.Static("/images", "./static/images")
-	r.Static("/assets", "./static/assets")
-
 	// 3. 設定路由群組
 	api := r.Group("/api")
 	{
 		api.GET("/stockDB", handler.StockDataShow)
 	}
+
+	// 根目錄靜態檔 (讓 vue 掛載用)
+	r.Static("/assets", "./static/assets")
+	r.Static("/images", "./static/images")
+
+	r.GET("/", func(c *gin.Context) {
+		c.File("./static/index.html")
+	})
+
+	r.NoRoute(func(c *gin.Context) {
+		c.File("./static/index.html")
+	})
 
 	// 4. 啟動
 	port := fmt.Sprintf(":%d", config.AppConfig.Server.Port)
