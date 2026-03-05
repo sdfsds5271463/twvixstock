@@ -3,9 +3,9 @@ kind: CronJob
 metadata:
   name: tvs-scheduler-cron
 spec:
-  # 分 時 日 月 週 (跟 Linux crontab 一樣)
-  # "0 * * * *" 代表每小時的第 0 分鐘執行一次
-  schedule: "0 * * * *" 
+  # 台北時間 每天 15 16 17 18 點各執行一次
+  schedule: "0 15,16,17,18 * * *"
+  timeZone: "Asia/Taipei"
   jobTemplate:
     spec:
       # 執行完成後 86400 秒 自動刪除此 Job 與相關 Pod
