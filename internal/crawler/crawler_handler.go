@@ -20,7 +20,7 @@ func FetchDataTAIEX(all bool, token string) {
 
 	// 時間準備
 	timestamp := time.Now().Unix() - 86400*getDays  //抓取天數
-	taipei_zone, _ := time.LoadLocation("Asia/Taipei")
+	taipei_zone := time.FixedZone("UTC+8", 8 * 3600)
 	t := time.Unix( timestamp, 0 ).In(taipei_zone)  //台北時區
 	start_date := t.Format("2006-01-02")
 
@@ -64,7 +64,7 @@ func FetchDataVIXTWN(all bool, token string) {
 	}
 
 	// 時間準備
-	taipei_zone, _ := time.LoadLocation("Asia/Taipei")
+	taipei_zone := time.FixedZone("UTC+8", 8 * 3600)
 	t := time.Now().In(taipei_zone)  //台北時區
 	t = t.Add( time.Duration( time.Hour * -14 ) )  //扣14小時 (因為下午兩點以後才可能封盤更新)
 
