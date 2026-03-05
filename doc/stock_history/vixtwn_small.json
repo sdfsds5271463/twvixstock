@@ -1,0 +1,109 @@
+{
+    "success": 1,
+    "data": {
+        "c:46328": {
+            "info": {
+                "id": 46328,
+                "slug": "tw-vixtwn",
+                "type": 1,
+                "name_tc": "台灣-台指選擇權波動指數[VIXTWN]",
+                "name_sc": "台湾-台指选择权波动指数[VIXTWN]",
+                "name_en": "Taiwan - TAIEX Options Volatility Index [VIXTWN]",
+                "country": "tw",
+                "description_tc": "此指標為台灣期貨交易所參考美國 CBOE VIX 指數方法、台指選擇權（TXO）市場特性所編製而成，測量未來 30 天市場預期台股期貨的波動程度。\n\n當 VIXTWN 升高時，代表交易者認為未來台股期貨會有大幅波動，處在恐慌情緒中；反之，VIXTWN 下降時，代表交易者認為未來波動將趨緩。\n",
+                "description_sc": "此指标为台湾期货交易所参考美国 CBOE VIX 指数方法、台指选择权（TXO）市场特性所编製而成，测量未来 30 天市场预期台股期货的波动程度。\n\n当 VIXTWN 升高时，代表交易者认为未来台股期货会有大幅波动，处在恐慌情绪中；反之，VIXTWN 下降时，代表交易者认为未来波动将趋缓。\n",
+                "description_en": "The TAIEX Options Volatility Index (VIXTWN) is compiled by the Taiwan Futures Exchange referencing the CBOE VIX methodology. Based on prices of TAIEX options (TXO), the index reflects the 30-day expected volatility of TAIEX futures. \n\nThe higher the index goes, the more volatile/bearish the market may get.",
+                "date_start": null,
+                "date_end": null,
+                "date_range": "",
+                "chart_config": {
+                    "valueDecimals": 2,
+                    "xbaselines": "",
+                    "sortBarChart": false,
+                    "seriesConfigs": [
+                        {
+                            "aggn": "",
+                            "freq": "D",
+                            "old_freq": "D",
+                            "opn": "lin",
+                            "opn_n": "",
+                            "color": "#3bafda",
+                            "line_width": "2",
+                            "name": "台灣-台指選擇權波動指數[VIXTWN]",
+                            "name_tc": "台灣-台指選擇權波動指數[VIXTWN]",
+                            "name_sc": "台湾-台指选择权波动指数[VIXTWN]",
+                            "name_en": "TAIEX Options Volatility Index [VIXTWN]",
+                            "u": "idx",
+                            "old_u": "idx",
+                            "unitlabel": "",
+                            "stats": [
+                                {
+                                    "stat_id": 4608,
+                                    "country": "tw",
+                                    "currency": "",
+                                    "u": "idx",
+                                    "old_u": "idx",
+                                    "freq": "D",
+                                    "category": 9,
+                                    "old_freq": "D",
+                                    "aggn": "eop",
+                                    "opn": "lin",
+                                    "opn_n": "",
+                                    "opn_m": "",
+                                    "base_date": "",
+                                    "name_tc": "台灣-台指選擇權波動指數[VIXTWN]",
+                                    "name_sc": "台湾-台指选择权波动指数[VIXTWN]",
+                                    "name_en": "Taiwan - TAIEX Options Volatility Index [VIXTWN]",
+                                    "category_v2": 400001
+                                }
+                            ],
+                            "yoppo": 0,
+                            "ymax": "",
+                            "ymin": "",
+                            "y_reverse": 0,
+                            "lineType": "line",
+                            "y_position": 1,
+                            "ybaselines": "",
+                            "arithmetic": "",
+                            "ytype": "linear"
+                        }
+                    ]
+                },
+                "user": null
+            },
+            "series": [
+                [
+                    [
+                        "2026-02-23",
+                        "27.3800"
+                    ],
+                    [
+                        "2026-02-24",
+                        "26.2900"
+                    ],
+                    [
+                        "2026-02-25",
+                        "29.0900"
+                    ],
+                    [
+                        "2026-02-26",
+                        "26.7600"
+                    ],
+                    [
+                        "2026-03-02",
+                        "30.3800"
+                    ],
+                    [
+                        "2026-03-03",
+                        "32.4200"
+                    ],
+                    [
+                        "2026-03-04",
+                        "39.1700"
+                    ]
+                ]
+            ]
+        }
+    },
+    "showDateList": []
+}

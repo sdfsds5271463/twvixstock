@@ -1,0 +1,8 @@
+TAIEX
+ FROM https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockPrice&data_id=TAIEX&start_date=2016-01-01
+   2016-01-04 ~ 2026-03-05
+
+VIXTWN
+ FROM https://www.macromicro.me/charts/46328/tw-vixtwn
+  ==> https://www.macromicro.me/charts/data/46328
+   2016-11-25 ~ 2026-03-04

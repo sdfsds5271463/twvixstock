@@ -1,0 +1,78 @@
+{
+    "msg": "success",
+    "status": 200,
+    "data": [
+        {
+            "date": "2026-02-25",
+            "stock_id": "TAIEX",
+            "Trading_Volume": 15806158578,
+            "Trading_money": 1020570870136,
+            "open": 34753.31,
+            "max": 35521.54,
+            "min": 34753.31,
+            "close": 35413.07,
+            "spread": 712.25,
+            "Trading_turnover": 6229085
+        },
+        {
+            "date": "2026-02-26",
+            "stock_id": "TAIEX",
+            "Trading_Volume": 15667310561,
+            "Trading_money": 1207836722507,
+            "open": 35457.76,
+            "max": 35579.34,
+            "min": 35171.52,
+            "close": 35414.49,
+            "spread": 1.42,
+            "Trading_turnover": 6143155
+        },
+        {
+            "date": "2026-03-02",
+            "stock_id": "TAIEX",
+            "Trading_Volume": 14965963786,
+            "Trading_money": 1014040137978,
+            "open": 35277.48,
+            "max": 35345.72,
+            "min": 34605.36,
+            "close": 35095.09,
+            "spread": -319.4,
+            "Trading_turnover": 6762693
+        },
+        {
+            "date": "2026-03-03",
+            "stock_id": "TAIEX",
+            "Trading_Volume": 16527604581,
+            "Trading_money": 1113233319063,
+            "open": 35106.22,
+            "max": 35264.59,
+            "min": 34323.65,
+            "close": 34323.65,
+            "spread": -771.44,
+            "Trading_turnover": 8200698
+        },
+        {
+            "date": "2026-03-04",
+            "stock_id": "TAIEX",
+            "Trading_Volume": 17027132902,
+            "Trading_money": 1099338575770,
+            "open": 34228.75,
+            "max": 34228.75,
+            "min": 32828.88,
+            "close": 32828.88,
+            "spread": -1494.77,
+            "Trading_turnover": 8552766
+        },
+        {
+            "date": "2026-03-05",
+            "stock_id": "TAIEX",
+            "Trading_Volume": 11784121914,
+            "Trading_money": 793545602327,
+            "open": 33620.74,
+            "max": 34319.68,
+            "min": 33472.91,
+            "close": 33672.94,
+            "spread": 844.06,
+            "Trading_turnover": 4641310
+        }
+    ]
+}

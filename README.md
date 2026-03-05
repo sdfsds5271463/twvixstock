@@ -1,7 +1,9 @@
 TwVixStock - 全棧台股指數爬蟲與視覺化系統
+
 這是一個基於 Go 語言開發的自動化台股爬蟲系統，整合了後端 API、排程任務、前端視覺化以及完整的雲端 CI/CD 自動化部署流程。
 
 🌟 專案亮點
+
 自動化排程：使用 Kubernetes CronJob 實現每日定時爬取台股盤後數據。
 
 高效能後端：採用 Go Gin 框架，配合 Repository Pattern 進行乾淨的架構管理。
@@ -13,7 +15,6 @@ DevOps 實踐：連結 GitHub 至 Google Cloud Build，實現 Push-to-Deploy 的
 HTTPS 保障：透過 Cloudflare 代理實現免費的 SSL 安全加密連線。
 
 🏗️ 專案目錄架構
-'''
 Plaintext
     twvixstock/
     ├── cmd/
@@ -32,7 +33,6 @@ Plaintext
     ├── Dockerfile           # 編譯產生映像檔
     ├── cloudbuild.yaml      # GCP Cloud Build 定義檔 (GitHub推送觸發)
     └── docker-compose.yaml  # 本地開發環境一鍵啟動
-'''
 
 🛠️ 技術棧
 Backend: Go (Gin Gonic)

@@ -8,7 +8,8 @@ import (
 	"io"
 )
 
-func FetchData(token string) {
+func FetchDataTAIEX(all bool, token string) {
+
 	// 實作爬蟲
 	res, err := http.Get("http://allenweb.ddns.net:9527/api1/res.php?token="+token)
 	if(err != nil){ 
@@ -24,4 +25,10 @@ func FetchData(token string) {
 		log.Printf("資料解析失敗: %v", err)
 	}
 	fmt.Println("成功解析筆數:", count)  //200
+}
+
+func FetchDataTWVIX(all bool, token string) {
+
+	// 實作爬蟲
+	fmt.Println("FetchDataTWVIX:", token)
 }
