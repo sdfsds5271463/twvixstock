@@ -6,25 +6,29 @@
 
     twvixstock/
     ├── cmd/
-    │   ├── server/          # Gin API 伺服器
-    │   └── scheduler/       # 爬蟲排程器
+    │   ├── server/          # Gin API 伺服器入口
+    │   └── scheduler/       # 爬蟲排程啟動器
     ├── internal/
-    │   ├── handler/         # 處理 HTTP 請求 (Gin)
-    │   ├── service/         # 核心業務邏輯 (例如：計算指標)
-    │   ├── repository/      # 資料庫操作 (SQL 語法)
-    │   ├── model/           # 定義 Struct (DB Schema)
-    │   ├── crawler/         # 爬蟲具體邏輯 (被 scheduler 調用)
-    │   └── config/          # 設定檔讀取邏輯 (建議從 root 移入 internal)
-    ├── frontend/            # Vue CLI 專案目錄
-    ├── scripts/             # 放一些部署用的 .sh 或 SQL 初始化腳本
-    ├── config/              # 存放 .yaml 設定檔
-    ├── Dockerfile
-    ├── docker-compose.yaml
-    ├── cloudbuild.yaml
-    ├── .gitignore
-    ├── .env
-    ├── go.mod
-    └── k8s/                 # Kubernetes manifest 檔案
+    │   ├── handler/         # HTTP 請求處理 (Controllers)
+    │   ├── service/         # 核心業務邏輯 (Business Logic)
+    │   ├── repository/      # 資料庫存取層 (SQL Operations)
+    │   ├── model/           # 資料結構定義 (Domain Models)
+    │   ├── crawler/         # 各類爬蟲具體邏輯
+    │   └── config/          # 設定檔與環境變數讀取
+    ├── frontend/            # Vue.js 前端專案
+    ├── k8s/                 # Kubernetes 部署設定檔案 (Deployment, Service, CronJob)
+    ├── scripts/             # SQL 初始化腳本與自動化腳本
+    ├── Dockerfile           # 編譯產生映像檔
+    ├── cloudbuild.yaml      # GCP Cloud Build 定義檔 (GitHub推送觸發)
+    └── docker-compose.yaml  # 本地開發環境一鍵啟動
+
+
+    Backend: Go (Gin Gonic)
+    Frontend: Vue.js 3 + Sass
+    Database: MySQL 8.0
+    Infrastructure: Google Kubernetes Engine (GKE), Artifact Registry
+    CI/CD: Google Cloud Build, GitHub Actions
+    Network: Cloudflare, Google Load Balancer
 
 
 
@@ -1486,21 +1490,27 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
 第五章: 申請域名::
 =======================================================================================
 4.i 章節目錄
-固定IP
-免費域名
+
+
+
+GKE
+   ↓
+Ingress
+   ↓
+Global Static IP
+   ↓
+Cloud DNS
+
 
 
     創建固定IP
 
     gcloud compute addresses create twvixstock-ip --region=asia-east1
-
     gcloud compute addresses describe twvixstock-ip --region=asia-east1
         ⮕ address: 35.229.210.177
-
-    綁定 loadBalancerIP
-
-
-    [檔案<改寫>: 伺服器端口與映像]
+        ⮕ 使用中幾乎不收費，沒使用就要收費所以要砍掉
+    
+    [檔案<改寫>: 綁定 loadBalancerIP]
     📂k8s/server.yaml:
         spec:
           type: LoadBalancer
@@ -1513,10 +1523,66 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
 
 
 
-GKE
-   ↓
-Ingress
-   ↓
-Global Static IP
-   ↓
-Cloud DNS
+    刪除IP方法
+    gcloud compute addresses describe twvixstock-ip --region=asia-east1
+        ⮕ status: RESERVED 可以刪 / status: IN_USE 要先結束服務
+    gcloud compute addresses delete twvixstock-ip --region=asia-east1
+        ⮕ 沒使用就要收費所以要砍掉
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cloudflare
+
+首頁 新網域
+twvixstock.qzz.io
+免費方案
+
+
+左邊網域 > 域名最右邊... > 設定DNS > 找到
+NS  isla.ns.cloudflare.com
+NS  quincy.ns.cloudflare.com
+
+
+
+
+
+
+
+
+https://dash.domain.digitalplat.org/auth/login
+註冊 連結GitHub
+
+
+申請域名：
+
+點擊 "Domain Registration"。
+
+搜尋你要的名稱（例如 twvixstock），後綴選 .qzz.io
+
+
+
+左邊網域 > 域名點下去 > 
+
+    自動驗證域名伺服器 > 等待刷新至綠色狀態
+
+    左側DNS > 紀錄 > 新增紀錄
+        A @ 35.229.210.177
+            > 儲存 > 可以連上 http://twvixstock.qzz.io/
+
+    左側SSL/TLS > 概觀 > 設定 > 彈性(僅cloudflare對外加密) > 儲存
+
+
+[SSL/TLS] -> 邊緣憑證
+ > 一律使用 HTTPS(勾) > 啟用 HSTS (設定>全勾) > 自動改寫 HTTPS(勾)
