@@ -29,7 +29,8 @@ func main() {
 	})
 	r.Static("/css", "./static/css")
 	r.Static("/js", "./static/js")
-	r.Static("/img", "./static/img")
+	r.Static("/images", "./static/images")
+	r.Static("/assets", "./static/assets")
 
 	// 3. 設定路由群組
 	api := r.Group("/api")
