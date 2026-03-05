@@ -30,8 +30,8 @@ func main() {
 	}
 	// 台灣恐慌指數
 	if(crawlerKind == model.CrawlerKind.Both || crawlerKind == model.CrawlerKind.VIXTWN){
-		crawler.FetchDataTWVIX(*flag_all, config.AppConfig.Crawler.Token)
+		crawler.FetchDataVIXTWN(*flag_all, config.AppConfig.Crawler.Token)
 	}
-
+	
 }
 

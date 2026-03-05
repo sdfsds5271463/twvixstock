@@ -8,8 +8,8 @@ spec:
   schedule: "0 * * * *" 
   jobTemplate:
     spec:
-      # 執行完成後 300 秒（5 分鐘）自動刪除此 Job 與相關 Pod
-      ttlSecondsAfterFinished: 300
+      # 執行完成後 86400 秒 自動刪除此 Job 與相關 Pod
+      ttlSecondsAfterFinished: 86400
       template:
         spec:
           containers:

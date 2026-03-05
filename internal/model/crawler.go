@@ -11,3 +11,10 @@ var CrawlerKind = struct {
     TAIEX:  "taiex",
     VIXTWN: "vixtwn",
 }
+
+//TaiexApi 返回格式
+type TaiexApi struct{
+	Msg string           `json:"msg"`
+	Status int64         `json:"status"`
+	Data []map[string]interface{}   `json:"data"`
+}
