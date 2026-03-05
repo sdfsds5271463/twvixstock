@@ -1153,6 +1153,8 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
         ⮕ 運行 .sql
     kubectl exec -it mysql-c76fd468f-d4mhr -- mysql -u root -ptt123456 twvixstock_db -e "SELECT * FROM stock LIMIT 5;"
         ⮕ 執行 query
+    kubectl port-forward svc/mysql-service 3306:3306
+        ⮕ 本地映射 port-forward
 
     [指令: 排程管理]
     kubectl get cronjobs
@@ -1490,99 +1492,76 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
 第五章: 申請域名::
 =======================================================================================
 4.i 章節目錄
+    4.0 DNS獲取流程
+        用 Cloudflare +免費 DNS 不用錢
+    4.1 固定 GEK 的 loadBalancerIP
+        讓 GKE 平衡端 IP 固定下來
+    4.2 申請 Cloudflare + DigitalPlat
+        免費域名的 DigitalPlat 綁定 Cloudflare 的 NS；並由 Cloudflare 綁定 IP 提供憑證
 
 
+4.0 DNS獲取流程
+    [方法1: GCP原生DNS]  
+    服務: GKE EXTERNAL-IP → Ingress → Global Static IP → Cloud DNS
+    流程: Client → Google Cloud HTTP(S) Load Balancer (Ingress) → GKE Service/Pod
+    費用: Load Balancer 有固定月費 + 流量費用
 
-GKE
-   ↓
-Ingress
-   ↓
-Global Static IP
-   ↓
-Cloud DNS
+    [方法2: Cloudflare+免費DNS]  
+    服務: GKE EXTERNAL-IP → Cloudflare + DigitalPlat(免費DNS)
+    流程: Client → Cloudflare/DigitalPlat Edge → GKE External IP (LoadBalancer)
+    費用: 免費 (所以本章採用本方法)
 
 
-
-    創建固定IP
-
+4.1 固定 GEK 的 loadBalancerIP
+    [指令: 產生可用的靜態IP]
     gcloud compute addresses create twvixstock-ip --region=asia-east1
     gcloud compute addresses describe twvixstock-ip --region=asia-east1
         ⮕ address: 35.229.210.177
         ⮕ 使用中幾乎不收費，沒使用就要收費所以要砍掉
     
-    [檔案<改寫>: 綁定 loadBalancerIP]
+    [檔案<改寫>: 加入 loadBalancerIP 固定值]
     📂k8s/server.yaml:
         spec:
           type: LoadBalancer
           ports:   ==>
-
         spec:
           type: LoadBalancer
           loadBalancerIP: 35.229.210.177
-          ports:   ==>
+          ports:
 
-
-
-    刪除IP方法
+    [指令: 未來刪除IP方法]
     gcloud compute addresses describe twvixstock-ip --region=asia-east1
         ⮕ status: RESERVED 可以刪 / status: IN_USE 要先結束服務
     gcloud compute addresses delete twvixstock-ip --region=asia-east1
         ⮕ 沒使用就要收費所以要砍掉
 
 
+4.2 申請 Cloudflare + DigitalPlat
+    [註冊階段: 註冊 Cloudflare 及 DigitalPlat]
+    Cloudflare 官網 https://www.cloudflare.com/zh-tw/ 
+        ⮕ 註冊帳號 (可能要強制開啟兩次驗證)
+    DigitalPlat 官網 https://dash.domain.digitalplat.org/
+        ⮕ 註冊帳號 > 連結GitHub > 查看Domain Registration免費域名規則
+        ⮕ 決定使用免費域名稱:  twvixstock.qzz.io
 
+    [Cloudflare: 取得NS]
+    C首頁 > 輸入現有(新)網域 > twvixstock.qzz.io > 繼續 > 免費方案
+    C首頁 > (左邊)網域 > (域名最右邊)⋯ > 設定DNS > (最下面)NS
+        ⮕ NS  isla.ns.cloudflare.com
+        ⮕ NS  quincy.ns.cloudflare.com
 
+    [DigitalPlat: 取得免費域名]
+    D首頁 > Domain Registration > 填入 twvixstock.qzz.io > 填入 NS1 + NS2
 
+    [Cloudflare: 設定IP]
+    C首頁 > (左邊)網域 > (直接點域名) > 進入C域名頁
+        C域名頁 > 自動驗證域名伺服器 > 等待刷新至綠色狀態
+        C域名頁 > (左側)DNS > 紀錄 > 新增紀錄
+            ⮕ 填入: A  @  35.229.210.177  > 儲存
+            ⮕ 可以連上 http://twvixstock.qzz.io
 
+    [Cloudflare: SSL/TLS]
+        C域名頁 > (左側)SSL/TLS > 概觀 > 設定 > 彈性(僅cloudflare對外加密) > 儲存
+        C域名頁 > (左側)SSL/TLS > 邊緣憑證 > 一律使用 HTTPS(勾) > 啟用 HSTS (設定>全勾) > 自動改寫 HTTPS(勾)
+            ⮕ 可以連上 https://twvixstock.qzz.io
 
-
-
-
-
-
-
-
-
-Cloudflare
-
-首頁 新網域
-twvixstock.qzz.io
-免費方案
-
-
-左邊網域 > 域名最右邊... > 設定DNS > 找到
-NS  isla.ns.cloudflare.com
-NS  quincy.ns.cloudflare.com
-
-
-
-
-
-
-
-
-https://dash.domain.digitalplat.org/auth/login
-註冊 連結GitHub
-
-
-申請域名：
-
-點擊 "Domain Registration"。
-
-搜尋你要的名稱（例如 twvixstock），後綴選 .qzz.io
-
-
-
-左邊網域 > 域名點下去 > 
-
-    自動驗證域名伺服器 > 等待刷新至綠色狀態
-
-    左側DNS > 紀錄 > 新增紀錄
-        A @ 35.229.210.177
-            > 儲存 > 可以連上 http://twvixstock.qzz.io/
-
-    左側SSL/TLS > 概觀 > 設定 > 彈性(僅cloudflare對外加密) > 儲存
-
-
-[SSL/TLS] -> 邊緣憑證
- > 一律使用 HTTPS(勾) > 啟用 HSTS (設定>全勾) > 自動改寫 HTTPS(勾)

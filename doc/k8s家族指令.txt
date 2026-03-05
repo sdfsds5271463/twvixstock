@@ -67,7 +67,9 @@
         ⮕ 運行 .sql
     kubectl exec -it mysql-c76fd468f-d4mhr -- mysql -u root -ptt123456 twvixstock_db -e "SELECT * FROM stock LIMIT 5;"
         ⮕ 執行 query
-
+    kubectl port-forward svc/mysql-service 3306:3306
+        ⮕ 本地映射 port-forward
+        
     [指令: 排程管理]
     kubectl get cronjobs
         ⮕ 所有將會開啟 jobs 的預期計畫
