@@ -34,7 +34,6 @@ metadata:
   name: server-service
 spec:
   type: LoadBalancer   #GKE     # type: NodePort   #minikube
-  loadBalancerIP: 35.229.210.177
   selector:
     app: tvs-server
   ports:

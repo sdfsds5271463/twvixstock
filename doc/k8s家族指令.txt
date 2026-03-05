@@ -1,4 +1,6 @@
-1. 確保 Minikube 正常執行
+1. Minikube
+
+1.1 確保 Minikube 正常執行
     [安裝]
     winget source update
     winget install Kubernetes.minikube
@@ -32,7 +34,7 @@
     kubectl delete -f k8s/   #徹底刪除所有設定及服務
 
 
-2. 編譯映像
+1.2. 編譯映像
     [指令1: 至 minikube VM docker 內編譯]
     eval $(minikube docker-env)
     docker build -t tvs-server --target server .
@@ -48,7 +50,7 @@
     minikube image ls
 
 
-3. 運行服務
+1.3 運行服務
     [指令: 運行與啟動服務]
     kubectl apply -f k8s/
     kubectl get pods
@@ -57,7 +59,7 @@
         ⮕ 將自動依據服務 server-service 開啟映射
 
 
-4. 管理指令
+1.4 管理指令
     [指令: 資料庫管理]
     kubectl get pods -l app=mysql
         ⮕ 先取得 pod 名
@@ -67,6 +69,8 @@
         ⮕ 執行 query
 
     [指令: 排程管理]
+    kubectl get cronjobs
+        ⮕ 所有將會開啟 jobs 的預期計畫
     kubectl get jobs
         ⮕ 查看所有 job 名，有名稱就可以查看 log
     kubectl create job --from=cronjob/tvs-scheduler-cron manualtest1
@@ -84,3 +88,106 @@
         ⮕ 查看服務 pod 名
     kubectl logs tvs-server-5b4d99bbcd-s2xdw
         ⮕ 查看指定服務單一 pod 運行 log
+
+
+
+2. GKE
+
+2.1 專案創建
+    [網站: 新建專案]
+    https://console.cloud.google.com/
+        ⮕ 新建專案 twvixstock
+
+    [指令: 安裝 gcloud 與初始登入(一次性)]
+    curl https://sdk.cloud.google.com | bash
+        ⮕ windows要再建安裝資料路徑環境變數，安裝完成後cli要重啟
+    gcloud init
+    gcloud auth login
+
+    [指令: 查看與切換專案]
+    gcloud config get-value project
+    gcloud config set project twvixstock
+        ⮕ 切換專案有標籤建議不用理它
+
+
+2.2 啟用API服務
+    [指令: 啟動服務 Cloud Run Admin API + Cloud Build API+  Artifact Registry API + Kubernetes Engine API ]
+    gcloud services enable run.googleapis.com
+    gcloud services enable cloudbuild.googleapis.com
+    gcloud services enable artifactregistry.googleapis.com
+    gcloud services enable container.googleapis.com
+    gcloud services list --enabled
+        ⮕ 查看服務清單
+
+
+2.3 建立 Artifact Registry
+    [指令: 建立倉庫 tvs-repo]
+    gcloud artifacts repositories create tvs-repo \
+      --repository-format=docker \
+      --location=asia-east1 \
+      --description="docker repository"
+
+    [指令: 設定 Docker 認證(一次性)]
+    gcloud auth configure-docker asia-east1-docker.pkg.dev
+        ⮕ 將自動修改設定  C:\Users\sdfsd\.docker\config.json  |  /home/sdfsd/.docker/config.json 
+        ⮕ .docker\config.json 設定檔將增加 { "credHelpers": { "asia-east1-docker.pkg.dev": "gcloud" }
+
+
+2.4 建立叢集
+    [指令: 建立叢集 twvixstock-cluster ]
+    gcloud container clusters create twvixstock-cluster \
+        --region asia-east1-b \
+        --num-nodes 2 \
+        --disk-size 30
+            ⮕ 地區不能只選 asia-east1 ，會創造 asia-east1-a/b/c 三個區
+            ⮕ 預設100G，這邊使用30G (免費帳總空間上限為250G)
+
+    [指令: 刪除叢集]
+    gcloud container clusters delete twvixstock-cluster --zone asia-east1-b
+        ⮕ 將刪除全部服務，就不會收費了
+
+    [指令: 查看磁碟用量]
+    gcloud config set project 別的專案
+    gcloud compute disks list
+        ⮕ 全部叢集磁碟用量，注意免費帳上限為 250G
+
+
+2.5 部屬前確認
+    [指令: 部屬環境確認]
+    gcloud config get-value project
+    gcloud config set project twvixstock
+        ⮕ 確認並設定正確 GCP 專案
+    kubectl config get-contexts
+    kubectl config use-context gke開頭的
+        ⮕ 確認並設定正確叢集
+    docker ps   #是否在 minikube 內
+    eval $(minikube docker-env -u)
+        ⮕ 離開 minikube 環境
+
+
+2.6 建置與部屬 (本地編譯推送)
+    [指令: 掛載sql準備]
+    kubectl delete configmap twvixstock-db-sql
+    kubectl create configmap twvixstock-db-sql --from-file=scripts/twvixstock_db.sql
+
+    [指令: 編譯與推送映像]
+    docker build --no-cache -t asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-server:v1 --target server .
+    docker build --no-cache -t asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-scheduler:v1 --target scheduler .
+    docker push asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-server:v1
+    docker push asia-east1-docker.pkg.dev/twvixstock/tvs-repo/tvs-scheduler:v1
+
+    [指令: 運行與測試服務]
+    kubectl apply -f k8s/
+    kubectl get pods
+    kubectl get services
+        ⮕ 查看services EXTERNAL-IP(對外IP)
+    kubectl create job --from=cronjob/tvs-scheduler-cron manualtest1
+        ⮕ 立刻創建並只運行一次排程
+    kubectl logs -l job-name=manualtest1
+    kubectl delete job manualtest1
+
+    [指令: 終止服務]
+    kubectl delete -f k8s/
+        ⮕ 終止所有部屬
+    gcloud container clusters delete twvixstock-cluster --zone asia-east1-b
+        ⮕ 刪除叢集

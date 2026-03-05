@@ -18,17 +18,17 @@
     ├── frontend/            # Vue CLI 專案目錄
     ├── scripts/             # 放一些部署用的 .sh 或 SQL 初始化腳本
     ├── config/              # 存放 .yaml 設定檔
-    ├── Dockerfile.server
-    ├── Dockerfile.scheduler
+    ├── Dockerfile
     ├── docker-compose.yaml
     ├── cloudbuild.yaml
     ├── .gitignore
+    ├── .env
     ├── go.mod
     └── k8s/                 # Kubernetes manifest 檔案
 
 
 
-. 關鍵觀念：從 Docker 到 K8s 的轉變功能Docker ComposeKubernetes容器單元ServicePod (通常包裹在 Deployment 內)內部溝通Service NameService (ClusterIP)資料持久化VolumesPersistentVolume (PV) & PVC環境變數environmentConfigMap & Secret排程任務手動或常駐CronJob (K8s 原生支持)
+git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -> gke-deploy run
 
 
     所有章節的指令都是在根目錄輸入
@@ -1177,11 +1177,35 @@
 第四章: 在GKE運行::
 =======================================================================================
 4.i 章節目錄
+    4.0 專案規劃
+        名詞與區域準備
+    4.1 專案創建
+        新增GCP專案並啟用gcloud
+    4.2 啟用API服務
+        專案啟用GCP服務
+    4.3 建立 Artifact Registry
+        建立倉庫 tvs-repo 並認證 docker
+    4.4 建立叢集
+        建立叢集 twvixstock-cluster 並管理磁碟
+    4.5 yaml檔修改
+        改寫映像拉取規則、浮動端口、80埠對外
+    4.6 部屬前確認
+        GCP專案、gke叢集、本地docker
+    4.7 建置與部屬 (本地編譯推送)
+        映像固定版號、SQL掛載、本地編譯推送，手動執行
+    4.8 建置與部屬 (線上編譯推送)
+        映像無版號、SQL掛載、線上編譯推送，gke-deploy執行
+    4.9 Github (線上編譯推送，繼承 4.8 全部設定)
+        新建 github 專案、初始推送並 trigger Cloud Build
+    4.a 除錯與管理指令
+        其他指令
+
 
 4.0 專案規劃
     [規劃: 名詞準備]
     專案名稱:  twvixstock
-    地區:  asia-east1(-b)
+    region:  asia-east1
+    regionZone:  asia-east1-b
     ArtifactRegistry名:  tvs-repo
     叢集名:  twvixstock-cluster
 
@@ -1245,7 +1269,7 @@
         ⮕ 全部叢集磁碟用量，注意免費帳上限為 250G
 
 
-4.5 ymal檔修改
+4.5 yaml檔修改
     [檔案<改寫>: 伺服器端口與映像]
     📂k8s/server.yaml:
     <將固定開放端口改為GCP自動平衡端口>
@@ -1272,7 +1296,7 @@
 
 
 4.6 部屬前確認
-    [指令: 部屬環境確認]
+    [指令: 確認 GCP專案、gke叢集、本地docker]
     gcloud config get-value project
     gcloud config set project twvixstock
         ⮕ 確認並設定正確 GCP 專案
@@ -1310,6 +1334,7 @@
     kubectl create job --from=cronjob/tvs-scheduler-cron manualtest1
         ⮕ 立刻創建並只運行一次排程
     kubectl logs -l job-name=manualtest1
+    kubectl delete job manualtest1
 
     [指令: 終止服務]
     kubectl delete -f k8s/
@@ -1403,6 +1428,7 @@
     kubectl create job --from=cronjob/tvs-scheduler-cron manualtest1
         ⮕ 立刻創建並只運行一次排程
     kubectl logs -l job-name=manualtest1
+    kubectl delete job manualtest1
 
     [指令: 終止服務]
     kubectl delete -f k8s/
@@ -1442,12 +1468,55 @@
         ⮕ 自動觸發提交線上編譯，後續效果同 4.8
 
 
+4.a 除錯與管理指令
+    [指令: 當 pods 出錯時]
+    kubectl get pods
+    kubectl describe pods tvs-server-55869b9b79-8hpc6
+
+    [指令: 當 image 出錯時]
+    kubectl get deployment tvs-server -o yaml | grep image:
+    kubectl get deployment tvs-scheduler -o yaml | grep image:
+
+    [指令: 擴展 pods]
+    kubectl scale deployment tvs-server --replicas=3
 
 
-檢查
-指令
-kubectl get deployment tvs-server -o yaml | grep image:
-kubectl get deployment tvs-scheduler -o yaml | grep image:
 
-kubectl get pods
-kubectl describe pods tvs-server-55869b9b79-8hpc6
+=======================================================================================
+第五章: 申請域名::
+=======================================================================================
+4.i 章節目錄
+固定IP
+免費域名
+
+
+    創建固定IP
+
+    gcloud compute addresses create twvixstock-ip --region=asia-east1
+
+    gcloud compute addresses describe twvixstock-ip --region=asia-east1
+        ⮕ address: 35.229.210.177
+
+    綁定 loadBalancerIP
+
+
+    [檔案<改寫>: 伺服器端口與映像]
+    📂k8s/server.yaml:
+        spec:
+          type: LoadBalancer
+          ports:   ==>
+
+        spec:
+          type: LoadBalancer
+          loadBalancerIP: 35.229.210.177
+          ports:   ==>
+
+
+
+GKE
+   ↓
+Ingress
+   ↓
+Global Static IP
+   ↓
+Cloud DNS
