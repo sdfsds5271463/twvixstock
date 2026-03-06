@@ -1,18 +1,18 @@
-<script setup>
+<script setup lang="ts">
 import {
-    dashboardOne,
-    dashboardTwo,
-    splineAreaWidgetTwo,
-    splineAreaWidgetThree,
-} from '@/data/dashboard.v1.js'
-import Breadcrumbs from '@/components/Breadcrumbs.vue'
+  dashboardOne,
+  dashboardTwo,
+  splineAreaWidgetTwo,
+  splineAreaWidgetThree,
+} from "@/data/dashboard.v1.js"
 
-import { onMounted } from 'vue'
-onMounted(async () => {
-    console.log(12123123)
-    const response = await fetch("/api/stockDB?start=2026-02-01&end=2026-12-31")
-    const data = await response.text()
-    console.log(data)
+import Breadcrumbs from "@/components/Breadcrumbs.vue"
+import { onMounted } from "vue"
+
+onMounted(async (): Promise<void> => {
+  const response: Response = await fetch("/api/stockDB?start=2026-02-01&end=2026-02-31")
+  const data: string = await response.text()
+  console.log("TEST SHOW AJAX DATA::", data)
 })
 </script>
 
