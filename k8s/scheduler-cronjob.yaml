@@ -3,9 +3,8 @@ kind: CronJob
 metadata:
   name: tvs-scheduler-cron
 spec:
-  # 台北時間 每天 15 16 17 18 點各執行一次
-  schedule: "0 15,16,17,18 * * *"
-  timeZone: "Asia/Taipei"
+  # 台北時間(翻譯成UTC+0) 每天 15 16 17 18 點各執行一次
+  schedule: "0 7,8,9,10 * * *"
   jobTemplate:
     spec:
       # 執行完成後 86400 秒 自動刪除此 Job 與相關 Pod
