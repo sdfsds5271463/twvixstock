@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import type { App as VueApp } from "vue"
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -12,16 +13,18 @@ import PerfectScrollbar from 'vue3-perfect-scrollbar'
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 import VueApexCharts from "vue3-apexcharts";
 
-// globally call 
+// create app
+const app: VueApp = createApp(App)
 
-// app.component('BaseBtn', BaseBtn)
+// global components
+app.component("BaseCard", BaseCard)
+app.component("BaseBtn", BaseBtn)
 
+// plugins
+app.use(PerfectScrollbar)
+app.use(VueApexCharts)
+app.use(store)
+app.use(router)
 
-createApp(App)
-    .component('BaseCard', BaseCard)
-    .component('BaseBtn', BaseBtn)
-    .use(PerfectScrollbar)
-    .use(VueApexCharts)
-    .use(store)
-    .use(router)
-    .mount('#app')
+// mount
+app.mount("#app")

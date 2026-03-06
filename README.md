@@ -19,22 +19,39 @@ HTTPS 保障：透過 Cloudflare 代理實現免費的 SSL 安全加密連線。
 🏗️ 專案目錄架構
 
 Plaintext
+
     twvixstock/
+
     ├── cmd/
+
     │   ├── server/          # Gin API 伺服器入口
+
     │   └── scheduler/       # 爬蟲排程啟動器
+
     ├── internal/
+
     │   ├── handler/         # HTTP 請求處理 (Controllers)
+
     │   ├── service/         # 核心業務邏輯 (Business Logic)
+
     │   ├── repository/      # 資料庫存取層 (SQL Operations)
+
     │   ├── model/           # 資料結構定義 (Domain Models)
+
     │   ├── crawler/         # 各類爬蟲具體邏輯
+
     │   └── config/          # 設定檔與環境變數讀取
+
     ├── frontend/            # Vue.js 前端專案
+
     ├── k8s/                 # Kubernetes 部署設定檔案 (Deployment, Service, CronJob)
+
     ├── scripts/             # SQL 初始化腳本與自動化腳本
+
     ├── Dockerfile           # 編譯產生映像檔
+
     ├── cloudbuild.yaml      # GCP Cloud Build 定義檔 (GitHub推送觸發)
+    
     └── docker-compose.yaml  # 本地開發環境一鍵啟動
 
 

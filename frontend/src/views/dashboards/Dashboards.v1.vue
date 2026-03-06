@@ -10,7 +10,7 @@ import Breadcrumbs from "@/components/Breadcrumbs.vue"
 import { onMounted } from "vue"
 
 onMounted(async (): Promise<void> => {
-  const response: Response = await fetch("/api/stockDB?start=2026-02-01&end=2026-02-31")
+  const response: Response = await fetch("/api/stockDB?start=2026-02-01&end=2026-02-28")
   const data: string = await response.text()
   console.log("TEST SHOW AJAX DATA::", data)
 })
