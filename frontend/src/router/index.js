@@ -6,10 +6,10 @@ import SignUp from '../views/sessions/SignUp.vue'
 
 const routes = [
     {
-        path: '/',
+        path: '/layout',
         name: 'Home',
         component: () => import('../layout/index.vue'),
-        redirect: '/dashboards/dashboard-version-one',
+        redirect: '/',
         meta: {
             title: 'Home',
         },
@@ -17,51 +17,28 @@ const routes = [
         children: [
             {
                 path: '/dashboards',
+                alias: '/',
                 name: 'Dashboards',
-                component: () => import('../views/dashboards/index.vue'),
+                component: () => import('../views/dashboards/Dashboards.v1.vue'),
                 meta: {
                     title: 'Dashboard',
                 },
-                children: [
-                    {
-                        path: 'dashboard-version-one',
-                        name: 'dashboard-version-one',
-                        component: () =>
-                            import('../views/dashboards/Dashboards.v1.vue'),
-                    },
-                ],
             },
             {
                 path: '/components',
                 name: 'components',
-                component: () => import('../views/components/index.vue'),
+                component: () => import('../views/components/Button.vue'),
                 meta: {
                     title: 'Components',
                 },
-                children: [
-                    {
-                        path: 'button',
-                        name: 'button',
-                        component: () =>
-                            import('../views/components/Button.vue'),
-                    },
-                ],
             },
             {
                 path: '/profile',
                 name: 'profile',
-                component: () => import('../views/profile/index.vue'),
+                component: () => import('../views/profile/ProfileTwo.vue'),
                 meta: {
                     title: 'Profile',
                 },
-                children: [
-                    {
-                        path: 'profileTwo',
-                        name: 'ProfileTwo',
-                        component: () =>
-                            import('../views/profile/ProfileTwo.vue'),
-                    },
-                ],
             },
         ],
     },

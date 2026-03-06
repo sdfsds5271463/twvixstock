@@ -55,7 +55,7 @@ let handleWindowResize = () => {
                             
                         ></div> -->
                         <router-link
-                            to="/dashboards/dashboard-version-one"
+                            to="/"
                             tag="li"
                             class="nav-item"
                         >
@@ -65,7 +65,7 @@ let handleWindowResize = () => {
                             </div>
                         </router-link>
                         <router-link
-                            to="/components/button"
+                            to="/components"
                             tag="li"
                             class="nav-item"
                         >
@@ -75,7 +75,7 @@ let handleWindowResize = () => {
                             </div>
                         </router-link>
                         <router-link
-                            to="/profile/profileTwo"
+                            to="/profile"
                             tag="li"
                             class="nav-item"
                         >
