@@ -2305,6 +2305,11 @@ vue-eslint-parser@^9.3.1:
     lodash "^4.17.21"
     semver "^7.3.6"
 
+vue-my-photos@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/vue-my-photos/-/vue-my-photos-3.0.1.tgz"
+  integrity sha512-zJjBttmDyF6+IKRp+QTDus2S8ESeiOl02UkAqCyW8iOkKQrwPA/SiTBmNGTY7z5Itcd+M4rHcDxCTVCOWL5s1A==
+
 vue-router@^4.2.4:
   version "4.2.4"
   resolved "https://registry.npmjs.org/vue-router/-/vue-router-4.2.4.tgz"

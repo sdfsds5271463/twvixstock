@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, watch, watchEffect } from 'vue'
 import { Switch } from '@headlessui/vue'
-import HeaderSearch from '../components/HeaderSearch.vue'
+//import HeaderSearch from '../components/HeaderSearch.vue'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { useStore } from 'vuex'
 
@@ -493,7 +493,7 @@ const sideBarToggle = () => {
                 </MenuItems>
             </Menu>
 
-            <HeaderSearch />
+            <!--HeaderSearch /-->
         </div>
         <div class="flex items-center">
             <a
@@ -507,7 +507,7 @@ const sideBarToggle = () => {
                     p-1
                     md:mr-2
                 "
-                href="https://github.com/uilibrary/AatroX-vue"
+                href="https://github.com/sdfsds5271463/twvixstock"
                 target="_blank"
             >
                 <svg
