@@ -17,11 +17,19 @@
     <Breadcrumb parentTitle='Profile' subParentTitle='ProfileV2' />
     
     <BaseCard noPadding class="user-profile overflow-hidden relative">
-        <div class="header-cover"></div>
+        <div class="header-cover">
+          <div class="text-white text-center text-4xl">Allen Zheng</div>
+          <div class="text-white text-center">資深網路工程師</div>
+        </div>
         <div class="flex justify-center z-10 -m-10">
             <div class="text-center"><img class="relative z-1 w-20 h-20 m-auto rounded-full border-2 border-white" src="/images/faces/allen_small_head.jpg" />
-                <p class="text-2xl">Allen Zheng</p>
-                <p class="text-gray-600">資深網路工程師</p>
+                <p class="profile_desc text-gray-600">
+                  ▪️15年全端開發經歷，6年管理經歷，深耕<br class="rwd">高併發架構與自動化交易系統。<br>
+                  ▪️撰寫超過20個上線網站，對接超過30個<br class="rwd">金流API、超過10個遊戲API。<br>
+                  ▪️帶領5人團隊，從零開始獨立開發過三種不同類型<br class="rwd">遊戲，總不重複註冊人數超過27萬人。<br>
+                  ▪️協作開發的體育系統同時在線人數超過200人，自<br class="rwd">動部屬管理該系統20個以上微服務。<br>
+                  ▪️登入爬蟲超過30間合作廠商後台，達成一鍵式對單<br class="rwd">及開代理等系列合作商後台批次操作。
+                </p>
             </div>
         </div>
         <div class="mt-10 p-5">
@@ -77,6 +85,8 @@
     background-size: cover;
     background-repeat: no-repeat;
     height: 300px;
+    padding-top: 195px;
+    text-shadow: 0px 0px 20px rgb(34, 2, 37);
   }
   &::after {
     content: "";
@@ -86,16 +96,21 @@
     background: rgba(0,0,0,.1)
   }
 }
-/*@media (max-width: 767px) {
-  .user-profile {
-      .header-cover {
-          height: 200px;
-      }
+
+.profile_desc .rwd {
+  display: none;
+}
+@media (max-width: 767px) {
+  .profile_desc .rwd {
+    display: inline;
   }
-}*/
+}
 @media (max-width: 414px) {
   .tablist_icon {
       display: none;
+  }
+  .profile_desc {
+    font-size: 14px;
   }
 }
 
