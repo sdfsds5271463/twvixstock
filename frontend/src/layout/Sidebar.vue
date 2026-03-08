@@ -70,7 +70,7 @@ let handleWindowResize = () => {
                             class="nav-item"
                         >
                             <div class="nav-item-hold">
-                                <i class="i-Wallet text-3xl"></i>
+                                <i class="i-File-Network text-3xl"></i>
                                 <p>Stock Api</p>
                             </div>
                         </router-link>
@@ -80,7 +80,7 @@ let handleWindowResize = () => {
                             class="nav-item"
                         >
                             <div class="nav-item-hold">
-                                <i class="i-Wallet text-3xl"></i>
+                                <i class="i-Settings-Window text-3xl"></i>
                                 <p>Programing</p>
                             </div>
                         </router-link>
@@ -112,6 +112,8 @@ let handleWindowResize = () => {
 </template>
 
 <style lang="scss" scoped>
+$top_height: 50px;
+
 .nav-item.router-link-exact-active {
     @apply text-purple-500;
 
@@ -147,7 +149,7 @@ let handleWindowResize = () => {
 .side-content-wrap {
     .sidebar-left {
         position: fixed;
-        top: 80px;
+        top: $top_height;
         left: -120px;
         width: 120px;
 
@@ -161,7 +163,7 @@ let handleWindowResize = () => {
             transition: all 0.24s ease-in-out;
         }
         .ps {
-            height: calc(100vh - 80px);
+            height: calc(100vh - $top_height);
         }
         .navigation-left {
             list-style: none;
@@ -221,10 +223,10 @@ let handleWindowResize = () => {
     }
     .sidebar-left-secondary {
         position: fixed;
-        top: 80px;
+        top: $top_height;
         left: calc(-220px - 20px);
         z-index: 89;
-        height: calc(100vh - 80px);
+        height: calc(100vh - $top_height);
         width: 220px;
         padding: 0.75rem 0;
         transition: all 0.24s ease-in-out;
@@ -306,7 +308,7 @@ let handleWindowResize = () => {
         display: none;
         position: fixed;
         width: calc(100% - 120px - 220px);
-        height: calc(100vh - 80px);
+        height: calc(100vh - $top_height);
         bottom: 0;
         right: 0;
         background: rgba(0, 0, 0, 0);

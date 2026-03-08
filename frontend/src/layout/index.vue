@@ -57,7 +57,7 @@ provide('profile_photos', profile_photos);
         <Sidebar />
         <div :class="store.state.largeSidebar.sidebarToggleProperties.isSideNavOpen === true ? '': 'full'" class="main-content-wrap">
             <main>
-                <div class="main-content-wrap flex flex-col flex-grow print-area pt-10">
+                <div class="main-content-wrap flex flex-col flex-grow print-area pt-6">
                     <div>
                         <router-view />
                     </div>
@@ -77,7 +77,7 @@ provide('profile_photos', profile_photos);
             width: calc(100% - 100px);
             margin-left: 80px;
             // min-height: 100vh;
-            margin-top: 80px;
+            margin-top: 50px;
             transition: all 0.24s ease-in-out;
             .main-content-body{
                 min-height: calc(100vh - 80px);

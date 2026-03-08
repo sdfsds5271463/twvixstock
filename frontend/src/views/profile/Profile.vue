@@ -35,7 +35,7 @@
                     v-slot="{ selected }"
                 >
                 <BaseBtn 
-                    class="mb-3 mr-1 border border-primary text-primary"
+                    class="mx-1 mb-3 border border-primary text-primary"
                     :class="[
                     'hover:bg-primary hover:text-white',
                     selected
@@ -70,13 +70,14 @@
 
 <style lang="scss" scoped>
 .user-profile {
- .header-cover {
-   background-image: url("../../../images/photo-wide-5.jpeg") ;
-   position: relative;
-   background-size: cover;
-   background-repeat: no-repeat;
-   height: 300px;
- }
+  .header-cover {
+    background-image: url("../../../images/photo-wide.jpg") ;
+    background-color: purple;
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 300px;
+  }
   &::after {
     content: "";
     width: 100%;
