@@ -14,7 +14,7 @@
 <template>
  
   <div class="container mx-auto">
-    <Breadcrumb parentTitle='Profile' subParentTitle='ProfileV2' />
+    <Breadcrumb parentTitle='Profile' subParentTitle='個人資料介紹' />
     
     <BaseCard noPadding class="user-profile overflow-hidden relative">
         <div class="header-cover">
@@ -24,11 +24,12 @@
         <div class="flex justify-center z-10 -m-10">
             <div class="text-center"><img class="relative z-1 w-20 h-20 m-auto rounded-full border-2 border-white" src="/images/faces/allen_small_head.jpg" />
                 <p class="profile_desc text-gray-600">
-                  ▪️15年全端開發經歷，6年管理經歷，深耕<br class="rwd">高併發架構與自動化交易系統。<br>
-                  ▪️撰寫超過20個上線網站，對接超過30個<br class="rwd">金流API、超過10個遊戲API。<br>
-                  ▪️帶領5人團隊，從零開始獨立開發過三種不同類型<br class="rwd">遊戲，總不重複註冊人數超過27萬人。<br>
-                  ▪️協作開發的體育系統同時在線人數超過200人，自<br class="rwd">動部屬管理該系統20個以上微服務。<br>
-                  ▪️登入爬蟲超過30間合作廠商後台，達成一鍵式對單<br class="rwd">及開代理等系列合作商後台批次操作。
+                  <p>▪️<b>15年</b>全端開發經歷，<b>6年</b>管理經歷，深耕<br class="rwd">高併發架構與自動化交易系統。</p>
+                  <p>▪️撰寫超過<b>20個</b>上線網站，對接超過<b>10個</b>遊戲API<br class="rwd">，亦主力開發過<b>4個</b>大型專案的API。</p>
+                  <p>▪️對接超過<b>30個</b>金流API，由我完全負責的金流<br class="rwd">接口每月處理超過<b>1萬張</b>有效單。</p>
+                  <p>▪️帶領<b>5人</b>團隊，從零開始獨立開發過<b>3種</b>不同類型<br class="rwd">遊戲，不重複註冊總人數超過<b>27萬</b>人。</p>
+                  <p>▪️協作開發的體育系統同時在線人數超過<b>200人</b>，自<br class="rwd">動部屬管理該系統<b>20個</b>以上微服務。</p>
+                  <p>▪️登入爬蟲超過<b>30間</b>合作廠商後台，達成一鍵式對單<br class="rwd">及開代理等系列合作商後台批次操作。</p>
                 </p>
             </div>
         </div>
@@ -84,14 +85,14 @@
     position: relative;
     background-size: cover;
     background-repeat: no-repeat;
-    height: 300px;
-    padding-top: 195px;
+    height: 200px;
+    padding-top: 95px;
     text-shadow: 0px 0px 20px rgb(34, 2, 37);
   }
   &::after {
     content: "";
     width: 100%;
-    height: 300px;
+    height: 202px;
     position: absolute;
     background: rgba(0,0,0,.1)
   }
@@ -99,6 +100,10 @@
 
 .profile_desc .rwd {
   display: none;
+}
+.profile_desc p {
+  line-height: 18px;
+  padding: 4px 0px;
 }
 @media (max-width: 767px) {
   .profile_desc .rwd {
@@ -111,6 +116,9 @@
   }
   .profile_desc {
     font-size: 14px;
+  }
+  .profile_desc p {
+    line-height: 16px;
   }
 }
 
