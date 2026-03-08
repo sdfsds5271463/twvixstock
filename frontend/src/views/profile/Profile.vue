@@ -1,14 +1,14 @@
 <script setup lang="ts">
-    import Breadcrumb from '@/components/Breadcrumbs.vue'
-    import Timeline from './Timeline.vue'
-    import Aboutme from './Aboutme.vue'
-    import Skills from './Skills.vue'
-    import Photos from './Photos.vue'
-    import { ref } from 'vue'
-    import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
-    import About from '../About.vue'
-    let categories = ref(['Timeline', 'About', 'Skills', 'Photos'])
-    let categories_icon = ref(['i-Calendar-4', 'i-Business-Man', 'i-Hipster-Glasses', 'i-Camera'])
+  import Breadcrumb from '@/components/Breadcrumbs.vue'
+  import Timeline from './Timeline.vue'
+  import Aboutme from './Aboutme.vue'
+  import Projects from './Projects.vue'
+  import Photos from './Photos.vue'
+  import { ref } from 'vue'
+  import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
+  import About from '../About.vue'
+  let categories = ref(['Timeline', 'About', 'Projects', 'Photos'])
+  let categories_icon = ref(['i-Calendar-4', 'i-Business-Man', 'i-Professor', 'i-Camera'])
 </script>
 
 <template>
@@ -55,7 +55,7 @@
                 <Aboutme></Aboutme>
               </TabPanel>
               <TabPanel>
-                <Skills></Skills>
+                <Projects></Projects>
               </TabPanel>
               <TabPanel>
                 <Photos></Photos>
@@ -85,13 +85,13 @@
     background: rgba(0,0,0,.1)
   }
 }
-@media (max-width: 767px) {
+/*@media (max-width: 767px) {
   .user-profile {
       .header-cover {
           height: 200px;
       }
   }
-}
+}*/
 @media (max-width: 414px) {
   .tablist_icon {
       display: none;

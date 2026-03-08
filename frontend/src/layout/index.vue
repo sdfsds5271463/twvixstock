@@ -3,14 +3,13 @@ import { useStore } from 'vuex'
 import Header from './Header.vue'
 import Sidebar from './Sidebar.vue'
 import Footer from './Footer.vue'
+import LightboxUI from '@/components/LightboxUI.vue'
 
 let store = useStore();
 
-//以下圖片輪播
+// 給圖片輪播用的資料
 import { ref,provide } from 'vue'
-import Lightbox from 'vue-my-photos'
 import type { ImageItem } from '@/types/ImageItem'
-//圖片清單
 const profile_photos = ref<ImageItem[]>([
   { name: 'images/profile_photos/2024_jyb3.jpg',    desc: '遊戲平台手機板' , year: '2024' },
   { name: 'images/profile_photos/2024_jyb2.jpg',    desc: '遊戲平台前台2' , year: '2024' },
@@ -45,29 +44,14 @@ const profile_photos = ref<ImageItem[]>([
   { name: 'images/profile_photos/2012_yuntech1.jpg',     desc: '政府投標審核系統' , year: '2012' },
 ])
 const currentImageName = ref<string>('')
+
 provide('currentImageName', currentImageName); 
 provide('profile_photos', profile_photos); 
 
-/*
-使用時先引入
-script setup lang="ts">
-    import { inject, Ref } from 'vue'
-    import type { ImageItem } from '@/types/ImageItem'
-    const currentImageName = inject<Ref<string>>('currentImageName')!
-    const profile_photos = inject<Ref<ImageItem[]>>('profile_photos')!
-    console.log(profile_photos.value[0]['name']);
-然後<span @click="currentImageName = 'images/Sass_icon.png'">123</span>  這樣可以觸發
-*/
 </script>
 
 <template>
-    <!-- 圖片輪播 -->
-    <Lightbox
-        :images="profile_photos"
-        :current-image-name="currentImageName"
-        @on-lightbox-close="currentImageName = ''"
-    />
-
+    <LightboxUI />
     <div class="app-admin-wrap-layout-2">
         <Header />
         <Sidebar />
@@ -84,7 +68,6 @@ script setup lang="ts">
         </div>
     </div>
 </template>
-
 
 <style lang="scss" scoped>
     .app-admin-wrap-layout-2 {
@@ -113,25 +96,3 @@ script setup lang="ts">
         }
     }
 </style>
-
-<!-- 圖片輪播 -->
-<style>
-    .lightbox .lightbox-image {
-        max-height: 80vh;
-        margin-top: 10vh;
-    }
-    .lightbox {
-    animation: lightboxFadeIn 0.3s ease;
-    }
-    @keyframes lightboxFadeIn {
-        from {
-            opacity: 0;
-            transform: scale(0.95);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-</style>
-

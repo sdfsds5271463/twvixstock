@@ -28,7 +28,6 @@
     import type { ImageItem } from '@/types/ImageItem'
     const currentImageName = inject<Ref<string>>('currentImageName')!
     const profile_photos = inject<Ref<ImageItem[]>>('profile_photos')!
-    console.log(profile_photos.value[0]['name']);
 </script>
 
 <style lang="scss">

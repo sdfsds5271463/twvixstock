@@ -119,7 +119,8 @@ const sideBarToggle = () => {
             </div>
             <!-- mega-menu  -->
 
-            <Menu as="div" class="relative inline-block text-left">
+            <!-- hidden 隱藏起來 20260308-->
+            <Menu as="div" class="hidden relative inline-block text-left">
                 <div>
                     <MenuButton
                         class="

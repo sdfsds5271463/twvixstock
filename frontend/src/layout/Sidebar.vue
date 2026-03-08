@@ -65,13 +65,23 @@ let handleWindowResize = () => {
                             </div>
                         </router-link>
                         <router-link
-                            to="/components"
+                            to="/stockapi"
                             tag="li"
                             class="nav-item"
                         >
                             <div class="nav-item-hold">
                                 <i class="i-Wallet text-3xl"></i>
-                                <p>Buttons</p>
+                                <p>Stock Api</p>
+                            </div>
+                        </router-link>
+                        <router-link
+                            to="/programing"
+                            tag="li"
+                            class="nav-item"
+                        >
+                            <div class="nav-item-hold">
+                                <i class="i-Wallet text-3xl"></i>
+                                <p>Programing</p>
                             </div>
                         </router-link>
                         <router-link
@@ -84,30 +94,16 @@ let handleWindowResize = () => {
                                 <p>Profile</p>
                             </div>
                         </router-link>
-                        <router-link to="/signIn" tag="li" class="nav-item">
-                            <div class="nav-item-hold">
-                                <i class="i-Checked-User text-3xl"></i>
-                                <p>Sign In</p>
-                            </div>
-                        </router-link>
-                        <router-link to="/signUp" tag="li" class="nav-item">
-                            <div class="nav-item-hold">
-                                <i class="i-Checked-User text-3xl"></i>
-                                <p>Sign Up</p>
-                            </div>
-                        </router-link>
-
-                        <a
-                            href="https://aatorx-vue-doc.vercel.app/"
-                            tag="a"
+                        <router-link
+                            to="/components"
+                            tag="li"
                             class="nav-item"
-                            target="_blank"
                         >
                             <div class="nav-item-hold">
-                                <i class="i-File-Word text-3xl"></i>
-                                <p>Doc</p>
+                                <i class="i-Wallet text-3xl"></i>
+                                <p>Buttons</p>
                             </div>
-                        </a>
+                        </router-link>
                     </ul>
                 </perfect-scrollbar>
             </div>
