@@ -23,7 +23,7 @@ const sideBarToggle = () => {
         <div class="flex items-center">
             <router-link class="logo flex justify-center" to="/">
                 <img src="@/../public/images/a_icon.png">
-                <span class="text-3xl pl-1 text-primary">TwVix</span>
+                <span class="text-3xl pl-1 text-purple-500">TwVix</span>
             </router-link>
             <div class="mx-0">
                 <button
