@@ -5,7 +5,7 @@
 <template>
   <div class="container mx-auto">
     <Breadcrumb parentTitle='Programing' subParentTitle='本站主程式' />
-    <BaseCard class="overflow-hidden relative mb-8">
+    <BaseCard class="overflow-hidden relative mb-8 p-4">
       <div class="programing_desc card-body">
         <p>
           本站開源於
@@ -16,7 +16,7 @@
       </div>
     </BaseCard>
 
-<BaseCard class="overflow-x-auto p-2 text-gray-300 bg-gray-800">
+<BaseCard class="Programing_pre overflow-x-auto p-2 text-gray-300">
 <pre><b class="text-sm text-primary">README.md</b>
 <b>TwVixStock - 台股恐慌資料站 (台股指數爬蟲與視覺化分析系統)</b>
 
@@ -127,6 +127,9 @@ gke-deploy 自動將最新版本部署至 GKE 叢集。
       line-height: 18px;
       padding: 5px;
     }
+  }
+  .Programing_pre{
+    background: linear-gradient(to bottom, #132c67, #15202e);
   }
 
 </style>

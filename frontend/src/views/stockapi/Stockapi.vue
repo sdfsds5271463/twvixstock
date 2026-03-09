@@ -66,7 +66,7 @@
         <div class="col-span-12 xl:col-span-6 m-2">
           <p class="mb-2">請求參數 Request parameters</p>
           <BaseCard noPadding class="overflow-x-auto">
-            <div class="min-w-full bg-white rounded-xl shadow">
+            <div class="min-w-full bg-white rounded-xl">
               <table class="min-w-full text-sm text-left">
                 <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                   <tr>
@@ -111,7 +111,7 @@
         <div class="col-span-12 xl:col-span-6 m-2">
           <p class="mb-2">返回參數 Return parameters</p>
           <BaseCard noPadding class="overflow-x-auto">
-            <div class="min-w-full bg-white rounded-xl shadow">
+            <div class="min-w-full bg-white rounded-xl">
               <table class="min-w-full text-sm text-left">
                 <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                   <tr>
@@ -265,6 +265,7 @@
 
   .apiTable{
     td{
+      font-size: 14px;
       padding: 2px 10px;
     }
   }
