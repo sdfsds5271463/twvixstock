@@ -1,0 +1,55 @@
+{
+    "ResultCode": 0,
+    "ResultMsg": "",
+    "Data": [
+        {
+            "STK_CD": "",
+            "codeSerialNo": 114,
+            "code": "Y00114",
+            "name": "台股本益比",
+            "List": [
+                {
+                    "value": 18.89,
+                    "dataDate": "2025-07-01T00:00:00",
+                    "UTC_dataDate": 1751299200000
+                },
+                {
+                    "value": 20.05,
+                    "dataDate": "2025-08-01T00:00:00",
+                    "UTC_dataDate": 1753977600000
+                },
+                {
+                    "value": 21.37,
+                    "dataDate": "2025-09-01T00:00:00",
+                    "UTC_dataDate": 1756656000000
+                },
+                {
+                    "value": 23.32,
+                    "dataDate": "2025-10-01T00:00:00",
+                    "UTC_dataDate": 1759248000000
+                },
+                {
+                    "value": 22.14,
+                    "dataDate": "2025-11-01T00:00:00",
+                    "UTC_dataDate": 1761926400000
+                },
+                {
+                    "value": 23.22,
+                    "dataDate": "2025-12-01T00:00:00",
+                    "UTC_dataDate": 1764518400000
+                },
+                {
+                    "value": 25.84,
+                    "dataDate": "2026-01-01T00:00:00",
+                    "UTC_dataDate": 1767196800000
+                },
+                {
+                    "value": 27.46,
+                    "dataDate": "2026-02-01T00:00:00",
+                    "UTC_dataDate": 1769875200000
+                }
+            ]
+        }
+    ],
+    "ExecuteTime": "2026-03-09 12:31:02.657"
+}

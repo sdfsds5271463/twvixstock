@@ -6,3 +6,8 @@ VIXTWN
  FROM https://www.macromicro.me/charts/46328/tw-vixtwn
   ==> https://www.macromicro.me/charts/data/46328
    2016-11-25 ~ 2026-03-04
+
+TAIPE
+ FROM https://www.yuanta-etfadvisor.com/map/chart?area=80008d7a-64b7-450c-9b96-49d7bf712b34&staticCategoryName=MacroEconomicIndex&product1=507f7d79-b6e2-44b1-902d-f304253322fc
+  ==> https://api.yuantafunds.com/ECTranslationAI/api/bridge?APIType=ConsultingAPI&FuncId=Index%2FMarcoEconomicIndex&code=Y00114&CompanyName=YUANTAFUNDS&Platform=ETFXAI&AppName=ETFxAI
+   2007-05-07 ~ 2026-02-01

@@ -61,8 +61,8 @@ if __name__ == "__main__":
         with open("taiex.json", "r", encoding="utf-8") as f:
             data = json.load(f)
             for v in data['data']:
-                # 最遠只存到 20200101
-                if v['date'] < "2020-01-01":
+                # 最遠只存到 2017-01-01
+                if v['date'] < "2017-01-01":
                     continue
                 # 執行插入指令
                 sql_query = """
@@ -80,8 +80,8 @@ if __name__ == "__main__":
         with open("vixtwn.json", "r", encoding="utf-8") as f:
             data = json.load(f)
             for v in data['data']['c:46328']['series'][0]:
-                # 最遠只存到 20200101
-                if v[0] < "2020-01-01":
+                # 最遠只存到 2017-01-01
+                if v[0] < "2017-01-01":
                     continue
                 # 執行插入指令
                 sql_query = """
@@ -125,4 +125,9 @@ VIXTWN
  FROM https://www.macromicro.me/charts/46328/tw-vixtwn
   ==> https://www.macromicro.me/charts/data/46328
    2016-11-25 ~ 2026-03-04
+
+TAIPE
+ FROM https://www.yuanta-etfadvisor.com/map/chart?area=80008d7a-64b7-450c-9b96-49d7bf712b34&staticCategoryName=MacroEconomicIndex&product1=507f7d79-b6e2-44b1-902d-f304253322fc
+  ==> https://api.yuantafunds.com/ECTranslationAI/api/bridge?APIType=ConsultingAPI&FuncId=Index%2FMarcoEconomicIndex&code=Y00114&CompanyName=YUANTAFUNDS&Platform=ETFXAI&AppName=ETFxAI
+   2007-05-07 ~ 2026-02-01
 '''
