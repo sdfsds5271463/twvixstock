@@ -10,17 +10,33 @@ import (
 	"strings"
 	"strconv"
 	"gorm.io/gorm/clause"
+	"errors"
 )
 
 // 根據日期過濾資料
-func GetStocksByDate(startDate string, endDate string) ([]model.StockRecord, error) {
+func GetStocksByDate(startDate string, endDate string, stocktype string) ([]model.StockRecord, error) {
 	var stocks []model.StockRecord
+
+	//空白消除
+	startDate = strings.TrimSpace(startDate)
+	endDate = strings.TrimSpace(endDate)
+	stocktype = strings.TrimSpace(stocktype)
+
+	//至少要給起始時間
+	if startDate == "" {
+		err := errors.New("startDate can't null")
+		return stocks, err
+	}
 
 	// 呼叫 Repository 層的 DB 物件進行查詢
 	db := repository.DB
 
 	if startDate != "" && endDate != "" {
 		db = db.Where("date BETWEEN ? AND ?", startDate, endDate)
+	}
+
+	if stocktype != "" {
+		db = db.Where("type = ? ", strings.ToUpper(stocktype) )
 	}
 
 	err := db.Find(&stocks).Error

@@ -137,7 +137,7 @@
 //以下試玩球
 .tryGameBall{
   box-shadow: 1px 1px 6px black;
-  bottom:10vh; 
+  bottom:5vh; 
   right:8px;
   line-height: 18px;
   text-shadow: 1px 1px 8px black;
@@ -159,7 +159,7 @@
     #6f00ff,
   );
   background-size: 800% 800%;
-  animation: rainbow-flow 8s ease infinite;
+  animation: rainbow-flow 18s ease infinite;
 }
 
 @keyframes rainbow-flow {

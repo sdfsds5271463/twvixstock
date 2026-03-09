@@ -5,21 +5,35 @@ import (
 	"twvixstock/internal/service"
 
 	"github.com/gin-gonic/gin"
+	"fmt"
 )
 
 // StockDataShow 處理股票顯示請求
 func StockDataShow(c *gin.Context) {
-	// 1. 取得 Query Parameters (例如: /api/stockDB?start=2023-01-01&end=2023-01-31)
-	startDate := c.Query("start")
-	endDate := c.Query("end")
 
-	// 2. 呼叫 Service 取得資料
-	stocks, err := service.GetStocksByDate(startDate, endDate)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "無法取得資料: " + err.Error()})
+	fmt.Print(" ( ↓↓↓ Visitor IP: ", c.ClientIP()," ↓↓↓ ) ")
+
+	// 過濾 binding 條件
+	type ReqStruct struct {
+		Start string `json:"start" form:"start" binding:"required,datetime=2006-01-02"`
+		End   string `json:"end"   form:"end"   binding:"omitempty,datetime=2006-01-02"`
+		Type  string `json:"type"  form:"type"`
+	}
+
+	// 解析參數 (傳入的資料有問題)
+	var req ReqStruct
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code":2001, "error": "Request is fail: " + err.Error()})
 		return
 	}
 
-	// 3. 回傳 JSON 給前端
-	c.JSON(http.StatusOK, stocks)
+	// 呼叫 Service 取得資料 (搜DB出錯)
+	stocks, err := service.GetStocksByDate(req.Start, req.End, req.Type)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"code":2002, "error": "Can't get data: " + err.Error()})
+		return
+	}
+
+	// 回傳 JSON 給前端
+	c.JSON(http.StatusOK, gin.H{"code":1000, "data":stocks})
 }
