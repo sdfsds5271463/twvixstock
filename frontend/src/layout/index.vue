@@ -59,9 +59,7 @@ provide('profile_photos', profile_photos);
             <main>
                 <div class="main-content-wrap flex flex-col flex-grow print-area pt-6">
                     <div>
-                        <keep-alive>
-                            <router-view />
-                        </keep-alive>
+                        <router-view />
                     </div>
                     
                     <Footer />

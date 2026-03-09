@@ -25,6 +25,8 @@ spec:
       containers:
       - name: mysql
         image: mysql:8.0
+        args:
+          - "--default-time-zone=+08:00"
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:

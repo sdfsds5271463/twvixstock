@@ -4,11 +4,47 @@
   import Aboutme from './Aboutme.vue'
   import Projects from './Projects.vue'
   import Photos from './Photos.vue'
-  import { ref } from 'vue'
+  import { ref,onMounted,onUnmounted } from 'vue'
   import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
   import About from '../About.vue'
   let categories = ref(['Timeline', 'About', 'Projects', 'Photos'])
   let categories_icon = ref(['i-Calendar-4', 'i-Business-Man', 'i-Professor', 'i-Camera'])
+
+  //以下 試玩球功能
+  const tryGameBall = ref(null);
+  const ballIndex = ref(0);
+  let tryBallLink:[string,string,string][] = [  //連結清單
+    ["2018","彩票","http://lottsample.ddns.net:9527/index.php?m=common&c=trygame&a=trygame&type=0"],
+    ["2019","百家樂","http://livesample.ddns.net:9527/game/trygame"],
+    ["2020","電子","http://lottsample.ddns.net:9527/egames/public/trygame"],
+    ["2026","GitHub","https://github.com/sdfsds5271463/twvixstock"],
+  ];
+  let timer = null
+
+  onMounted(() => {
+    timer = setInterval(()=>{
+      let ballWord = tryGameBall.value.childNodes[1];  //文字元素
+      ballWord.classList.add('blinking');  //開始閃爍
+      setTimeout(()=>{
+        ballIndex.value += 1;
+        ballIndex.value %= 4;  //換文字
+      },1000);
+      setTimeout(()=>{
+        ballWord.classList.remove("blinking");  //重置閃爍
+      },2000);
+    },6000); 
+
+  })
+
+  onUnmounted(() => {
+    clearInterval(timer)  //很重要!!
+  })
+
+  function openLink() {
+    window.open(tryBallLink[ballIndex.value][2], '_blank')
+  }
+  //以上 試玩球功能
+
 </script>
 
 <template>
@@ -16,6 +52,9 @@
   <div class="container mx-auto">
     <Breadcrumb parentTitle='Profile' subParentTitle='個人資料介紹' />
     
+
+
+
     <BaseCard noPadding class="user-profile overflow-hidden relative">
         <div class="header-cover">
           <div class="text-white text-center text-4xl">Allen Zheng</div>
@@ -75,10 +114,85 @@
         </div>
         
     </BaseCard>
-</div>
+  </div>
+
+  <!-- 試玩球 -->
+  <div ref="tryGameBall" class="
+    tryGameBall rainbow-flow
+    fixed z-50 w-16 h-16 rounded-full text-center text-sm pt-1 
+    text-white cursor-pointer
+    hover:opacity-60"
+    @click="openLink"
+  >
+    try
+    <div>
+      <b v-text="tryBallLink[ballIndex][1]"></b><br><span v-text="tryBallLink[ballIndex][0]"></span>
+    </div>
+  </div>
+
 </template>
 
 <style lang="scss" scoped>
+
+//以下試玩球
+.tryGameBall{
+  box-shadow: 1px 1px 6px black;
+  top:85vh; 
+  right:8px;
+  line-height: 18px;
+  text-shadow: 1px 1px 8px black;
+  b{
+    font-size: 16px;
+  }
+}
+.rainbow-flow {
+  background: linear-gradient(
+    270deg,
+    #6f00ff,
+    #d400ff,
+    #ff0000,
+    #ff0077,
+    #6f00ff,
+    #0004fd,
+    #0084ff,
+    #0066ff,
+    #6f00ff,
+  );
+  background-size: 800% 800%;
+  animation: rainbow-flow 8s ease infinite;
+}
+
+@keyframes rainbow-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.blinking{
+  animation: blinking 2s ease;
+}
+@keyframes blinking {
+  0% {
+    opacity: 100%;
+  }
+  50% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+//以上試玩球
+
+
+
+
 .user-profile {
   .header-cover {
     background-image: url("../../../images/photo-wide.jpg") ;
@@ -122,6 +236,9 @@
     line-height: 16px;
   }
 }
+
+
+
 
 
 </style>
