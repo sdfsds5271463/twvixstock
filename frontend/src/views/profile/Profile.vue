@@ -137,7 +137,7 @@
 //以下試玩球
 .tryGameBall{
   box-shadow: 1px 1px 6px black;
-  top:85vh; 
+  bottom:10vh; 
   right:8px;
   line-height: 18px;
   text-shadow: 1px 1px 8px black;

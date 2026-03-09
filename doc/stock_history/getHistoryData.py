@@ -4,7 +4,7 @@
 #執行提示
 confirm = input(
 '''本程序將會DB刪減表 stock
-並且依據json檔案插入 20200101 ~ 20260304 初始指數資料
+並且依據json檔案插入 2017-01-01 ~ 2026-03-04 初始指數資料
 確定執行嗎(y|Y)? ''')
 
 if(confirm.upper() != "Y"):
@@ -17,6 +17,7 @@ import os
 import mysql.connector
 from dotenv import load_dotenv
 import json
+import time
 
 # 載入 .env 檔案
 load_dotenv()
@@ -93,6 +94,30 @@ if __name__ == "__main__":
                 # 執行
                 datacount += 1
                 cursor.execute(sql_query, data)
+
+        # 台灣本益比 TAIPE
+        print(" - 初始化 台灣本益比 TAIPE")
+        with open("taipe.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+            for v in data['Data'][0]['List']:
+
+                t = time.localtime(v['UTC_dataDate'] / 1000)  #時間參數(用時間戳轉)
+                t_str = time.strftime("%Y-%m-%d", t)
+
+                # 最遠只存到 2017-01-01
+                if t_str < "2017-01-01":
+                    continue
+                # 執行插入指令
+                sql_query = """
+                    INSERT INTO stock (type, date, close) VALUES (%s, %s, %s)
+                    ON DUPLICATE KEY UPDATE close = VALUES(close)
+                """
+                data = ["TAIPE", t_str, v['value']]
+
+                # 執行
+                datacount += 1
+                cursor.execute(sql_query, data)
+
 
         # 提交
         conn.commit()

@@ -111,3 +111,46 @@ func FetchDataVIXTWN(all bool, token string) {
 
 	fmt.Println("VIXTWN 解析筆數:", count)
 }
+
+// 台灣PE爬蟲
+func FetchDataTAIPE(all bool, token string) {
+
+	// 全資料
+	sortInsert := !all //短插入
+	
+	//目標網站(元大)沒有時間過濾，永遠抓全部
+	// sortInsert 用來決定是否短插入，就不用處理那麼多DB
+	//https://www.yuanta-etfadvisor.com/map/chart?area=80008d7a-64b7-450c-9b96-49d7bf712b34&staticCategoryName=MacroEconomicIndex&product1=507f7d79-b6e2-44b1-902d-f304253322fc
+	//https://api.yuantafunds.com/ECTranslationAI/api/bridge?APIType=ConsultingAPI&FuncId=Index%2FMarcoEconomicIndex&code=Y00114&CompanyName=YUANTAFUNDS&Platform=ETFXAI&AppName=ETFxAI
+
+	// 時間準備
+
+	// 爬蟲
+	url := "https://api.yuantafunds.com/ECTranslationAI/api/bridge?APIType=ConsultingAPI&FuncId=Index%2FMarcoEconomicIndex&code=Y00114&CompanyName=YUANTAFUNDS&Platform=ETFXAI&AppName=ETFxAI"
+	res, err := http.Get(url)
+	if(err != nil){ 
+		log.Printf("TAIPE 爬蟲請求失敗: %v", err)
+		return
+	}
+	defer res.Body.Close()
+
+	if(res.StatusCode != 200){ // 狀態
+		log.Printf("TAIPE 爬蟲狀態失敗: %v", res.StatusCode)
+		return
+	}
+
+	ioBytes, err := io.ReadAll(res.Body) // 讀取
+	if(err != nil){ 
+		log.Printf("TAIPE 爬蟲 io 讀取失敗: %v", err)
+		return
+	}
+
+	// 交給服務進行資料解析
+	count, err := service.TaipeAnalysis(ioBytes, sortInsert)
+	if(err != nil){ 
+		log.Printf("TAIPE 資料解析失敗: %v", err)
+		return
+	}
+
+	fmt.Println("TAIPE 解析筆數:", count)
+}

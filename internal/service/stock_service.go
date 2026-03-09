@@ -130,3 +130,63 @@ func VixtwnAnalysis(strArr []string) (count int, err error){
 	count = len(insert)
 	return
 }
+
+// 爬蟲 TAIPE 分析存入資料
+// 格式:
+// {"ResultCode":0,"ResultMsg":"","Data":[{"STK_CD":"","codeSerialNo":114,"code":"Y00114","name":"台股本益比","List":[{"value":18.47,"dataDate":"2007-05-01T00:00:00","UTC_dataDate":1177948800000},{"value":20.26,"dataDate":"2007-06-01T00:00:00","UTC_dataDate":1180627200000},{"value":18.72,"dataDate":"2007-08-01T00:00:00","UTC_dataDate":1185897600000}]}],"ExecuteTime": "2026-03-09 12:31:02.657"}
+func TaipeAnalysis(ioBytes []byte, sortInsert bool) (count int, err error){
+
+	// 解析 JSON
+	var data model.TaipeApi
+	err = json.Unmarshal(ioBytes, &data)
+	if err != nil {
+		log.Printf("TAIPE 分析 JSON 解析失敗: %v", err)
+		return
+	}
+
+	// 將 List 拉出來斷言(陣列空介面)
+	list := data.Data[0]["List"].([]interface{})
+
+	// 準備插入
+	insert := []model.StockRecord{}
+	for _, v := range(list) {
+		//第二層斷言
+		data_sub := v.(map[string]interface{})
+		
+		//資料
+		close := data_sub["value"].(float64)
+		dataDate := data_sub["dataDate"].(string)  //2025-09-01T00:00:00
+		date, _ := time.Parse(time.RFC3339, dataDate+"+08:00")  //用 +8時區字串轉
+
+		//簡短插入 (避免處理過多sql)
+		if(sortInsert){
+			if(date.Before( time.Now().AddDate(0, -6, 0) )){  //6個月以前的不要
+				continue
+			}
+		}
+
+		val := model.StockRecord{
+			Type: "TAIPE",
+			Date: date,
+			Close: close,
+		}
+		insert = append(insert, val)
+	}
+
+	// 執行插入或更新 (Upsert)
+	result := repository.DB.Clauses(clause.OnConflict{
+		Columns: []clause.Column{{Name: "type"}, {Name: "date"}},  //唯獨索引
+		DoUpdates: clause.AssignmentColumns([]string{"close"}),  //衝突時更新
+	}).Create(&insert)
+
+	if result.Error != nil {
+		err = result.Error
+		return
+	}
+
+	// 回報
+	count = len(insert)
+	return
+}
+
+

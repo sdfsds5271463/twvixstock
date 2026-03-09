@@ -7,7 +7,7 @@ import (
 // StockRecord 對應到資料表
 type StockRecord struct {
 	ID    uint      `gorm:"primaryKey;autoIncrement"`
-	Type  string    `gorm:"type:enum('TAIEX','VIXTWN');index"`
+	Type  string    `gorm:"type:enum('TAIEX','VIXTWN','TAIPE');index"`
 	Date  time.Time `gorm:"type:date;index"`
 	Close float64   `gorm:"type:decimal(10,2);"`
 }
