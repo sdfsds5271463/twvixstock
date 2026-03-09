@@ -7,7 +7,7 @@
     <Breadcrumb parentTitle='Stock Api' subParentTitle='ProfileV2' />
   </div>
     <div class="p-5">
-        <p class="text-xl font-semibold mb-2">Personal Information</p>
+        <p class="text-xl font-semibold mb-2">台股指數API</p>
         <p class="border-b border-gray-300 pb-10 mb-8">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, commodi quam! Provident quis voluptate asperiores ullam, quidem odio pariatur. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem, nulla eos? Cum non ex voluptate corporis id asperiores doloribus dignissimos blanditiis iusto qui repellendus deleniti aliquam, vel quae eligendi explicabo.</p>
         <div class="grid grid-cols-12 gap-5 border-b border-gray-300 pb-10 mb-10">
             <div class="col-span-12 sm:col-span-6 md:col-span-4">

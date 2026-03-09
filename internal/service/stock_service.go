@@ -10,7 +10,6 @@ import (
 	"strings"
 	"strconv"
 	"gorm.io/gorm/clause"
-	"errors"
 )
 
 // 根據日期過濾資料
@@ -22,10 +21,10 @@ func GetStocksByDate(startDate string, endDate string, stocktype string) ([]mode
 	endDate = strings.TrimSpace(endDate)
 	stocktype = strings.TrimSpace(stocktype)
 
-	//至少要給起始時間
-	if startDate == "" {
-		err := errors.New("startDate can't null")
-		return stocks, err
+	//類別準備
+	stocktype = strings.ToUpper(stocktype)
+	if(stocktype == "ALL"){  //全部的話也就不限制
+		stocktype = ""
 	}
 
 	// 呼叫 Repository 層的 DB 物件進行查詢
@@ -36,7 +35,7 @@ func GetStocksByDate(startDate string, endDate string, stocktype string) ([]mode
 	}
 
 	if stocktype != "" {
-		db = db.Where("type = ? ", strings.ToUpper(stocktype) )
+		db = db.Where("type = ? ", stocktype )
 	}
 
 	err := db.Find(&stocks).Error
