@@ -23,14 +23,16 @@ RUN go build -o /app/bin/server ./cmd/server/main.go
 RUN go build -o /app/bin/scheduler ./cmd/scheduler/main.go
 
 # --- Final Stage: Scheduler ---
-FROM alpine:latest AS scheduler
+FROM alpine:3.20 AS scheduler
+RUN apk add --no-cache tzdata
 WORKDIR /root/
 COPY --from=builder /app/bin/scheduler .
 COPY --from=builder /app/config ./config
 CMD ["./scheduler"]
 
 # --- Final Stage: API Server ---
-FROM alpine:latest AS server
+FROM alpine:3.20 AS server
+RUN apk add --no-cache tzdata
 WORKDIR /root/
 COPY --from=frontend-builder /app/frontend/dist ./static
 COPY --from=builder /app/bin/server .

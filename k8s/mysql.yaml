@@ -28,6 +28,8 @@ spec:
         args:
           - "--default-time-zone=+08:00"
         env:
+        - name: TZ
+          value: Asia/Taipei
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:

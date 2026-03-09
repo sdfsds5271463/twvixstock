@@ -4,7 +4,8 @@ metadata:
   name: tvs-scheduler-cron
 spec:
   # 台北時間(翻譯成UTC+0) 每天 15 16 17 18 點各執行一次
-  schedule: "0 7,8,9,10 * * *"
+  schedule: "0 15,16,17,18 * * *"
+  timeZone: Asia/Taipei
   jobTemplate:
     spec:
       # 執行完成後 86400 秒 自動刪除此 Job 與相關 Pod
@@ -29,5 +30,7 @@ spec:
                 secretKeyRef:
                   name: tvs-secret
                   key: CRAWLER_TOKEN
+            - name: TZ
+              value: Asia/Taipei
           # 執行完後自動關閉，不要重啟
           restartPolicy: OnFailure

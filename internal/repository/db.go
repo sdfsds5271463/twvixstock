@@ -20,7 +20,7 @@ func InitDB() {
 	
 	// 組裝 DSN (Data Source Name)
 	// 格式: user:password@tcp(host:port)/dbname?charset=utf8mb4&parseTime=True&loc=Local
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Asia%2FTaipei",  //時區 +8
 		c.User, c.Password, c.Host, c.Port, c.DBName)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{

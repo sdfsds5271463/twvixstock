@@ -27,6 +27,8 @@ spec:
             secretKeyRef:
               name: tvs-secret
               key: DB_PASSWORD
+        - name: TZ
+          value: Asia/Taipei
 ---
 apiVersion: v1
 kind: Service
