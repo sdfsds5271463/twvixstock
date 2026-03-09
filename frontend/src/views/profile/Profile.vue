@@ -121,7 +121,7 @@
     tryGameBall rainbow-flow
     fixed z-50 w-16 h-16 rounded-full text-center text-sm pt-1 
     text-white cursor-pointer
-    hover:opacity-60"
+    hover:opacity-90 hover:scale-105"
     @click="openLink"
   >
     try

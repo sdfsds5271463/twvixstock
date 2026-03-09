@@ -26,6 +26,14 @@ func main() {
 	limiter.SetMessageContentType("application/json")
 	limiter.SetStatusCode(429)
 
+	// (保險起見) 設定IP抓取單
+	limiter.SetIPLookups([]string{
+		"CF-Connecting-IP",
+		"X-Forwarded-For",
+		"X-Real-IP",
+		"RemoteAddr",
+	})
+
 	// 允許跨域 (CORS) - 為了讓你的 Vue 前端能順利存取
 	r.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
