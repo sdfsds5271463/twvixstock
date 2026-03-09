@@ -45,8 +45,8 @@ func main() {
 	{
 		api.Use(tollbooth_gin.LimitHandler(limiter))  // 進行 tollbooth_gin 限流
 
-		api.GET("/stockDB", handler.StockDataShow)
-		api.POST("/stockDB", handler.StockDataShow)
+		api.GET("/v1/stockDB", handler.StockDataShow)
+		api.POST("/v1/stockDB", handler.StockDataShow)
 
 		/*
 			回應 {'code':<code>, 'error':<msg>, 'data':<data>}
