@@ -5,3 +5,4 @@ frontend/yarn.lock
 .git/
 *.log
 tmp/
+static/

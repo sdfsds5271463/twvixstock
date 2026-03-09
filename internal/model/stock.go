@@ -6,7 +6,7 @@ import (
 
 // StockRecord 對應到資料表
 type StockRecord struct {
-	ID    uint      `gorm:"primaryKey;autoIncrement"`
+	ID    uint      `gorm:"primaryKey;autoIncrement" json:"-"`
 	Type  string    `gorm:"type:enum('TAIEX','VIXTWN','TAIPE');index"`
 	Date  time.Time `gorm:"type:date;index"`
 	Close float64   `gorm:"type:decimal(10,2);"`
@@ -16,3 +16,5 @@ type StockRecord struct {
 func (StockRecord) TableName() string {
 	return "stock"
 }
+
+

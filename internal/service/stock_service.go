@@ -13,7 +13,7 @@ import (
 )
 
 // 根據日期過濾資料
-func GetStocksByDate(startDate string, endDate string, stocktype string) ([]model.StockRecord, error) {
+func GetStocksByDate(startDate string, endDate string, stocktype string) ([]model.GetStocksRet, error) {
 	var stocks []model.StockRecord
 
 	//空白消除
@@ -37,9 +37,24 @@ func GetStocksByDate(startDate string, endDate string, stocktype string) ([]mode
 	if stocktype != "" {
 		db = db.Where("type = ? ", stocktype )
 	}
-
+	
+	// 查詢
 	err := db.Find(&stocks).Error
-	return stocks, err
+	if(err != nil){
+		return nil, err
+	}
+
+	// 格式化日期
+	var ret []model.GetStocksRet
+	for _,v := range(stocks){
+		ret = append(ret, model.GetStocksRet{
+			Type: v.Type,
+			Close: v.Close,
+			Date: v.Date.Format("2006-01-02"),
+		})
+	}
+
+	return ret, err
 }
 
 // 爬蟲 TAIEX 分析存入資料

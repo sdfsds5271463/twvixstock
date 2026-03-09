@@ -1,9 +1,24 @@
-TwVixStock - 全棧台股指數爬蟲與視覺化系統
+=========================================================================================
 
-這是一個基於 Go 語言開發的自動化台股爬蟲系統，整合了後端 API、排程任務、前端視覺化以及完整的雲端 CI/CD 自動化部署流程。
+TwVixStock - 台股恐慌資料站 (台股指數爬蟲與視覺化分析系統)
 
+=========================================================================================
+
+🌈 網站摘要
+
+這是一個開源的台股恐慌資料站，其核心分析資料為 台灣加權指數、台灣恐慌指數(台指選擇權波動指數)、台灣加權本益比。
+
+本站後端基於 Go + Gin 開發，排程爬蟲將會蒐集 臺灣期貨交易所、臺灣證券交易所 之每日指數資料，並提供 API 開源接口可下載。
+
+本站前端使用 Vue3 Vite + TypeScript + Tailwind CSS 撰寫，可進行台股恐慌程度的視覺化分析。
+
+專案自動部屬在 Google Cloud Platform(GCP)，開源代碼可從 GitHub 下載。
+
+=========================================================================================
 
 🌟 專案亮點
+
+現代化前端：使用主流前端框架 Vue3 Vite 搭配 Tailwind CSS 進行高度自由的前端樣式開發。
 
 自動化排程：使用 Kubernetes CronJob 實現每日定時爬取台股盤後數據。
 
@@ -15,6 +30,7 @@ DevOps 實踐：連結 GitHub 至 Google Cloud Build，實現 Push-to-Deploy 的
 
 HTTPS 保障：透過 Cloudflare 代理實現免費的 SSL 安全加密連線。
 
+=========================================================================================
 
 🏗️ 專案目錄架構
 
@@ -30,13 +46,13 @@ Plaintext
 
     ├── internal/
 
-    │   ├── handler/         # HTTP 請求處理 (Controllers)
+    │   ├── handler/         # HTTP 請求處理
 
-    │   ├── service/         # 核心業務邏輯 (Business Logic)
+    │   ├── service/         # 核心業務邏輯
 
-    │   ├── repository/      # 資料庫存取層 (SQL Operations)
+    │   ├── repository/      # 資料庫存取層
 
-    │   ├── model/           # 資料結構定義 (Domain Models)
+    │   ├── model/           # 資料結構定義
 
     │   ├── crawler/         # 各類爬蟲具體邏輯
 
@@ -54,12 +70,13 @@ Plaintext
     
     └── docker-compose.yaml  # 本地開發環境一鍵啟動
 
+=========================================================================================
 
 🛠️ 技術棧
 
 Backend: Go (Gin Gonic)
 
-Frontend: Vue.js 3 + Sass
+Frontend: Vue3 Vite + TypeScript + Tailwind CSS + Sass
 
 Database: MySQL 8.0
 
@@ -69,27 +86,45 @@ CI/CD: Google Cloud Build, GitHub Actions
 
 Network: Cloudflare, Google Load Balancer
 
+=========================================================================================
 
 🚀 快速啟動 (本地開發)
 
-複製專案
+[複製專案]
 
-Bash
-git clone https://github.com/your-username/twvixstock.git
+git clone https://github.com/sdfsds5271463/twvixstock.git
+
 cd twvixstock
-環境變數設定
-複製 .env.example 並修改為你的本地設定：
 
-Bash
+
+[安裝依賴]
+
+go mod tidy
+
+cd frontend
+
+npm install | pnpm install | yarn install
+
+
+[環境變數設定]
+
 cp .env.example .env
-使用 Docker Compose 啟動
 
-Bash
+
+[使用 Docker Compose 啟動]
+
+docker build -t tvs-server --target server .
+
+docker build -t tvs-scheduler --target scheduler .
+
 docker-compose up -d
-API Server: http://localhost:8080
 
-Frontend: http://localhost:8081
 
+Server: http://localhost:8080
+
+Api:    http://localhost:8080/api/v1/stockDB?start=2026-01-01&end=2026-01-06&type=taiex
+
+=========================================================================================
 
 ☁️ 部署說明
 
@@ -103,9 +138,12 @@ Google Cloud Build 會觸發構建。
 
 gke-deploy 自動將最新版本部署至 GKE 叢集。
 
+=========================================================================================
 
 📬 聯絡資訊
 
-作者: [allen]
+作者: [allen.Zheng]
 
 專案連結: https://twvixstock.qzz.io/
+
+專案GitHub: https://github.com/sdfsds5271463/twvixstock
