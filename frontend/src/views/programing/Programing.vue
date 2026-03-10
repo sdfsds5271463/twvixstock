@@ -8,16 +8,16 @@
     <BaseCard class="overflow-hidden relative mb-8 p-4">
       <div class="programing_desc card-body">
         <p>
-          本站開源於
+          ▪️本站開源於
           <a class="text-primary" href="https://github.com/sdfsds5271463/twvixstock" target="_blank">https://github.com/sdfsds5271463/twvixstock</a><br>
         </p>
-        <p>可執行 <b>git clone https://github.com/sdfsds5271463/twvixstock.git</b> 將專案建置到你的機器上</p>
-        <p>本站詳細架構及技術請參照下方 README</p>
+        <p>▪️可執行 <b>git clone https://github.com/sdfsds5271463/twvixstock.git</b> 將專案建置到你的機器上</p>
+        <p>▪️本站詳細架構及技術請參照下方 README</p>
       </div>
     </BaseCard>
 
 <BaseCard class="Programing_pre overflow-x-auto p-2 text-gray-300">
-<pre><b class="text-sm text-primary">README.md</b>
+<pre><b class="text-sm text-primary text-shadow">README.md</b>
 <b>TwVixStock - 台股恐慌資料站 (台股指數爬蟲與視覺化分析系統)</b>
 
 <hr>
@@ -106,6 +106,7 @@ gke-deploy 自動將最新版本部署至 GKE 叢集。
 📬 聯絡資訊
 
 作者: [allen.Zheng]
+E-Mail: sdfsds5271463@gmail.com
 專案連結: https://twvixstock.qzz.io/
 專案GitHub: https://github.com/sdfsds5271463/twvixstock
 
@@ -130,6 +131,7 @@ gke-deploy 自動將最新版本部署至 GKE 叢集。
   }
   .Programing_pre{
     background: linear-gradient(to bottom, #132c67, #15202e);
+    text-shadow: 1px 1px 3px black;
   }
 
 </style>

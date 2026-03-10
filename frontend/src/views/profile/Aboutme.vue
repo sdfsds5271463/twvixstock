@@ -56,4 +56,71 @@
             </div>
         </div>
     </div>
+
+
+  <div class="p-6 bg-white rounded-xl shadow-lg">
+    <h2 class="text-xl font-bold mb-4 text-gray-800">股票走勢比較</h2>
+    <apexchart
+      type="line"
+      height="400"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
+  </div>
+
+
+
+
+
+
 </template>
+
+
+
+<script setup lang="ts">
+import { ref } from 'vue';
+
+// 1. 資料定義：series 陣列裡放幾個物件，就有幾條線
+const series = ref([
+  {
+    name: "TAIEX",
+    data: [23.22, 25.84, 27.46, 26.10, 28.50] // 你的 Close 數據
+  },
+  {
+    name: "TSMC",
+    data: [15.10, 18.20, 17.50, 19.80, 21.00]
+  },
+  {
+    name: "AAPL",
+    data: [10.50, 12.30, 11.80, 13.20, 14.50]
+  }
+]);
+
+// 2. 圖表配置
+const chartOptions = ref({
+  chart: {
+    zoom: { enabled: true }, // 開啟縮放功能，看股票必備
+    toolbar: { show: true }
+  },
+  colors: ['#2563eb', '#dc2626', '#16a34a'], // 藍、紅、綠 三色
+  stroke: {
+    curve: 'smooth', // 曲線平滑化
+    width: 3
+  },
+  xaxis: {
+    categories: ['2026-01', '2026-02', '2026-03', '2026-04', '2026-05'], // 日期
+    title: { text: '日期' }
+  },
+  yaxis: {
+    title: { text: '收盤價' }
+  },
+  legend: {
+    position: 'top' // 圖例放在上方
+  },
+  tooltip: {
+    shared: true, // 滑鼠移上去時同時顯示三條線的數值
+    intersect: false
+  }
+});
+
+</script>

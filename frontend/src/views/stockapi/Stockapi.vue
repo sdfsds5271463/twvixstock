@@ -9,17 +9,17 @@
     <BaseCard class="p-4">
       <div class="apiDesc border-b border-gray-300 pb-8 mb-8">
         <p>
-          本站資料從
+          ▪️本站資料從
           <a class="text-primary" href="https://mis.taifex.com.tw/futures/" target="_blank">臺灣期貨交易所</a>、
           <a class="text-primary" href="https://www.twse.com.tw/zh/index.html" target="_blank">臺灣證券交易所</a>
           爬蟲抓下，並儲存於 Google Cloud Platform，程式碼完全開源可見 
           <a class="text-primary" href="https://github.com/sdfsds5271463/twvixstock" target="_blank">GitHub</a>
           。
         </p>
-        <p>資料開放 API 進行下載，以下接口請求方式允許 <b>GET</b> 或 <b>POST</b> ，請求格式允許 <b>get-query</b>、<b>form</b> 或 <b>json</b>。</p>
-        <p>請求頻率同 IP <b>每2分鐘最多20次</b> ，請求過於頻繁將返回錯誤碼 3001。</p>
+        <p>▪️資料開放 API 進行下載，以下接口請求方式允許 <b>GET</b> 或 <b>POST</b> ，請求格式允許 <b>uri-query</b>、<b>form</b> 或 <b>json</b>。</p>
+        <p>▪️請求頻率同 IP <b>每2分鐘最多20次</b> ，請求過於頻繁將返回錯誤碼 3001。</p>
         <p>
-          開始對接之前，試試看點一下這個連結
+          ▪️開始對接之前，試試看點一下這個連結
           <a class="text-primary" href="https://twvixstock.qzz.io/api/v1/stockDB?start=2026-01-01&end=2026-01-05" target="_blank">
             https://twvixstock.qzz.io/api/v1/stockDB?start=2026-01-01&end=2026-01-05
           </a>
@@ -28,19 +28,20 @@
       </div>
 
       <div class="">
-          <p class="text-xl">域名 Domain</p>
-          <p class="text-gray-600 border-b border-gray-300 pb-8 mb-8 pt-2 text-2xl font-bold">
+          <p class="text-xl font-medium">域名 Domain</p>
+          <p class="text-blue-500 border-b border-gray-300 pb-8 mb-8 pt-2 pl-1 text-2xl font-bold ">
             https://twvixstock.qzz.io/api/v1/
           </p>
       </div>
 
 
       <div class="">
-          <p class="text-xl">表頭 Header</p>
-          <p class="text-gray-600">與伺服器連線之資料請求與返回格式</p>
+          <p class="text-xl font-medium">表頭 Header</p>
+          <p class="text-gray-600 pl-1">與伺服器連線之資料請求與返回格式</p>
       </div>
 
       <div class="border-b border-gray-300 pb-8 mb-8 pt-2">
+        <BaseCard noPadding class="mx-2 p-2">
         <table class="apiTable">
           <tr>
             <td>Request Method</td><td>GET | POST</td>
@@ -52,12 +53,13 @@
             <td>Response content-type</td><td>application/json</td>
           </tr>
         </table>
+        </BaseCard>
       </div>
 
       
       <div class="">
-          <p class="text-xl">參數 Parameters</p>
-          <p class="text-gray-600">與伺服器連線之資料請求與返回格式</p>
+          <p class="text-xl font-medium">參數 Parameters</p>
+          <p class="text-gray-600 pl-1">與伺服器連線之資料請求與返回格式</p>
       </div>
 
       <div class="grid grid-cols-12 border-b border-gray-300 pb-8 mb-8">
@@ -155,58 +157,62 @@
       </div>
 
       <div class="">
-        <p class="text-xl">範例 Example</p>
-        <p class="text-gray-600">請求成功與失敗的響應格式</p>
+        <p class="text-xl font-medium">範例 Example</p>
+        <p class="text-gray-600 pl-1">請求成功與失敗的響應格式</p>
       </div>
 
       <div class="grid grid-cols-12 border-b border-gray-300 pb-8 mb-8">
         <div class="col-span-12 xl:col-span-6 m-2">
           ✅請求成功範例:
-          <table class="apiTable">
-            <tr>
-              <td>Url</td><td>/api/v1/stockDB</td>
-            </tr>
-            <tr>
-              <td>Header</td><td>content-type: application/json</td>
-            </tr>
-            <tr>
-              <td>Parameters</td><td>{"start_date": "2026-01-01", "end_date": "2026-01-06", "stock_type": "taiex"}</td>
-            </tr>
-            <tr>
-              <td>Return</td><td>{"code":1000,"data":[{"Type":"TAIEX","Date":"2026-01-02","Close":29349.81},{"Type":"TAIEX","Date":"2026-01-05","Close":30105.04},{"Type":"TAIEX","Date":"2026-01-06","Close":30576.3}]}</td>
-            </tr>
-          </table>
+          <BaseCard noPadding class="p-2">
+            <table class="apiTable">
+              <tr>
+                <td>Url</td><td>/api/v1/stockDB</td>
+              </tr>
+              <tr>
+                <td>Header</td><td>content-type: application/json</td>
+              </tr>
+              <tr>
+                <td>Parameters</td><td>{"start_date": "2026-01-01", "end_date": "2026-01-06", "stock_type": "taiex"}</td>
+              </tr>
+              <tr>
+                <td>Return</td><td>{"code":1000,"data":[{"Type":"TAIEX","Date":"2026-01-02","Close":29349.81},{"Type":"TAIEX","Date":"2026-01-05","Close":30105.04},{"Type":"TAIEX","Date":"2026-01-06","Close":30576.3}]}</td>
+              </tr>
+            </table>
+          </BaseCard>
 
         </div>
         <div class="col-span-12 xl:col-span-6 m-2">
           ❌請求失敗範例:
-          <table class="apiTable">
-            <tr>
-              <td>Url</td><td>/api/v1/stockDB</td>
-            </tr>
-            <tr>
-              <td>Header</td><td>content-type: application/json</td>
-            </tr>
-            <tr>
-              <td>Parameters</td><td>{"start_date": "", "end_date": "2026-01-06", "stock_type": "taiex"}</td>
-            </tr>
-            <tr>
-              <td>Return</td><td>{"code":2001,"error":"Request is fail: Key: 'ReqStruct.Start' Error:Field validation for 'Start' failed on the 'required' tag"}</td>
-            </tr>
-          </table>
+          <BaseCard noPadding class="p-2">
+            <table class="apiTable">
+              <tr>
+                <td>Url</td><td>/api/v1/stockDB</td>
+              </tr>
+              <tr>
+                <td>Header</td><td>content-type: application/json</td>
+              </tr>
+              <tr>
+                <td>Parameters</td><td>{"start_date": "", "end_date": "2026-01-06", "stock_type": "taiex"}</td>
+              </tr>
+              <tr>
+                <td>Return</td><td>{"code":2001,"error":"Request is fail: Key: 'ReqStruct.Start' Error:Field validation for 'Start' failed on the 'required' tag"}</td>
+              </tr>
+            </table>
+          </BaseCard>
         </div>
       </div>
 
 
 
       <div class="">
-          <p class="text-xl">附錄 Appendix</p>
-          <p class="text-gray-600">參數及其他資料細節參考附錄</p>
+          <p class="text-xl font-medium">附錄 Appendix</p>
+          <p class="text-gray-600 pl-1">參數及其他資料細節參考附錄</p>
       </div>
 
       <div class="grid grid-cols-12 gap-5 border-b border-gray-300 pb-10 mb-10 mt-2">
           <div class="col-span-12 sm:col-span-6 md:col-span-4">
-            <p class="text-purple-500 mb-1"><i class="i-Calendar text-base"></i><span class="ml-1">股票類型 type</span></p>
+            <p class="text-purple-500 mb-1 pl-1"><i class="i-Calendar text-base"></i><span class="ml-1">股票類型 type</span></p>
             <table class="apiTable">
               <tr>
                 <td>all</td><td>全部 (default)</td>
@@ -223,7 +229,7 @@
             </table>
           </div>
           <div class="col-span-12 sm:col-span-6 md:col-span-4">
-            <p class="text-purple-500 mb-1"><i class="i-Gears text-base"></i><span class="ml-1">狀態碼 code</span></p>
+            <p class="text-purple-500 mb-1 pl-1"><i class="i-Gears text-base"></i><span class="ml-1">狀態碼 code</span></p>
             <table class="apiTable">
               <tr>
                 <td>1000</td><td>請求成功 (http status:200)</td>

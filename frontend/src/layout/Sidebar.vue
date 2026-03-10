@@ -61,7 +61,7 @@ let handleWindowResize = () => {
                         >
                             <div class="nav-item-hold">
                                 <i class="i-Bar-Chart text-3xl"></i>
-                                <p>Dashboard</p>
+                                <p>Dashboard<br>儀錶板</p>
                             </div>
                         </router-link>
                         <router-link
@@ -71,7 +71,7 @@ let handleWindowResize = () => {
                         >
                             <div class="nav-item-hold">
                                 <i class="i-File-Network text-3xl"></i>
-                                <p>Stock Api</p>
+                                <p>Stock Api<br>股票接口</p>
                             </div>
                         </router-link>
                         <router-link
@@ -81,7 +81,7 @@ let handleWindowResize = () => {
                         >
                             <div class="nav-item-hold">
                                 <i class="i-Settings-Window text-3xl"></i>
-                                <p>Programing</p>
+                                <p>Programing<br>本站程式</p>
                             </div>
                         </router-link>
                         <router-link
@@ -91,7 +91,7 @@ let handleWindowResize = () => {
                         >
                             <div class="nav-item-hold">
                                 <i class="i-Find-User text-3xl"></i>
-                                <p>Profile</p>
+                                <p>Profile<br>人物簡介</p>
                             </div>
                         </router-link>
                         <router-link

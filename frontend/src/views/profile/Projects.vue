@@ -67,7 +67,7 @@
     let projects_data:data_type[] = [
         {   
             logoImg:"2022_sb1.jpg",
-            title:"台股恐慌監測平台(2026)",
+            title:"台股恐慌資料站(2026)",
             desc:"收集證交所恐慌指數並提供API的分析平台",
             keyword:"RESTful API Golang Gin VueVite Vuex VueRouter TypeScript Sass TailwindCSS DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus GitHub Docker CI/CD WebCrawler RWD Linux UnitTest SEO Cloudflare",
             content:`

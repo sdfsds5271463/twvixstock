@@ -50,7 +50,7 @@
 <template>
  
   <div class="container mx-auto">
-    <Breadcrumb parentTitle='Profile' subParentTitle='個人資料介紹' />
+    <Breadcrumb parentTitle='Profile' subParentTitle='本站作者人物簡介' />
     
 
 
@@ -64,10 +64,10 @@
             <div class="text-center"><img class="relative z-1 w-20 h-20 m-auto rounded-full border-2 border-white" src="/images/faces/allen_small_head.jpg" />
                 <p class="profile_desc text-gray-600">
                   <p class="text-blue-500 font-extrabold"># PHP Laravel Golang Python TypeScript <br class="rwd">Vue DevOps CI/CD GCP</p>
-                  <p>▪️<b>13年</b>全端開發經歷，<b>6年</b>管理經歷，深耕高<br class="rwd">併發自動部屬與自動化交易系統。</p>
+                  <p>▪️<b>13年</b>全端開發經歷，<b>6年</b>管理經歷，深耕高併<br class="rwd">發、自動部屬與自動化交易系統。</p>
                   <p>▪️撰寫超過<b>20個</b>上線網站，對接超過<b>10個</b>遊戲API<br class="rwd">，亦主力開發過<b>4個</b>大型專案的API。</p>
                   <p>▪️對接超過<b>30個</b>金流API，由我完全負責的金流<br class="rwd">接口每月處理超過<b>1萬張</b>有效單。</p>
-                  <p>▪️帶領<b>5人</b>團隊，從零開始獨立開發過<b>3種</b>不同類型<br class="rwd">遊戲，不重複註冊總人數超過<b>27萬</b>人。</p>
+                  <p>▪️帶領<b>5人+</b>團隊，從零開始獨立開發過<b>3款</b>大型遊戲<br class="rwd">平台，不重複註冊總人數超過<b>27萬</b>人。</p>
                   <p>▪️協作開發的體育系統同時在線人數超過<b>200人</b>，自<br class="rwd">動部屬管理該系統<b>20個</b>以上微服務。</p>
                   <p>▪️登入爬蟲超過<b>30間</b>合作廠商後台，達成一鍵式對<br class="rwd">單及開代理等合作商後台批次操作。</p>
                 </p>
