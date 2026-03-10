@@ -9,7 +9,7 @@
             精通 <b>5種</b> 主流網頁程式語言。
           </p>
           <p>
-            就學階段，從甲工資訊科 → 雲科資工系 → 雲科資工所，一路都在領域內發展，並於大三開始產學合作，並以網管技術人員任職於雲科研發處。
+            就學階段，從甲工資訊科 → 雲科資工系 → 雲科資工所，一路都在領域內發展，於大三開始產學合作，並以網管技術人員任職於雲科研發處。
             畢業後亦投入網頁領域的職場中，在任職的第二年底成為部門主管，經歷9年的變遷後，於2025年底離開該公司。
           </p>
         </div>
@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div class="p-6 mt-2 bg-white rounded-xl shadow-lg bg-gray-200 border-b border-gray-300 mb-6">
+    <div class="p-6 mt-2 rounded-xl shadow-lg bg-gray-200 border-b border-gray-300 mb-6">
       <h2 class="text-xl font-bold mb-4 text-gray-600">參與專案 & 語言使用率</h2>
       <apexchart
         type="line"

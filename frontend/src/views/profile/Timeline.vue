@@ -417,12 +417,14 @@
             color: white;
             background-color: rgba(139, 92, 246,0.9);
             border-radius: 5px;
-            padding: 4px 12px;
+            padding: 3px 12px;
             margin: 3px;
             box-shadow: 1px 1px 3px rgb(112, 112, 112);
             transition: opacity 0.3s ease;
             font-weight: 300;
             font-size: 14px;
+            line-height: 28px;
+            white-space: nowrap;
         }
         a:hover{
             opacity: 60%;
