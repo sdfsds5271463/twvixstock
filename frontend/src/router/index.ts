@@ -46,14 +46,14 @@ const routes: RouteRecordRaw[] = [
           title: 'Profile',
         },
       },
-      {
+      /*{
         path: '/components',
         name: 'components',
         component: () => import('../views/components/Button.vue'),
         meta: {
           title: 'Components',
         },
-      },
+      },*/
     ],
   },
 

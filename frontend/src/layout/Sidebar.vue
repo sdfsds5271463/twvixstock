@@ -94,16 +94,6 @@ let handleWindowResize = () => {
                                 <p>Profile<br>人物簡介</p>
                             </div>
                         </router-link>
-                        <router-link
-                            to="/components"
-                            tag="li"
-                            class="nav-item"
-                        >
-                            <div class="nav-item-hold">
-                                <i class="i-Wallet text-3xl"></i>
-                                <p>Buttons</p>
-                            </div>
-                        </router-link>
                     </ul>
                 </perfect-scrollbar>
             </div>

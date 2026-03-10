@@ -2,7 +2,7 @@
     <div class="grid grid-cols-12 gap-5">
         <template v-for="i in profile_photos">
             <div class="col-span-12 lg:col-span-4 md:col-span-6">
-                <BaseCard noPadding class="relative overflow-hidden cursor-pointer"
+                <BaseCard noPadding class="relative overflow-hidden cursor-pointer photos_img"
                     @click="currentImageName=i.name"
                 >
                     <img class="w-full" :src="i.name.replace(/photos\//g, 'photos/small_')" alt="" />
@@ -30,8 +30,14 @@
     const profile_photos = inject<Ref<ImageItem[]>>('profile_photos')!
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .photos_desc{
         text-shadow: 0px 0px 8px black;
+    }
+    .photos_img{
+        transition: transform 0.3s ease;
+    }
+    .photos_img:hover{
+        transform: scale(1.05);
     }
 </style>

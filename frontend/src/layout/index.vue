@@ -11,9 +11,12 @@ let store = useStore();
 import { ref,provide } from 'vue'
 import type { ImageItem } from '@/types/ImageItem'
 const profile_photos = ref<ImageItem[]>([
+  { name: 'images/profile_photos/2024_jyb5.jpg',    desc: '遊戲平台金流頁' , year: '2024' },
+  { name: 'images/profile_photos/2024_jyb4.jpg',    desc: '遊戲平台儀表板' , year: '2024' },
   { name: 'images/profile_photos/2024_jyb3.jpg',    desc: '遊戲平台手機板' , year: '2024' },
   { name: 'images/profile_photos/2024_jyb2.jpg',    desc: '遊戲平台前台2' , year: '2024' },
   { name: 'images/profile_photos/2024_jyb1.jpg',    desc: '遊戲平台前台1' , year: '2024' },
+  { name: 'images/profile_photos/2022_sb5.jpg',     desc: '體育系統負載' , year: '2022' },
   { name: 'images/profile_photos/2022_sb4.jpg',     desc: '體育系統手機板' , year: '2022' },
   { name: 'images/profile_photos/2022_sb3.jpg',     desc: '體育系統2' , year: '2022' },
   { name: 'images/profile_photos/2022_sb2.jpg',     desc: '體育系統1' , year: '2022' },
@@ -30,8 +33,10 @@ const profile_photos = ref<ImageItem[]>([
   { name: 'images/profile_photos/2018_lo3.jpg',     desc: '彩票遊戲前台2' , year: '2018' },
   { name: 'images/profile_photos/2018_lo2.jpg',     desc: '彩票遊戲前台1' , year: '2018' },
   { name: 'images/profile_photos/2018_lo1.jpg',     desc: '彩票遊戲後台' , year: '2018' },
-  { name: 'images/profile_photos/2017_bos2.jpg',    desc: '對接金流文件' , year: '2017' },
-  { name: 'images/profile_photos/2017_bos.jpg',     desc: '遊戲系統後台' , year: '2017' },
+  { name: 'images/profile_photos/2017_bos4.jpg',    desc: '對接遊戲文件' , year: '2017' },
+  { name: 'images/profile_photos/2017_bos3.jpg',    desc: '對接金流文件2' , year: '2017' },
+  { name: 'images/profile_photos/2017_bos2.jpg',    desc: '對接金流文件1' , year: '2017' },
+  { name: 'images/profile_photos/2017_bos1.jpg',     desc: '我方對接金流後台' , year: '2017' },
   { name: 'images/profile_photos/2016_yuntech3.jpg',     desc: '校園徵才廠商登錄網' , year: '2016' },
   { name: 'images/profile_photos/2016_yuntech2.jpg',     desc: '雲科研發處官網' , year: '2016' },
   { name: 'images/profile_photos/2016_yuntech1.jpg',     desc: '雲科卓越典範人物' , year: '2016' },

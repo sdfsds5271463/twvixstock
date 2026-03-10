@@ -25,9 +25,8 @@
                         <!-- 小圖片本體 -->
                         <img v-for="i2 in i.photoNames" class="
                             shadow-lg mb-3 rounded-lg cursor-pointer
-                            border-2 border-solid border-purple-500 
                             linkimg h-1/3
-                            hover:opacity-80
+                            hover:opacity-50
                         " 
                             @click = "currentImageName = profile_photos[keyOfPhotos[i2]]['name']"
                             :src="profile_photos[keyOfPhotos[i2]]['name'].replace(/photos\//g, 'photos/small_')" 
@@ -69,7 +68,7 @@
             logoImg:"2022_sb1.jpg",
             title:"台股恐慌資料站(2026)",
             desc:"收集證交所恐慌指數並提供API的分析平台",
-            keyword:"RESTful API Golang Gin VueVite Vuex VueRouter TypeScript Sass TailwindCSS DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus GitHub Docker CI/CD WebCrawler RWD Linux UnitTest SEO Cloudflare",
+            keyword:"RESTful API Golang Gin Vue3Vite Vuex VueRouter TypeScript Sass TailwindCSS DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus GitHub Docker CI/CD WebCrawler RWD Linux UnitTest SEO Cloudflare",
             content:`
                 獨立開發的個人網站，自動部屬在 GCP 上並開源於 GitHub。系統排程至證交所進行恐慌指數爬蟲，資料送至前端可查詢分析，並開放 API 接口服務。
                 核心技術 API、Golang、Gin、VueVite、Vuex、VueRouter、TypeScript、Sass、TailwindCSS、DevOps、GCP、Kubernetes、Docker、CI/CD。
@@ -83,7 +82,7 @@
             logoImg:"2024_jyb1.jpg",
             title:"大型線上遊戲平台(2024)",
             desc:"暢玩超過30個不同遊戲商的遊戲",
-            keyword:"RESTful API PHP Laravel MVC Python Vue3 Vuex TypeScript Sass MySQL Redis WebCrawler Scrapy Selenium Playwright UnitTest SEO",
+            keyword:"RESTful API PHP Laravel MVC Python Vue3 Vuex TypeScript Sass MySQL Redis WebCrawler Bootstrap Scrapy Selenium Playwright UnitTest SEO",
             content:`
                 我領導的<b>5人</b>後端技術團隊，負責大量金流、遊戲對接，並設計爬蟲至合作遊戲商後台，併發對單或操作對方後台功能。
                 核心技術 PHP、Laravel、TypeScript、Vue、Sass、Python、Scrapy、UnitTest、SEO。
@@ -91,7 +90,7 @@
                 遊戲商超過<b>30間</b>，與團隊共同接入 API，並使用爬蟲 Python 框架 Scrapy + Playwright 併發登入所有遊戲商後台，進行對單或批次開設代理。 本專案還有設計 SEO 推廣模型。
             `,
             links:["", ""],
-            photoNames: ["2024_jyb3.jpg","2024_jyb2.jpg","2024_jyb1.jpg",],
+            photoNames: ["2024_jyb4.jpg","2024_jyb2.jpg","2024_jyb1.jpg",],
         },
         {   
             logoImg:"2022_sb2.jpg",
@@ -99,7 +98,7 @@
             desc:"每秒更新百次以上賠率的高併發微服務整合系統",
             keyword:"Golang Gin gRPC Vue3 Vuex TypeScript Sass DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus ELK GitHub Docker CI/CD WebSocket API Redis Linux UnitTest JWT",
             content:`
-                我領導的<b>8人</b>全端技術團隊，負責將舊版 PHP 體育系統源碼重新撰寫成 Golang 自動部屬至 GCP，包含後續開發維護等全端工作。
+                我領導的<b>8人</b>全端技術團隊，負責將舊版 PHP 體育系統源碼重新撰寫成 Golang <b>自動部屬</b>至 GCP，包含後續開發維護等全端工作。
                 核心技術 Golang、Gin、TypeScript、Vue、DevOps、GCP、Kubernetes、Docker、CI/CD、WebSocket。
                 我們負責改寫專案 PHP→Go、jQuery→Vue，維運全端、API等所有服務，並全部整合進行 CI/CD。專案由<b>20個</b>以上的 GCP 容器微服務整合運行，通過 GitHub 觸發進行自動部屬，並使用 Prometheus、ELK 做後續的日誌監控。
                 架構包含平台、前端、後端、控端、賽程、訊源、視訊等，使用 Go Channel 集中狀態併發 gRPC 給自拓展 pod 運算服務，以應付同時<b>200人</b>在線及每秒達<b>百次</b>以上的賠率運算。
@@ -115,7 +114,7 @@
             content:`
                 我領導的<b>5人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為基於彩票規則的爬蟲獎號概率精算遊戲，專案主架構為前端、後端、API、排程。
                 核心技術 PHP、Laravel、WebCrawler、jQuery、Bootstrap、Nginx、Git。
-                本專案累計註冊會員超過<b>27萬人</b>，專案核心為排程開獎以及計算賠率，獎號的來源有官網爬蟲、購買的獎源、我們合作遊戲商的前後台等。
+                本專案累計註冊會員超過<b>27萬人</b>，專案核心為排程開獎以及計算賠率，獎號的來源有官網爬蟲、獎源、我們合作遊戲商的前後台等。
                 完整專案包含前台、後台建置、排程設計、撰寫 API 並發送文件給合作商對接，以及後續維運。
             `,
             links:["http://lottsample.ddns.net:9527/index.php?m=common&c=trygame&a=trygame&type=0", "彩票遊戲試玩"],
@@ -129,7 +128,7 @@
             content:`
                 我領導的<b>6人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為精美的動畫與機率計算，專案主架構為前端、後端、API。
                 核心技術 PHP、Laravel、jQuery、Spine、PixiJS、Nginx、Git。
-                美術團隊提供靜態的 .psd 素材給我們，我們通過 Photoshop 切割取出、並使用 Spine 編輯成動畫，至前端使用 PixiJS 動畫引擎呈現。
+                使用 Spine 編輯成動畫，至前端使用 PixiJS 動畫引擎呈現，內崁入合作商捕魚遊戲，整個平台日注單可遠超<b>上萬張</b>。
                 完整專案包含前台、後台建置、撰寫 API 並發送文件給合作商對接，以及後續維運。
             `,
             links:["http://lottsample.ddns.net:9527/egames/public/trygame", "電子遊戲試玩"],
@@ -143,14 +142,14 @@
             content:`
                 我領導的<b>5人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為 SHA256 預加密可驗證的公平紙牌機率遊戲，專案主架構為前端、後端、API、排程。
                 核心技術 PHP、Laravel、jQuery、Canvas、Bootstrap、Nginx、Git。
-                美術團隊提供靜態的 .psd 素材給我們，我們通過 Photoshop 切割取出、並使用 jQuery 與畫布 Canvas 呈現生動的牌桌畫面，並通過排程預 hash 以及開獎。
+                使用 jQuery 與畫布 Canvas 呈現生動的牌桌畫面，並通過排程預 hash 以及開獎；本遊戲崁入合作商的遊戲平台，創建了超過<b>120個</b>子代理。
                 完整專案包含前台、後台建置、排程設計、撰寫 API 並發送文件給合作商對接，以及後續維運。
             `,
             links:["http://livesample.ddns.net:9527/game/trygame", "區塊鏈百家樂試玩"],
             photoNames: ["2019_li4.jpg","2019_li3.jpg","2019_li2.jpg"],
         },
         {   
-            logoImg:"2017_bos.jpg",
+            logoImg:"2017_bos1.jpg",
             title:"遊戲後台API對接(2017)",
             desc:"技術對接大量合作遊戲商、合作金流商",
             keyword:"RESTful API Json PHP Laravel MVC MySQL Redis Git",
@@ -161,21 +160,22 @@
                 遊戲 API 有創建會員、無縫或轉帳、啟動遊戲、報表等固定接口；金流 API 有代付代收、請求、回調、查詢等固定接口。我的任務就是完善這個流程。
             `,
             links:["", ""],
-            photoNames: ["2017_bos2.jpg","2017_bos.jpg"],
+            photoNames: ["2017_bos3.jpg","2017_bos2.jpg","2017_bos1.jpg"],
         },
         {   
             logoImg:"2016_yuntech2.jpg",
-            title:"CMS內容管理系統(2016)",
+            title:"內容管理E化流程系統(2016)",
             desc:"後台輕鬆更新前端內容、圖片的管理系統",
             keyword:"WordPress PHP MySQL Javascript jQuery Photoshop SEO Html Css Apache",
             content:`
-                自2012年起職位為雲科研發處網管，協助校內靜態資訊網站改寫成可由教職員自行編輯內容、上傳圖片的 CMS 內容管理系統。
-                核心技術 WordPress、PHP、jQuery、Html、Css、SEO、Apache。
-                建置 Apache 伺服器並進行 WordPress 建置與維運，並使用 PHP、jQuery 撰寫例如產生公文等客製化功能。
-                全端開發所有流程，因此學會了極強的 Photoshop 素材編輯能力，並且很認真研究 SEO 推廣網站。
+                自2012年起職位為雲科研發處網管，總共撰寫了超過<b>20個</b>上線網站，協助校內建置靜態網站、CMS 內容管理系統及E化政府單位流程的介面化資料庫網頁系統。。
+                核心技術 WordPress、PHP、MySQL、jQuery、Html、Css、SEO、Apache。
+                撰寫了大量校內活動靜態網頁，學會了極強的 Photoshop 素材編輯能力以及基礎的 SEO 推廣。
+                協助將各處室的靜態網站以 Apache + WordPress 建成教職員自行編輯內容、上傳圖片的 CMS 內容管理系統。
+                協助政府單位建置了數個 PHP + MySQL 的E化投標或公文等系統，項目內容包含介面化填寫、比對資料，寄發郵件等。
             `,
             links:["", ""],
-            photoNames: ["2016_yuntech2.jpg","2014_yuntech1.jpg"],
+            photoNames: ["2016_yuntech3.jpg","2016_yuntech2.jpg","2012_yuntech1.jpg"],
         },
     ];
 
@@ -195,6 +195,7 @@
 <style lang="scss">
     .linkimg{ //小圖片寬度(1~3張)
         width: calc(33% - 2px);
+        transition: opacity 0.3s ease;
     }
     .linkimg_1_block{ //1張小圖片置中預留寬
         width: 32%;
