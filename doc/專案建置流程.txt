@@ -1586,3 +1586,14 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
         kubectl create secret generic gcpsm-secret --from-file=secret-access-credentials.json=twvixstock_secretManager.json -n external-secrets
 
 
+kubectl get pods -n external-secrets  找到三個服務
+kubectl get crd | grep external-secrets  取得一排CRD資源表
+
+
+kubectl api-resources | grep external-secrets   有抓到新定義
+    ExternalSecret
+    external-secrets.io/v1
+
+
+
+kubectl apply -f k8s/env.yaml
