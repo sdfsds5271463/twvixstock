@@ -6,9 +6,9 @@
   import Photos from './Photos.vue'
   import { ref,onMounted,onUnmounted } from 'vue'
   import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
-  import About from '../About.vue'
-  let categories = ref(['時間線', '關於我', '專案清單', '專案圖'])
-  let categories_icon = ref(['i-Calendar-4', 'i-Business-Man', 'i-Professor', 'i-Camera'])
+  //import About from '../About.vue'
+  let categories = ref(['關於我', '時間線', '專案清單', '專案圖'])
+  let categories_icon = ref(['i-Business-Man', 'i-Calendar-4', 'i-Professor', 'i-Camera'])
 
   //以下 試玩球功能
   const tryGameBall = ref(null);
@@ -98,10 +98,10 @@
 
             <TabPanels class="mt-10">
               <TabPanel>
-                <Timeline></Timeline>
+                <Aboutme></Aboutme>
               </TabPanel>
               <TabPanel>
-                <Aboutme></Aboutme>
+                <Timeline></Timeline>
               </TabPanel>
               <TabPanel>
                 <Projects></Projects>

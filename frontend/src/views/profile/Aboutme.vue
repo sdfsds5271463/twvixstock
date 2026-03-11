@@ -43,7 +43,7 @@
         <p class="text-lg font-semibold mb-2">精通技能關鍵字：</p>
         <div class="border-b border-gray-300 pb-10 mb-8 text-blue-500 aboutme_content font-semibold">
           <p>前端 # Vue3 Vite Vuex VueRouter TypeScript TailwindCSS BootStrap jQuery Javascript Twig Sass Css Html PixiJS</p>
-          <p>後端 # Golang Gin PHP Laravel Python Scrapy RESTfulAPI WebSocket Redis MySQL API </p>
+          <p>後端 # Golang Gin PHP Laravel Python Scrapy RESTfulAPI WebSocket Redis MySQL SQL API</p>
           <p>部屬 # DevOps Kubernetes K8s CI/CD Docker GCP GKE CloudBuild Prometheus ELK GitHub Cloudflare Linux Nginx</p>
           <p>其他 # UnitTest WebCrawler Git SEO MVC RWD Ajax Json Selenium Playwright Photoshop WordPress Spine JWT </p>
         </div>
@@ -63,23 +63,23 @@ import { ref } from 'vue';
   // 1. 資料定義：series 陣列裡放幾個物件，就有幾條線
   const series = ref([
     {
-      name: "PHP",
-      data: [50, 60, 95, 50, 30, 25, 40,  10,  0, 50, 50,  0],
+      name: ["PHP","Laravel"],
+      data: [55, 60, 95, 50, 30, 25, 40,  10,  0, 50, 50,  0],
     },
     {
-      name: "GOLANG",
+      name: ["GOLANG","Gin"],
       data: [ 0,  0,  0,  0,  0,  0,  0,  60, 65, 15, 5, 35],
     },
     {
-      name: "PYTHON",
+      name: ["PYTHON","Scrapy"],
       data: [ 0,  0,  0, 20, 10,  0, 10,  0,  0,  35, 30, 10],
     },
     {
-      name: "JAVASCRIPT",
-      data: [50, 40,  5, 30, 60, 75, 50,  20,  5,  0,  0, 5],
+      name: ["JAVASCRIPT","jQuery"],
+      data: [45, 40,  5, 30, 60, 75, 50,  20,  5,  0,  0, 5],
     },
     {
-      name: "TYPESCRIPT",
+      name: ["TYPESCRIPT","Vue"],
       data: [ 0,  0,  0,  0,  0,  0,  0,  10, 30,  0, 15, 50],
     },
   ]);
