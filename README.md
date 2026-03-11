@@ -110,6 +110,8 @@ npm install | pnpm install | yarn install
 
 cp .env.example .env
 
+cp k8s/env.yaml.example k8s/env.yaml
+
 
 [使用 Docker Compose 啟動]
 

@@ -6,12 +6,14 @@ var CrawlerKind = struct {
     All     KindName
     TAIEX   KindName
     VIXTWN  KindName
-    TAIPE  KindName
+    TAIPE   KindName
+    GEMINI  KindName
 }{
-    All:   "all",
+    All:    "all",
     TAIEX:  "taiex",
     VIXTWN: "vixtwn",
     TAIPE:  "taipe",
+    GEMINI: "gemini",  //抓取近三個月的股市分析
 }
 
 //TaiexApi 返回格式

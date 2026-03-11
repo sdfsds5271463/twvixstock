@@ -154,3 +154,12 @@ func FetchDataTAIPE(all bool, token string) {
 
 	fmt.Println("TAIPE 解析筆數:", count)
 }
+
+// 台灣PE爬蟲
+func FetchGeminiApi(all bool, token string) {
+	_ = all //不用這個參數，固定給 3 個月分析
+
+
+
+	fmt.Println("GEMINI 解析結果:", token)
+}

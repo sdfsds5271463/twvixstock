@@ -9,6 +9,7 @@
     "dependencies": {
         "@headlessui/vue": "^1.7.16",
         "apexcharts": "^5.10.0",
+        "pinia": "^3.0.4",
         "vue": "^3.3.4",
         "vue-my-photos": "^3.0.1",
         "vue-router": "^4.2.4",

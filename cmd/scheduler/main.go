@@ -19,7 +19,7 @@ func main() {
 	repository.InitDB()
 
 	// 爬蟲 flag (EX: go run cmd/scheduler/main.go -k=taiex -all)
-	flag_k := flag.String("k", "all", "指數種類?(all|taiex|vixtwn|taipe)")
+	flag_k := flag.String("k", "all", "指數種類或gemini三月分析?(all|taiex|vixtwn|taipe|gemini)")
 	flag_all := flag.Bool("all", false, "是否抓取全紀錄?")
 	flag.Parse()
 	crawlerKind := model.KindName( strings.ToLower(*flag_k) )
@@ -36,6 +36,9 @@ func main() {
 	if(crawlerKind == model.CrawlerKind.All || crawlerKind == model.CrawlerKind.TAIPE){
 		crawler.FetchDataTAIPE(*flag_all, config.AppConfig.Crawler.Token)
 	}
-
+	// gemini三月分析
+	if(crawlerKind == model.CrawlerKind.All || crawlerKind == model.CrawlerKind.GEMINI){
+		crawler.FetchGeminiApi(*flag_all, config.AppConfig.Crawler.Token)
+	}
 }
 

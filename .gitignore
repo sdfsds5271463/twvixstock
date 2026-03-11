@@ -6,3 +6,4 @@ frontend/yarn.lock
 *.log
 tmp/
 static/
+k8s/env.yaml
