@@ -99,7 +99,7 @@ import { ref } from 'vue';
       categories: [['2015-', '任職學界'], "2016", ['2017', 'API專案'], ['2018', '彩票平台'], ['2019', '百家樂'], ['2020', '電子遊戲'], 
         '2021', ['2022', '體育系統'], '2023', ['2024', '遊戲平台'], '2025', ['2026+', '股票系統']
       ],
-      title: { text: '日期(年)' },
+      title: { text: '年代 專案' },
       labels: {
         style: {
           fontSize: '11px',
@@ -107,7 +107,7 @@ import { ref } from 'vue';
       }
     },
     yaxis: {
-      title: { text: '使用率(%)' }
+      title: { text: '使用率' }
     },
     legend: {
       position: 'top' // 圖例放在上方

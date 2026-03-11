@@ -6,7 +6,17 @@ import {
     sparklineData,
 } from '@/data/apexDataSeries'
 
-export const dashboardOne = {
+import { ApexOptions } from 'apexcharts'
+
+interface DashboardSeries{
+    name: string
+    data: number[]
+}
+
+export const dashboardOne:{
+    series: DashboardSeries[]|number[]
+    chartOptions: ApexOptions
+} = {
     series: [
         {
             name: 'Net Profit',
@@ -59,13 +69,187 @@ export const dashboardOne = {
         },
         tooltip: {
             y: {
-                formatter: function (val) {
+                formatter: function (val: number|string) {
                     return '$ ' + val + ' thousands'
                 },
             },
         },
     },
 }
+
+export const dashboardTwo:{
+    series: DashboardSeries[]|number[]
+    chartOptions: ApexOptions
+} = {
+    series: [44, 55, 13, 43, 22],
+    chartOptions: {
+        fill: {
+            colors: ['#EDE9FE', '#DDD6FE', '#8B5CF6', '#C4B5FD', '#A78BFA'],
+        },
+        chart: {
+            height: 350,
+            type: 'pie',
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        legend: {
+            show: false,
+        },
+        // responsive: [
+        //   {
+        //     breakpoint: 480,
+        //     options: {
+        //       chart: {
+        //         // width: 200
+        //       },
+        //       legend: {
+        //         show: false,
+        //       },
+        //     },
+        //   },
+        // ],
+    },
+}
+
+export const splineAreaWidgetTwo:{
+    series: DashboardSeries[]|number[]
+    chartOptions: ApexOptions
+} = {
+    series: [
+        {
+            name: 'series2',
+            data: [11, 90, 45, 32, 34, 52, 41],
+        },
+    ],
+
+    chartOptions: {
+        chart: {
+            width: '90%',
+            height: 100,
+            toolbar: {
+                show: false,
+            },
+            sparkline: {
+                enabled: true,
+            },
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        legend: {
+            show: false,
+        },
+
+        xaxis: {
+            type: 'datetime',
+            categories: [
+                '2018-09-19T00:00:00',
+                '2018-09-19T01:30:00',
+                '2018-09-19T02:30:00',
+                '2018-09-19T03:30:00',
+                '2018-09-19T04:30:00',
+                '2018-09-19T05:30:00',
+                '2018-09-19T06:30:00',
+            ],
+            labels: {
+                show: false,
+            },
+            axisTicks: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            },
+        },
+        yaxis: {
+            show: false,
+        },
+        grid: {
+            show: false,
+        },
+        tooltip: {
+            enabled: true,
+            x: {
+                format: 'dd/MM/yy HH:mm',
+            },
+        },
+        colors: ['#8b5cf6'],
+        stroke: {
+            curve: 'smooth',
+            width: 1,
+        },
+    },
+}
+export const splineAreaWidgetThree:{
+    series: DashboardSeries[]|number[]
+    chartOptions: ApexOptions
+} = {
+    series: [
+        {
+            name: 'series2',
+            data: [41, 52, 34, 32, 45, 90, 11],
+        },
+    ],
+
+    chartOptions: {
+        chart: {
+            width: '100%',
+            height: 100,
+            toolbar: {
+                show: false,
+            },
+            sparkline: {
+                enabled: true,
+            },
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        legend: {
+            show: false,
+        },
+        xaxis: {
+            type: 'datetime',
+            categories: [
+                '2018-09-19T00:00:00',
+                '2018-09-19T01:30:00',
+                '2018-09-19T02:30:00',
+                '2018-09-19T03:30:00',
+                '2018-09-19T04:30:00',
+                '2018-09-19T05:30:00',
+                '2018-09-19T06:30:00',
+            ],
+            labels: {
+                show: false,
+            },
+            axisTicks: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            },
+        },
+        yaxis: {
+            show: false,
+        },
+        grid: {
+            show: false,
+        },
+        tooltip: {
+            enabled: true,
+            x: {
+                format: 'dd/MM/yy HH:mm',
+            },
+        },
+        colors: ['#f59e0b'],
+        stroke: {
+            curve: 'smooth',
+            width: 1,
+        },
+    },
+}
+
 
 // export const dashboardOne = {
 //   series: [
@@ -118,174 +302,3 @@ export const dashboardOne = {
 //   }
 
 // }
-
-export const dashboardTwo = {
-    series: [44, 55, 13, 43, 22],
-    chartOptions: {
-        fill: {
-            colors: ['#EDE9FE', '#DDD6FE', '#8B5CF6', '#C4B5FD', '#A78BFA'],
-        },
-        chart: {
-            height: 350,
-            type: 'pie',
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        legend: {
-            show: false,
-        },
-        // responsive: [
-        //   {
-        //     breakpoint: 480,
-        //     options: {
-        //       chart: {
-        //         // width: 200
-        //       },
-        //       legend: {
-        //         show: false,
-        //       },
-        //     },
-        //   },
-        // ],
-    },
-}
-
-export const splineAreaWidgetTwo = {
-    series: [
-        {
-            name: 'series2',
-            data: [11, 90, 45, 32, 34, 52, 41],
-        },
-    ],
-
-    chartOptions: {
-        chart: {
-            width: '90%',
-            height: 100,
-            toolbar: {
-                show: false,
-            },
-            sparkline: {
-                enabled: true,
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        stroke: {
-            curve: 'smooth',
-        },
-        legend: {
-            show: false,
-        },
-
-        xaxis: {
-            type: 'datetime',
-            categories: [
-                '2018-09-19T00:00:00',
-                '2018-09-19T01:30:00',
-                '2018-09-19T02:30:00',
-                '2018-09-19T03:30:00',
-                '2018-09-19T04:30:00',
-                '2018-09-19T05:30:00',
-                '2018-09-19T06:30:00',
-            ],
-            labels: {
-                show: false,
-            },
-            axisTicks: {
-                show: false,
-            },
-            axisBorder: {
-                show: false,
-            },
-        },
-        yaxis: {
-            show: false,
-        },
-        grid: {
-            show: false,
-        },
-        tooltip: {
-            enabled: true,
-            x: {
-                format: 'dd/MM/yy HH:mm',
-            },
-        },
-        colors: ['#8b5cf6'],
-        stroke: {
-            curve: 'smooth',
-            width: 1,
-        },
-    },
-}
-export const splineAreaWidgetThree = {
-    series: [
-        {
-            name: 'series2',
-            data: [41, 52, 34, 32, 45, 90, 11],
-        },
-    ],
-
-    chartOptions: {
-        chart: {
-            width: '100%',
-            height: 100,
-            toolbar: {
-                show: false,
-            },
-            sparkline: {
-                enabled: true,
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        stroke: {
-            curve: 'smooth',
-        },
-        legend: {
-            show: false,
-        },
-
-        xaxis: {
-            type: 'datetime',
-            categories: [
-                '2018-09-19T00:00:00',
-                '2018-09-19T01:30:00',
-                '2018-09-19T02:30:00',
-                '2018-09-19T03:30:00',
-                '2018-09-19T04:30:00',
-                '2018-09-19T05:30:00',
-                '2018-09-19T06:30:00',
-            ],
-            labels: {
-                show: false,
-            },
-            axisTicks: {
-                show: false,
-            },
-            axisBorder: {
-                show: false,
-            },
-        },
-        yaxis: {
-            show: false,
-        },
-        grid: {
-            show: false,
-        },
-        tooltip: {
-            enabled: true,
-            x: {
-                format: 'dd/MM/yy HH:mm',
-            },
-        },
-        colors: ['#f59e0b'],
-        stroke: {
-            curve: 'smooth',
-            width: 1,
-        },
-    },
-}

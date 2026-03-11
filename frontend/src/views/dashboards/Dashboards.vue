@@ -4,7 +4,7 @@ import {
   dashboardTwo,
   splineAreaWidgetTwo,
   splineAreaWidgetThree,
-} from "@/data/dashboard.v1.js"
+} from "@/data/dashboard"
 
 import Breadcrumbs from "@/components/Breadcrumbs.vue"
 import { onMounted } from "vue"
