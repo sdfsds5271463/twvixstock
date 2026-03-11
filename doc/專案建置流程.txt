@@ -1565,3 +1565,24 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
         C域名頁 > (左側)SSL/TLS > 邊緣憑證 > 一律使用 HTTPS(勾) > 啟用 HSTS (設定>全勾) > 自動改寫 HTTPS(勾)
             ⮕ 可以連上 https://twvixstock.qzz.io
 
+
+4.3 使用 Secret Manager 管理敏感鑰匙
+    1. 至 GCP 啟用 Secret Manager
+        Secret Manager  >  建立新密鑰  >  CRAWLER_TOKEN_SECRET  >  直接貼上密鑰值
+
+
+    2. winget install Helm.Helm
+    3. 安裝 ESO 到你的 GKE 叢集
+        helm repo add external-secrets https://charts.external-secrets.io
+        helm install external-secrets external-secrets/external-secrets \
+            -n external-secrets --create-namespace
+    4. 新增鑰匙管理者權限檔
+        Service Account
+        新增使用者名稱 SecretManagerUser  >  權限 密鑰管理員 - Secret Manager 管理員  >  新增  (後續可在 IAM 與管理頁面 看到他)
+        點入剛剛新增的 SecretManagerUser  >  金鑰  >  新增鍵 建立新的鑰匙 JSON  >  存成 twvixstock_secretManager.json
+    5. 例外鑰匙管理者權限檔
+        .gitignore 例外 twvixstock_secretManager.json
+    6. 產生 secret/gcpsm-secret
+        kubectl create secret generic gcpsm-secret --from-file=secret-access-credentials.json=twvixstock_secretManager.json -n external-secrets
+
+

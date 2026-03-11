@@ -84,7 +84,6 @@ npm install | pnpm install | yarn install
 
 [環境變數設定]
 cp .env.example .env
-cp k8s/env.yaml.example k8s/env.yaml
 
 [使用 Docker Compose 啟動]
 docker build -t tvs-server --target server .
