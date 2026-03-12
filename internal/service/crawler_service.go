@@ -378,7 +378,7 @@ func GeminiApiFetch(configCrawler config.CrawlerConfig)(count int, err error){
 	//=============================階段(4/5) 發送Gemini API=============================
 
 	//模組  GeminiModel  |  GeminiModellite
-	useModel := configCrawler.GeminiModellite
+	useModel := configCrawler.GeminiModel
 	postData := []byte(`{'contents':[{'parts':[{'text':"`+question.String()+`"}]}]}`)
 
 	//發送請求

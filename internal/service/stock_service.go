@@ -1,12 +1,11 @@
 package service
 
 import (
-	"errors"
 	//"fmt"
+	"encoding/json"
 	"strings"
 	"twvixstock/internal/model"
 	"twvixstock/internal/repository"
-	"encoding/json"
 )
 
 // 根據日期過濾資料
@@ -63,20 +62,16 @@ func GetStocksByDate(startDate string, endDate string, stocktype string) ([]mode
 
 // 取得 Gemini Api 的分析
 func GetGeminiTextByDate(date string)(data model.GeminiJson, err error){
-
-	if(date == ""){
-		err = errors.New("date can't null")
-		return
-	}
-
 	var geminiText []model.GeminiText
 
 	// 呼叫 Repository 層的 DB 物件進行查詢
 	db := repository.DB
-	db = db.Where("date = ?", date)
+	if(date != ""){
+		db = db.Where("date = ?", date)
+	}
 
 	// 查詢
-	err = db.Find(&geminiText).Error
+	err = db.Order("date DESC").Find(&geminiText).Error
 	if(err != nil){
 		return
 	}
@@ -87,8 +82,7 @@ func GetGeminiTextByDate(date string)(data model.GeminiJson, err error){
 		if(err != nil){
 			return
 		}
-		data.Date = date
+		data.Date = geminiText[0].Date.Format("2006-01-02")
 	}
-
 	return
 }

@@ -46,7 +46,7 @@ func GeminiDataShow(c *gin.Context) {
 
 	// 過濾 binding 條件
 	type ReqStruct struct {
-		Date string `json:"date" form:"date" binding:"required,datetime=2006-01-02"`
+		Date string `json:"date" form:"date"`
 	}
 
 	// 解析參數 (傳入的資料有問題)

@@ -3,8 +3,8 @@ kind: CronJob
 metadata:
   name: tvs-scheduler-cron
 spec:
-  # 台北時間(翻譯成UTC+0) 每天 15 16 17 18 點各執行一次
-  schedule: "0 15,16,17,18 * * *"
+  # 台北時間 15 16 17 18 點各執行兩次  僅周1-5
+  schedule: "0,30 15,16,17,18 * * 1-5"
   timeZone: Asia/Taipei
   jobTemplate:
     spec:

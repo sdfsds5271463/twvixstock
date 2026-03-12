@@ -53,6 +53,13 @@ const currentImageName = ref<string>('')
 provide('currentImageName', currentImageName); 
 provide('profile_photos', profile_photos); 
 
+
+// 初始化 piniaStock
+import { piniaStock } from '@/store/piniaStock'
+const piniaStockMain = piniaStock()
+piniaStockMain.initPiniaStock()
+
+
 </script>
 
 <template>
