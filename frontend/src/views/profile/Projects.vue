@@ -140,7 +140,7 @@
             desc:"將結果提前hash加密的公平紙牌遊戲",
             keyword:"PHP Laravel MVC jQuery Javascript Canvas API Ajax MySQL Redis Bootstrap UnitTest Nginx Git Photoshop",
             content:`
-                我領導的<b>5人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為 SHA256 預加密可驗證的公平紙牌機率遊戲，專案主架構為前端、後端、API、排程。
+                我領導的<b>5人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為 SHA512 預加密可驗證的公平紙牌機率遊戲，專案主架構為前端、後端、API、排程。
                 核心技術 PHP、Laravel、jQuery、Canvas、Bootstrap、Nginx、Git。
                 使用 jQuery 與畫布 Canvas 呈現生動的牌桌畫面，並通過排程預 hash 以及開獎；本遊戲崁入合作商的遊戲平台，創建了超過<b>120個</b>子代理。
                 完整專案包含前台、後台建置、排程設計、撰寫 API 並發送文件給合作商對接，以及後續維運。

@@ -18,6 +18,24 @@ SET NAMES utf8mb4;
 
 -- SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
+-- DROP TABLE IF EXISTS `gemini_text`;
+CREATE TABLE `gemini_text`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `date` date NOT NULL,
+  `remark` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `date`(`date`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+-- ----------------------------
+-- SET FOREIGN_KEY_CHECKS = 1;
+INSERT INTO `gemini_text` VALUES (1, '{\n  \"point\": 45,\n  \"price\": 31500,\n  \"reason\": \"台股在2026年2月創下35414點高點後，隨即面臨估值過熱與恐慌情緒升溫的修正壓力。近兩週VIXTWN一度飆升至41.63，反映市場對於近期全球地緣政治摩擦及通貨膨脹疑慮導致的流動性收緊感到不安。雖然TAIEX自高點回調近10%，但本益比仍處於26倍左右的歷史相對高位，顯示市場並未達到「極度超賣」的佈局階段。近期指數在32000點至34000點間震盪，籌碼面正進行換手。鑒於全球央行利率政策走向不明，若無法在32000點取得強力支撐，修正壓力恐延續。現階段操作建議謹慎，觀察重點在於VIXTWN是否能穩定回落至25以下，且本益比回到23-24倍的長期平均區間，屆時才具備較高的中長線進場價值。目前價位雖修正，但仍非極低基期，故採取中性偏保守態度。\"\n}', '2026-03-11', 'gemini-3.1-flash-lite-preview(6m+15d)');
+INSERT INTO `gemini_text` VALUES (2, '{\n  \"point\": 35,\n  \"price\": 28500,\n  \"reason\": \"台股在2026年2月創下35,414點高點後，近期出現明顯修正，加權指數已跌破34,000點大關。觀察台灣恐慌指數（VIXTWN）飆升至36-41區間，顯示市場對國際地緣政治不確定性及通膨擔憂加劇，避險情緒高漲。雖然本益比（TAIPE）從歷史高位回落至26左右，但相比於2025年下半年的均值，目前估值仍處於相對昂貴區間，未達物美價廉的進場條件。近期國際局勢動盪，全球供應鏈及貨幣政策面臨變數，法人籌碼鬆動且技術面轉弱，短線築底過程恐需時間沉澱。建議採取保守策略，待VIX回落至25以下，且指數修正至28,500點附近的長期支撐位，才具備中長期布局的合理性與安全邊際。\"\n}', '2026-03-12', 'gemini-3.1-flash-lite-preview(6m+15d)');
+
+
+
+-- SET FOREIGN_KEY_CHECKS = 0;
+-- ----------------------------
 -- DROP TABLE IF EXISTS `stock`;
 CREATE TABLE `stock`  (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,

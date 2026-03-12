@@ -1489,18 +1489,150 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
 
 
 =======================================================================================
-第五章: 申請域名::
+第五章: GCP密鑰管理::
 =======================================================================================
-4.i 章節目錄
-    4.0 DNS獲取流程
+5.i 章節目錄
+    5.0 密鑰管理介紹
+        ESO秘密搬運服務 以及 使用者→憑證庫→通道→訂單 流程
+    5.1 建立GCP密鑰
+        啟用服務並建立密鑰
+    5.2 獲取使用者密鑰權限
+        創建使用者並獲取鑰匙
+    5.3 安裝 ESO
+        安裝秘密搬運管家以使用 external-secrets.io/v1 執行 yaml
+    5.4 生成憑證庫
+        繼承使用者權限創建憑證庫供通道使用
+    5.5 透過 ESO 執行通道與訂單
+        改寫 yaml 檔讓 ESO 透過通道索取訂單
+    5.6 推送前手動執行
+        執行沒問題就可以Cloudbuild了
+    5.7 除錯指令
+        有異常執行除錯
+
+
+5.0 密鑰管理介紹
+    [概述: 本章節之前現況說明]
+    前面的版本，無風險且固定設定存在 config/
+               有風險或動態設定 本地存在 .env | 雲端存在 k8s/env.yaml
+    雲端動態設定繼續存在 k8s/env.yaml 沒問題，但有風險的密鑰就不安全了，所以有風險密鑰應該要存在GCP
+
+    [ESO(External Secrets Operator): 秘密搬運管家(三個服務)]
+    我們的 GKE 引擎預設是沒有這個服務的，所以我們需要安裝，安裝完成後
+        ⮕ (yaml)apiVersion: external-secrets.io/v1  將能搬運 GCP密鑰 出來給我們使用
+
+    [流程: 先創建憑證庫 再用ESO搬運參數]
+    手動操作:
+        1. SecretManagerUser 使用者 - 有權查看密鑰
+        2. gcpsm-secret 憑證庫 - 繼承使用者權限
+    ESO(yaml)操作:
+        3. ClusterSecretStore 通道 - 從憑證庫給搬運渠道
+        4. ExternalSecret 訂單 - 從通道搬運訂單參數
+
+
+5.1 建立GCP密鑰
+    [介面: 創造密鑰匙]
+    啟用服務 Secret Manager
+    創建密鑰 CRAWLER_TOKEN_SECRET
+        ⮕ Secret Manager  →  建立新密鑰  →  CRAWLER_TOKEN_SECRET(可改)  →  直接貼上密鑰值
+
+
+5.2 獲取使用者密鑰權限
+    [介面: 新增使用者]
+    Service Account  →  名稱 SecretManagerUser(可改)  →  權限>密鑰管理員>[至少要檢視權限]  →  新增(之後可在 IAM與管理頁面 管他)
+
+    [介面: 獲取使用者鑰匙]
+    Service Account  →  點選剛剛增的使用者  →  金鑰  →  新增鍵>建立新的鑰匙>JSON  →  存成 twvixstock_secretManager.json(可改)
+
+    [本地檔: 例外.gitignore]
+    .gitignore  加入  twvixstock_secretManager.json
+
+
+5.3 安裝 ESO
+    [指令: 先裝helm再裝ESO]
+    winget install Helm.Helm
+    helm repo add external-secrets https://charts.external-secrets.io
+    helm install external-secrets external-secrets/external-secrets \
+        -n external-secrets --create-namespace
+            ⮕ GKE叢集將能使用 external-secrets.io/v1
+
+5.4 生成憑證庫
+    [指令: 從使用者的鑰匙繼承]
+    kubectl create secret generic gcpsm-secret --from-file=secret-access-credentials.json=twvixstock_secretManager.json -n external-secrets
+        ⮕ 於GKE上創建 secret/gcpsm-secret
+
+5.5 透過 ESO 執行通道與訂單
+    [檔案<改寫>: ClusterSecretStore通道 與 ExternalSecret訂單]
+    📂k8s/env.yaml:
+        ###### 末端插入 ######
+        ---
+        # 配置 ess-store
+        apiVersion: external-secrets.io/v1
+        kind: ClusterSecretStore
+        metadata:
+          name: gcp-store
+        spec:
+          provider:
+            gcpsm:
+              projectID: twvixstock  # 專案 ID
+              auth:
+                secretRef:
+                  secretAccessKeySecretRef:
+                    name: gcpsm-secret
+                    key: secret-access-credentials.json
+                    namespace: external-secrets
+        ---
+        # 告訴 ESO 去 GCP 抓資料並「合併」進 tvs-secret
+        apiVersion: external-secrets.io/v1
+        kind: ExternalSecret
+        metadata:
+          name: tvs-secret-sync
+        spec:
+          refreshInterval: 1h
+          secretStoreRef:
+            name: gcp-store
+            kind: ClusterSecretStore
+          target:
+            name: tvs-secret      # 注意：這裡要跟上面的 Secret Name 一致
+            creationPolicy: Merge # 使用 Merge 模式，將覆蓋 CRAWLER_TOKEN 但保留 DB_PASSWORD
+          data:
+          - secretKey: CRAWLER_TOKEN
+            remoteRef:
+              key: CRAWLER_TOKEN_SECRET # 這是你在 GCP Secret Manager 建立的名字
+
+
+5.6 推送前手動執行
+    [指令: 手動取GCP密鑰]
+    kubectl apply -f k8s/env.yaml
+    kubectl get es tvs-secret-sync
+        ⮕ 應該要找到訂單  tvs-secret-sync   ClusterSecretStore   gcp-store 
+    kubectl describe secret tvs-secret
+        ⮕ 應該要找到參數  CRAWLER_TOKEN:  39 bytes
+
+
+5.7 除錯指令
+    kubectl get pods -n external-secrets
+        ⮕ 找到三個服務，表示 ESO 有裝好
+    kubectl get crd | grep external-secrets  取得一排CRD資源表
+        ⮕ 取得一排CRD資源表，包含 external-secrets.io/v1
+    kubectl api-resources | grep external-secrets
+        ⮕ 檢查通道  external-secrets.io/v1    ExternalSecret
+        ⮕ 檢查訂單  external-secrets.io/v1    ClusterSecretStore
+
+
+
+=======================================================================================
+第六章: 申請域名::
+=======================================================================================
+6.i 章節目錄
+    6.0 DNS獲取流程
         用 Cloudflare +免費 DNS 不用錢
-    4.1 固定 GEK 的 loadBalancerIP
+    6.1 固定 GEK 的 loadBalancerIP
         讓 GKE 平衡端 IP 固定下來
-    4.2 申請 Cloudflare + DigitalPlat
+    6.2 申請 Cloudflare + DigitalPlat
         免費域名的 DigitalPlat 綁定 Cloudflare 的 NS；並由 Cloudflare 綁定 IP 提供憑證
 
 
-4.0 DNS獲取流程
+6.0 DNS獲取流程
     [方法1: GCP原生DNS]  
     服務: GKE EXTERNAL-IP → Ingress → Global Static IP → Cloud DNS
     流程: Client → Google Cloud HTTP(S) Load Balancer (Ingress) → GKE Service/Pod
@@ -1512,7 +1644,7 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
     費用: 免費 (所以本章採用本方法)
 
 
-4.1 固定 GEK 的 loadBalancerIP
+6.1 固定 GEK 的 loadBalancerIP
     [指令: 產生可用的靜態IP]
     gcloud compute addresses create twvixstock-ip --region=asia-east1
     gcloud compute addresses describe twvixstock-ip --region=asia-east1
@@ -1536,7 +1668,7 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
         ⮕ 沒使用就要收費所以要砍掉
 
 
-4.2 申請 Cloudflare + DigitalPlat
+6.2 申請 Cloudflare + DigitalPlat
     [註冊階段: 註冊 Cloudflare 及 DigitalPlat]
     Cloudflare 官網 https://www.cloudflare.com/zh-tw/ 
         ⮕ 註冊帳號 (可能要強制開啟兩次驗證)
@@ -1565,35 +1697,3 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
         C域名頁 > (左側)SSL/TLS > 邊緣憑證 > 一律使用 HTTPS(勾) > 啟用 HSTS (設定>全勾) > 自動改寫 HTTPS(勾)
             ⮕ 可以連上 https://twvixstock.qzz.io
 
-
-4.3 使用 Secret Manager 管理敏感鑰匙
-    1. 至 GCP 啟用 Secret Manager
-        Secret Manager  >  建立新密鑰  >  CRAWLER_TOKEN_SECRET  >  直接貼上密鑰值
-
-
-    2. winget install Helm.Helm
-    3. 安裝 ESO 到你的 GKE 叢集
-        helm repo add external-secrets https://charts.external-secrets.io
-        helm install external-secrets external-secrets/external-secrets \
-            -n external-secrets --create-namespace
-    4. 新增鑰匙管理者權限檔
-        Service Account
-        新增使用者名稱 SecretManagerUser  >  權限 密鑰管理員 - Secret Manager 管理員  >  新增  (後續可在 IAM 與管理頁面 看到他)
-        點入剛剛新增的 SecretManagerUser  >  金鑰  >  新增鍵 建立新的鑰匙 JSON  >  存成 twvixstock_secretManager.json
-    5. 例外鑰匙管理者權限檔
-        .gitignore 例外 twvixstock_secretManager.json
-    6. 產生 secret/gcpsm-secret
-        kubectl create secret generic gcpsm-secret --from-file=secret-access-credentials.json=twvixstock_secretManager.json -n external-secrets
-
-
-kubectl get pods -n external-secrets  找到三個服務
-kubectl get crd | grep external-secrets  取得一排CRD資源表
-
-
-kubectl api-resources | grep external-secrets   有抓到新定義
-    ExternalSecret
-    external-secrets.io/v1
-
-
-
-kubectl apply -f k8s/env.yaml

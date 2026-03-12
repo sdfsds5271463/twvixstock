@@ -58,6 +58,9 @@ func main() {
 				2002 資料傳輸異常 (500)
 				3001 請求過於頻繁 (429)
 		*/
+
+		api.GET("/v1/geminiData", handler.GeminiDataShow)
+		api.POST("/v1/geminiData", handler.GeminiDataShow)
 	}
 
 	// 根目錄靜態檔 (讓 vue 掛載用)

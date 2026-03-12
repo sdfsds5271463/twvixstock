@@ -7,10 +7,83 @@ import (
 	"net/http"
 	"time"
 	"twvixstock/internal/service"
+	"twvixstock/internal/model"
+	"twvixstock/internal/config"
 )
 
+// 檢查是不是要爬蟲
+func CheckForNeedCrawler()(needCrawler model.NeedCrawler){
+
+	//旗標(預設全抓)
+	needCrawler = model.NeedCrawler{
+		TAIEX:   true,  //預設抓，當DB有時不抓
+		VIXTWN:  true,  //預設抓，當DB有時不抓
+		TAIPE:   true,  //預設抓，當DB有時不抓
+		GEMINI:  false, //預設不抓，當 TAIEX VIXTWN 有時才抓
+	}
+
+	//檢查 TAIEX VIXTWN
+	timeStr := time.Now().Format("2006-01-02") //今日日期
+	stocks, err := service.GetStocksByDate(timeStr, timeStr, "all")
+	if err != nil {
+		fmt.Println("CheckForNeedCrawler DB ERROR!!")
+		return
+	}
+
+	for _ ,v := range(stocks){
+		if(v.Type == "TAIEX"){ //TAIEX 有紀錄，不用抓了
+			needCrawler.TAIEX = false
+			fmt.Println("TAIEX check already has datas")
+		}
+		if(v.Type == "VIXTWN"){ //VIXTWN 有紀錄，不用抓了
+			needCrawler.VIXTWN = false
+			fmt.Println("VIXTWN check already has datas")
+		}
+	}
+
+	//檢查 TAIPE
+	//上個月日期
+	ly := int(time.Now().Year())  //今年
+	lm := int(time.Now().Month())  //今月
+	lm -= 1  //上個月計算
+	if(lm <= 0){
+		lm += 12
+		ly -= 1
+	}
+	lastMonthtimeStr := fmt.Sprintf("%04d-%02d-%02d", ly, lm, 1)
+	stocks2, err := service.GetStocksByDate(lastMonthtimeStr, lastMonthtimeStr, "all")
+	if err != nil {
+		fmt.Println("CheckForNeedCrawler DB ERROR!!")
+		return
+	}
+	if(len(stocks2) == 1){ //TAIPE 有紀錄，不用抓了
+		needCrawler.TAIPE = false
+		fmt.Println("TAIPE check already has datas")
+	}
+
+	//檢查 GEMINI (當 TAIEX VIXTWN 都有時才抓)
+	if (!needCrawler.TAIEX && !needCrawler.VIXTWN) {
+		needCrawler.GEMINI = true
+	}else{
+		fmt.Println("GEMINI skip because TAIEX|VIXTWN not ready")
+	}
+	if ( needCrawler.GEMINI == true ){  //如果要抓
+		geminiChk, err := service.GetGeminiTextByDate(timeStr)  //檢查有沒有資料囉
+		if err != nil {
+			fmt.Println("CheckForNeedGemini DB ERROR!!")
+			return
+		}
+		if (geminiChk.Reason != ""){  //有資料
+			needCrawler.GEMINI = false  //別抓
+			fmt.Println("GEMINI check already has datas")
+		}
+	}
+	return
+}
+
+
 // 台灣加權爬蟲
-func FetchDataTAIEX(all bool, token string) {
+func FetchDataTAIEX(all bool, configCrawler config.CrawlerConfig) {
 
 	// 全資料all時，抓取366天；否則抓取31天
 	var getDays int64 = 31
@@ -55,7 +128,7 @@ func FetchDataTAIEX(all bool, token string) {
 }
 
 // 台灣恐慌爬蟲
-func FetchDataVIXTWN(all bool, token string) {
+func FetchDataVIXTWN(all bool, configCrawler config.CrawlerConfig) {
 
 	// 全資料all時，抓取4個月檔案；否則抓取1個月檔案
 	var getMonth = 1
@@ -113,7 +186,7 @@ func FetchDataVIXTWN(all bool, token string) {
 }
 
 // 台灣PE爬蟲
-func FetchDataTAIPE(all bool, token string) {
+func FetchDataTAIPE(all bool, configCrawler config.CrawlerConfig) {
 
 	// 全資料
 	sortInsert := !all //短插入
@@ -155,11 +228,11 @@ func FetchDataTAIPE(all bool, token string) {
 	fmt.Println("TAIPE 解析筆數:", count)
 }
 
-// 台灣PE爬蟲
-func FetchGeminiApi(all bool, token string) {
-	_ = all //不用這個參數，固定給 3 個月分析
+// GEMINI API
+func FetchGeminiApi(all bool, configCrawler config.CrawlerConfig) {
+	_ = all //不用這個參數，固定給 6 個月 + 15天 分析
 
-
-
-	fmt.Println("GEMINI 解析結果:", token)
+	// 交給服務進行資料解析
+	count, err := service.GeminiApiFetch(configCrawler)
+	fmt.Println("GEMINI:", count, err)
 }

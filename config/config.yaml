@@ -1,11 +1,13 @@
 server:
-  port: 8080
-  mode: "debug"
+  Port: 8080
+  Mode: "debug"
 
 database:
-  host: "127.0.0.1"
-  port: 3306
+  Host: "127.0.0.1"
+  Port: 3306
 
 crawler:
-  base_url: "https://api.example.com/stock"
-  interval_hour: 1
+  BaseURL: "https://999.no.use"
+  IntervalHour: 999
+  GeminiModel: "gemini-3-flash-preview"
+  GeminiModellite: "gemini-3.1-flash-lite-preview"

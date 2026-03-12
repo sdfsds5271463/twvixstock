@@ -28,9 +28,11 @@ type DatabaseConfig struct {
 }
 
 type CrawlerConfig struct {
-	BaseURL      string
-	IntervalHour int
-	Token        string
+	BaseURL       string
+	IntervalHour  int
+	Token         string
+	GeminiModel   string
+	GeminiModellite  string
 }
 
 var AppConfig *Config
