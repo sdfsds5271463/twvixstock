@@ -51,9 +51,6 @@
  
   <div class="container mx-auto">
     <Breadcrumb parentTitle='Profile' subParentTitle='本站作者人物簡介' />
-    
-
-
 
     <BaseCard noPadding class="user-profile overflow-hidden relative">
         <div class="header-cover">

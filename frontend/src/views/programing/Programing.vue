@@ -25,6 +25,7 @@
 
 這是一個開源的台股恐慌資料站，其核心分析資料為 台灣加權指數、台灣恐慌指數(台指選擇權波動指數)、台灣加權本益比。
 本站後端基於 Go + Gin 開發，排程爬蟲將會蒐集 臺灣期貨交易所、臺灣證券交易所 之每日指數資料，並提供 API 開源接口可下載。
+包含正規化指數、按比例權重推算PE估值等分析模型，並串接 Gemini API 將爬蟲資料交由 AI 自動分析，給出市場評分及台股估值。
 本站前端使用 Vue3 Vite + TypeScript + Tailwind CSS 撰寫，可進行台股恐慌程度的視覺化分析。
 專案自動部屬在 Google Cloud Platform(GCP)，開源代碼可從 GitHub 下載。
 
@@ -64,9 +65,9 @@ Plaintext
 🛠️ 技術棧
 
 Backend: Go (Gin Gonic)
-Frontend: Vue3 Vite + TypeScript + Tailwind CSS + Sass
+Frontend: Vue3 Vite + TypeScript + Jinia + Tailwind CSS + Sass
 Database: MySQL 8.0
-Infrastructure: Google Kubernetes Engine (GKE), Artifact Registry
+Infrastructure: Google Kubernetes Engine (GKE), Artifact Registry, Gemini API
 CI/CD: Google Cloud Build, GitHub Actions
 Network: Cloudflare, Google Load Balancer
 
