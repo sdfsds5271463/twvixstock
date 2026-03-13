@@ -83,8 +83,9 @@
           <div class="text-white text-center text-4xl">Allen Zheng</div>
           <div class="text-white text-center">資深網路工程師</div>
         </div>
-        <div class="flex justify-center z-10 -m-10">
-            <div class="text-center"><img class="relative z-1 w-20 h-20 m-auto rounded-full border-2 border-white" src="/images/faces/allen_small_head.jpg" />
+        <div class="flex justify-center z-10 -mt-10">
+            <div class="text-center">
+                <img class="relative z-1 w-20 h-20 m-auto rounded-full border-2 border-white" src="/images/faces/allen_small_head2.jpg" />
                 <div class="profile_desc text-gray-600">
                   <p class="text-blue-500 font-extrabold"># PHP Laravel Golang Python TypeScript <br class="rwd">Vue DevOps CI/CD GCP</p>
                   <p>▪️<b>13年</b>全端開發經歷，<b>7年</b>主管經歷，深耕高併<br class="rwd">發、自動部屬與自動化交易系統。</p>
@@ -97,7 +98,7 @@
             </div>
         </div>
         <div id="target-jumpTop"></div><!-- 彈跳點 -->
-        <div class="mt-10 p-5">
+        <div class="mt-0 p-5">
           <TabGroup>
             <TabList class="flex justify-center newBtnDiv">
                 <Tab
@@ -272,7 +273,7 @@
 
     position: sticky; //吸頂
     top: 45px;
-    z-index: 99;
+    z-index: 88;
 
     div{
         background-color: #EEE;
