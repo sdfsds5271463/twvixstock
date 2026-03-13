@@ -67,18 +67,19 @@
 
     let projects_data:data_type[] = [
         {   
-            logoImg:"2022_sb1.jpg",
+            logoImg:"2026_twvix2.jpg",
             title:"台股恐慌資料站(2026)",
             desc:"收集證交所恐慌指數並提供API的分析平台",
-            keyword:"RESTful API Golang Gin Vue3Vite Vuex VueRouter TypeScript Sass TailwindCSS DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus GitHub Docker CI/CD WebCrawler RWD Linux UnitTest SEO Cloudflare",
-            content:`
+            keyword:"RESTful API Gemini Golang Gin Vue3Vite Vuex VueRouter TypeScript Pinia Sass TailwindCSS DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus GitHub Docker CI/CD WebCrawler Apexchart RWD Linux UnitTest SEO Cloudflare",
+            content:`<div class='text-sm'>
                 獨立開發的個人網站，自動部屬在 GCP 上並開源於 GitHub。系統排程至證交所進行恐慌指數爬蟲，資料送至前端可查詢分析，並開放 API 接口服務。
+                包含正規化指數、按比例權重推算PE估值等分析模型，並串接 Gemini API 將爬蟲資料交由 AI 自動分析，給出市場評分及台股估值。
                 核心技術 API、Golang、Gin、VueVite、Vuex、VueRouter、TypeScript、Sass、TailwindCSS、DevOps、GCP、Kubernetes、Docker、CI/CD。
                 本系統有三個 GCP 服務，Mysql、Server、CronJob。其中 Vue 編譯後靜態檔存放在 Server 的 Container；CronJob 爬蟲到的資料交給 Mysql，最後由 Server 實現前端查詢分析與 API 等服務。
                 本站自動部屬流程為 Git → GitHub → CloudBuild → Registry → GKE → gke-deploy → (運行服務開放端口) → Cloudflare。
-            `,
+            </div>`,
             links:["https://github.com/sdfsds5271463/twvixstock", "GitHub專案源碼"],
-            photoNames: ["2022_sb1.jpg","2022_sb1.jpg","2022_sb1.jpg"],
+            photoNames: ["2026_twvix5.jpg","2026_twvix2.jpg","2026_twvix1.jpg"],
         },
         {   
             logoImg:"2024_jyb1.jpg",

@@ -42,10 +42,10 @@
     <div class="p-5">
         <p class="text-lg font-semibold mb-2">精通技能關鍵字：</p>
         <div class="border-b border-gray-300 pb-10 mb-8 text-blue-500 aboutme_content font-semibold">
-          <p>前端 # Vue3 Vite Vuex VueRouter TypeScript TailwindCSS BootStrap jQuery Javascript Twig Sass Css Html PixiJS</p>
-          <p>後端 # Golang Gin PHP Laravel Python Scrapy RESTfulAPI WebSocket Redis MySQL SQL API</p>
+          <p>前端 # Vue3 Vite Pinia Vuex VueRouter TypeScript TailwindCSS BootStrap jQuery Javascript Twig Sass Css Html PixiJS</p>
+          <p>後端 # Golang Gin PHP Laravel Python Scrapy RESTfulAPI WebSocket Redis MySQL SQL Gemini API </p>
           <p>部屬 # DevOps Kubernetes K8s CI/CD Docker GCP GKE CloudBuild Prometheus ELK GitHub Cloudflare Linux Nginx</p>
-          <p>其他 # UnitTest WebCrawler Git SEO MVC RWD Ajax Json Selenium Playwright Photoshop WordPress Spine JWT </p>
+          <p>其他 # UnitTest WebCrawler Git SEO MVC RWD Ajax Json Selenium Playwright Photoshop WordPress Spine JWT Apexchart</p>
         </div>
     </div>
 

@@ -236,7 +236,7 @@
             //data: [84, 95, 81, 97, 82, 73, 81, 71, 96, 87, 43]
             data: VIXTWN
         },{
-            name: '台灣加權本益比 TAIEX',
+            name: '台灣加權本益比(估值) TAIEX',
             type: 'line',
             //data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
             data: TAIPE
@@ -298,7 +298,7 @@
                     offsetX: -15,
                 }
             },{
-                seriesName: ['台灣恐慌指數 VIXTWN', '台灣加權本益比 TAIEX'],
+                seriesName: ['台灣恐慌指數 VIXTWN', '台灣加權本益比(估值) TAIEX'],
                 opposite: true, // 放在右邊
                 //title: { text: "TEAM B B (Percentage)" },
                 labels: {

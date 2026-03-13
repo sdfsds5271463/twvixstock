@@ -139,22 +139,23 @@
 
     let TD:TimelineStruct[] = [
         {
-            ball_photo: "2018_lo3.jpg",
+            ball_photo: "2026_twvix2.jpg",
             ball_text: "2026",
             title: "台股恐慌資訊站",
             sub_title: "自動爬蟲股市並分析的自動部屬系統",
-            key_word_big: "Golang Vue3Vite TypeScript TailwindCSS DevOps GCP Kubernetes K8s Docker CI/CD",
-            key_word_small: "RESTful API Gin Vuex VueRouter Sass CloudBuild GKE Prometheus GitHub WebCrawler RWD Linux UnitTest SEO Cloudflare",
+            key_word_big: "Gemini Golang Vue3Vite TypeScript Pinia TailwindCSS DevOps GCP Kubernetes K8s Docker CI/CD",
+            key_word_small: "RESTful API Gin Vuex VueRouter Sass CloudBuild GKE Prometheus GitHub WebCrawler Apexchart RWD Linux UnitTest SEO Cloudflare",
             desc1: `
                 <a href='https://github.com/sdfsds5271463/twvixstock' target='_blank'>開啟本站 GitHub</a>
                 獨立開發的個人網站，<b>自動部屬</b>在 GCP 上並開源於 GitHub。系統排程至證交所進行恐慌指數爬蟲，資料送至前端可查詢分析，並開放 API 接口服務。
+                包含正規化指數、按比例權重推算PE估值等分析模型，並串接 Gemini API 將爬蟲資料交由 AI 自動分析，給出市場評分及台股估值。
                 本系統有三個 GCP 服務，Mysql、Server、CronJob。其中 Vue 編譯後靜態檔存放在 Server 的 Container；CronJob 爬蟲到的資料交給 Mysql，最後由 Server 實現前端查詢分析與 API 等服務。
             `,
             desc2: `
                 本站是一個完整專案架構，具有前端、後端、排程、部屬，其 GCP 自動部屬流程為 Git → GitHub → CloudBuild → Registry → GKE → gke-deploy → (運行服務開放端口) → Cloudflare。
                 技術實現上，使用 Go + Gin 框架實現後端響應及排程，並使用 Vue3Vite + Vuex + VueRouter + TailwindCSS 撰寫前端分析頁面。
             `,
-            photos: ["2018_lo3.jpg","2018_lo3.jpg","2018_lo3.jpg","2018_lo3.jpg"],
+            photos: ["2026_twvix5.jpg","2026_twvix4.jpg","2026_twvix2.jpg","2026_twvix1.jpg"],
             float_right: false, //奇數物件根據祖先長度，決定是否飄右邊
         },
         {

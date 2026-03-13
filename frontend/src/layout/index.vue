@@ -11,6 +11,11 @@ let store = useStore();
 import { ref,provide } from 'vue'
 import type { ImageItem } from '@/types/ImageItem'
 const profile_photos = ref<ImageItem[]>([
+  { name: 'images/profile_photos/2026_twvix5.jpg',  desc: '台灣恐慌資訊站RWD' , year: '2026' },
+  { name: 'images/profile_photos/2026_twvix4.jpg',  desc: '台灣恐慌資訊站API2' , year: '2026' },
+  { name: 'images/profile_photos/2026_twvix3.jpg',  desc: '台灣恐慌資訊站API1' , year: '2026' },
+  { name: 'images/profile_photos/2026_twvix2.jpg',  desc: '台灣恐慌資訊站前台2' , year: '2026' },
+  { name: 'images/profile_photos/2026_twvix1.jpg',  desc: '台灣恐慌資訊站前台1' , year: '2026' },
   { name: 'images/profile_photos/2024_jyb5.jpg',    desc: '遊戲平台金流頁' , year: '2024' },
   { name: 'images/profile_photos/2024_jyb4.jpg',    desc: '遊戲平台儀表板' , year: '2024' },
   { name: 'images/profile_photos/2024_jyb3.jpg',    desc: '遊戲平台手機板' , year: '2024' },
