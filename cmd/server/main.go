@@ -67,6 +67,10 @@ func main() {
 	r.Static("/assets", "./static/assets")
 	r.Static("/images", "./static/images")
 
+	// 直接掛載檔案
+	r.StaticFile("/sitemap.xml", "./static/sitemap.xml")
+	r.StaticFile("/robots.txt", "./static/robots.txt")
+
 	r.GET("/", func(c *gin.Context) {
 		c.File("./static/index.html")
 	})
