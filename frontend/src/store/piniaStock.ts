@@ -155,7 +155,7 @@ export const piniaStock = defineStore('piniaStock', {
 
       this.stockData.data.forEach(v => {
         //記錄下所有日期
-        if(v.Type == "VIXTWN"){
+        if(v.Type == "TAIEX"){
           DateArr.push(v.Date); //所有日期
           MonthLast[v.Date.substring(0,7)] = v.Date; //每月最後日
         }
