@@ -10,6 +10,13 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler', // 如果這行報錯，可以嘗試改為 'modern'
+      },
+    },
+  },
   server: {
     open: true,
     proxy: {

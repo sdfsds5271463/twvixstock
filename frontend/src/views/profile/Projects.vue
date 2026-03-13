@@ -69,12 +69,11 @@
         {   
             logoImg:"2026_twvix2.jpg",
             title:"台股恐慌資料站(2026)",
-            desc:"收集證交所恐慌指數並提供API的分析平台",
-            keyword:"RESTful API Gemini Golang Gin Vue3Vite Vuex VueRouter TypeScript Pinia Sass TailwindCSS DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus GitHub Docker CI/CD WebCrawler Apexchart RWD Linux UnitTest SEO Cloudflare",
+            desc:"排程爬蟲股市並AI分析的自動部屬全端系統",
+            keyword:"RESTful API Gemini Golang Gin Vue3Vite Pinia Vuex VueRouter TypeScript Sass TailwindCSS DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus GitHub Docker CI/CD WebCrawler Apexchart RWD Linux UnitTest SEO Cloudflare",
             content:`<div class='text-sm'>
-                獨立開發的個人網站，自動部屬在 GCP 上並開源於 GitHub。系統排程至證交所進行恐慌指數爬蟲，資料送至前端可查詢分析，並開放 API 接口服務。
-                包含正規化指數、按比例權重推算PE估值等分析模型，並串接 Gemini API 將爬蟲資料交由 AI 自動分析，給出市場評分及台股估值。
-                核心技術 API、Golang、Gin、VueVite、Vuex、VueRouter、TypeScript、Sass、TailwindCSS、DevOps、GCP、Kubernetes、Docker、CI/CD。
+                獨立開發的個人網站，<b>自動部屬</b>在 GCP 上並開源於 GitHub。系統排程至證交所進行指數爬蟲，除了提供 API 接口外，亦將指數正規化、按比例權重推算PE估值，並串接 Gemini API 交由 AI 自動分析給出市場評分及估值。
+                核心技術 API、Golang、Gin、VueVite、Pinia、VueRouter、TypeScript、Sass、TailwindCSS、DevOps、GCP、Kubernetes、Docker、CI/CD。
                 本系統有三個 GCP 服務，Mysql、Server、CronJob。其中 Vue 編譯後靜態檔存放在 Server 的 Container；CronJob 爬蟲到的資料交給 Mysql，最後由 Server 實現前端查詢分析與 API 等服務。
                 本站自動部屬流程為 Git → GitHub → CloudBuild → Registry → GKE → gke-deploy → (運行服務開放端口) → Cloudflare。
             </div>`,
@@ -84,12 +83,12 @@
         {   
             logoImg:"2024_jyb1.jpg",
             title:"大型線上遊戲平台(2024)",
-            desc:"暢玩超過30個不同遊戲商的遊戲",
+            desc:"對接超過30個遊戲9個金流的完整遊戲系統",
             keyword:"RESTful API PHP Laravel MVC Python Vue3 Vuex TypeScript Sass MySQL Redis WebCrawler Bootstrap Scrapy Selenium Playwright UnitTest SEO",
             content:`
                 我領導的<b>5人</b>後端技術團隊，負責大量金流、遊戲對接，並設計爬蟲至合作遊戲商後台，併發對單或操作對方後台功能。
                 核心技術 PHP、Laravel、TypeScript、Vue、Sass、Python、Scrapy、UnitTest、SEO。
-                金流API商總共<b>9間</b>全由我一人完全負責，每月金流有效單超過<b>1萬張</b>、金額達<b>八位數</b>。
+                我執掌對接的金流API商總共<b>9間</b>，每月金流有效單超過<b>1萬張</b>、金額達<b>八位數</b>。
                 遊戲商超過<b>30間</b>，與團隊共同接入 API，並使用爬蟲 Python 框架 Scrapy + Playwright 併發登入所有遊戲商後台，進行對單或批次開設代理。 本專案還有設計 SEO 推廣模型。
             `,
             links:["", ""],
@@ -98,7 +97,7 @@
         {   
             logoImg:"2022_sb2.jpg",
             title:"體育遊戲系統(2022)",
-            desc:"每秒更新百次以上賠率的高併發微服務整合系統",
+            desc:"自動部屬超過20個微服務200人同時在線的高併發系統",
             keyword:"Golang Gin gRPC Vue3 Vuex TypeScript Sass DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus ELK GitHub Docker CI/CD WebSocket API Redis Linux UnitTest JWT",
             content:`
                 我領導的<b>8人</b>全端技術團隊，負責將舊版 PHP 體育系統源碼重新撰寫成 Golang <b>自動部屬</b>至 GCP，包含後續開發維護等全端工作。
@@ -112,7 +111,7 @@
         {   
             logoImg:"2018_lo3.jpg",
             title:"彩票遊戲平台(2018)",
-            desc:"透過爬蟲收集獎號的概率精算遊戲",
+            desc:"註冊超過27萬人的概率精算遊戲",
             keyword:"RESTful API PHP Laravel MVC Twig jQuery Javascript WebCrawler API Ajax RWD MySQL Redis Bootstrap UnitTest Nginx Git",
             content:`
                 我領導的<b>5人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為基於彩票規則的爬蟲獎號概率精算遊戲，專案主架構為前端、後端、API、排程。
@@ -126,7 +125,7 @@
         {   
             logoImg:"2020_eg3.jpg",
             title:"電子遊戲(2020)",
-            desc:"大量動畫圖片素材的機率遊戲",
+            desc:"每日注單遠超上萬張的動畫遊戲",
             keyword:"PHP Laravel MVC Spine PixiJS jQuery Javascript API Ajax MySQL Redis Bootstrap UnitTest Nginx Photoshop",
             content:`
                 我領導的<b>6人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為精美的動畫與機率計算，專案主架構為前端、後端、API。
@@ -140,7 +139,7 @@
         {   
             logoImg:"2019_li3.jpg",
             title:"區塊鏈百家樂(2019)",
-            desc:"將結果提前hash加密的公平紙牌遊戲",
+            desc:"超過120子代理的hash加密紙牌遊戲",
             keyword:"PHP Laravel MVC jQuery Javascript Canvas API Ajax MySQL Redis Bootstrap UnitTest Nginx Git Photoshop",
             content:`
                 我領導的<b>5人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為 SHA512 預加密可驗證的公平紙牌機率遊戲，專案主架構為前端、後端、API、排程。
@@ -154,7 +153,7 @@
         {   
             logoImg:"2017_bos1.jpg",
             title:"遊戲後台API對接(2017)",
-            desc:"技術對接大量合作遊戲商、合作金流商",
+            desc:"技術對接40個以上合作商接口",
             keyword:"RESTful API Json PHP Laravel MVC MySQL Redis Git",
             content:`
                 項目成立初期加入該團隊，專精負責 API 對接的業務，本專案我總計對接了<b>30個</b>以上金流 API、<b>10個</b>以上遊戲 API。
@@ -195,7 +194,7 @@
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
     .linkimg{ //小圖片寬度(1~3張)
         width: calc(33% - 2px);
         transition: opacity 0.3s ease;

@@ -4,6 +4,17 @@
     import { onMounted, ref, watch, nextTick, computed } from "vue"
     import { piniaStock } from '@/store/piniaStock'
 
+  import { useSeoMeta } from '@unhead/vue'
+  useSeoMeta({
+    title: '儀錶板|台股恐慌資訊站 TwVixStock',
+    description: '台股恐慌資訊站提供加權、恐慌、本益比指數已及AI估值分析',
+    ogImage: 'http://twvixstock.qzz.io/images/profile_photos/small_2026_twvix2.jpg',
+    ogTitle: '儀錶板|台股恐慌資訊站 TwVixStock',
+    ogType: 'website',
+    ogLocale: 'zh_TW',
+    keywords: '台股, 恐慌指數, VIX, 股票投資, TwVixStock, 台灣加權, 本益比, 儀錶板',
+  });
+
     // 使用 pinia
     const piniaStockMain = piniaStock()
 
@@ -79,24 +90,6 @@
         });
     }
 
-    // 顛倒 vix 按鈕
-    const vixReverseBtn = ()=>{
-        vixIsReverse.value = !vixIsReverse.value; //顛倒
-        //vixCompute(); //運算 vix
-    }
-
-    // 通膨 vix 按鈕
-    const vixInflationBtn = ()=>{
-        vixIsInflation.value = !vixIsInflation.value; //通膨
-        //vixCompute(); //運算 vix
-    }
-
-    // 通膨 pe 按鈕
-    const peInflationBtn = () => {
-        peIsInflation.value = !peIsInflation.value;  //通膨
-        //peCompute(); //運算 pe
-    }
-
     // 監控變化 進行運算
     watch(() => vixIsReverse, (newval)=>{    
         vixCompute();
@@ -147,6 +140,13 @@
     //通膨率運算
     const inflationCompute = (NumArr:number[]):number[] =>{
 
+        //平均保存備用
+        let AvgTmp = 0;
+        NumArr.forEach((v)=>{
+            AvgTmp += v;
+        })
+        AvgTmp /= NumArr.length;
+
         //先算 TAIEX.value 通膨率
         let exAvgL = 0;
         let exAvgR = 0;
@@ -164,12 +164,12 @@
         let ni = (NumArr.length/2-1); //長度一半
         for(let i=0; i<ni; i++){
             let Lrate = (ni-i)/ni; //左半部，越左越1 越中越0 
-            NumArr[i] = NumArr[i] / (1 + (rate * Lrate)); //調整左側
+            NumArr[i] = NumArr[i] - (AvgTmp * (rate * Lrate)); //調整左側
         }
         ni = (NumArr.length/2);
         for(let i=(NumArr.length-1); i>NumArr.length/2; i--){
             let Rrate = (i-ni)/ni; //右半部，越右越1 越中越0 
-            NumArr[i] = NumArr[i] * (1 + (rate * Rrate)); //調整右側
+            NumArr[i] = NumArr[i] + (AvgTmp * (rate * Rrate)); //調整右側
         }
 
         return NumArr;
@@ -421,7 +421,7 @@
 
 <template>
     <div class="container mx-auto">
-        <Breadcrumbs parentTitle="Dashboard" subParentTitle="台股恐慌儀表板" />
+        <Breadcrumbs parentTitle="台股恐慌儀表板" subParentTitle="Dashboard" />
 
         <div class="Dashboard_desc px-4 mb-4">
             <p>▪️以下三個大盤重要指數在特定條件下有一定程度的<b>正相關</b>： 【台灣<b>加權指數TAIEX】</b>、

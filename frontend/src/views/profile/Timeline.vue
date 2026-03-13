@@ -142,13 +142,12 @@
             ball_photo: "2026_twvix2.jpg",
             ball_text: "2026",
             title: "台股恐慌資訊站",
-            sub_title: "自動爬蟲股市並分析的自動部屬系統",
+            sub_title: "排程爬蟲股市並 AI 分析的自動部屬全端系統",
             key_word_big: "Gemini Golang Vue3Vite TypeScript Pinia TailwindCSS DevOps GCP Kubernetes K8s Docker CI/CD",
             key_word_small: "RESTful API Gin Vuex VueRouter Sass CloudBuild GKE Prometheus GitHub WebCrawler Apexchart RWD Linux UnitTest SEO Cloudflare",
             desc1: `
-                <a href='https://github.com/sdfsds5271463/twvixstock' target='_blank'>開啟本站 GitHub</a>
-                獨立開發的個人網站，<b>自動部屬</b>在 GCP 上並開源於 GitHub。系統排程至證交所進行恐慌指數爬蟲，資料送至前端可查詢分析，並開放 API 接口服務。
-                包含正規化指數、按比例權重推算PE估值等分析模型，並串接 Gemini API 將爬蟲資料交由 AI 自動分析，給出市場評分及台股估值。
+                <a href='https://twvixstock.qzz.io' target='_blank'>台股恐慌資訊站</a><a href='https://github.com/sdfsds5271463/twvixstock' target='_blank'>開啟本站 GitHub</a>
+                獨立開發的個人網站，<b>自動部屬</b>在 GCP 上並開源於 GitHub。系統排程至證交所進行指數爬蟲，除了提供 API 接口外，亦將指數正規化、按比例權重推算PE估值，並串接 Gemini API 交由 AI 自動分析給出市場評分及估值。
                 本系統有三個 GCP 服務，Mysql、Server、CronJob。其中 Vue 編譯後靜態檔存放在 Server 的 Container；CronJob 爬蟲到的資料交給 Mysql，最後由 Server 實現前端查詢分析與 API 等服務。
             `,
             desc2: `
@@ -162,12 +161,12 @@
             ball_photo: "2024_jyb1.jpg",
             ball_text: "2025<br>~<br>2024",
             title: "大型線上遊戲平台",
-            sub_title: "對接超過<b>30個</b>遊戲商的完整遊戲系統",
+            sub_title: "對接超過<b>30個</b>遊戲<b>9個金流</b>的完整遊戲系統",
             key_word_big: "RESTful API PHP Laravel Python Vue3 TypeScript MySQL Redis Bootstrap",
             key_word_small: "MVC Vuex Sass WebCrawler Scrapy Selenium Playwright UnitTest SEO",
             desc1: `
                 我領導的<b>5人</b>後端技術團隊，負責大量的接口對接及爬蟲支援。
-                本平台對接了<b>9個</b>金流商由我一人完全負責，包含提交及回調查詢等系列動作，每月有效金流單超過<b>1萬張</b>，金額達<b>八位數</b>。
+                本平台由我執掌對接了<b>9個</b>金流商，包含提交及回調查詢等系列動作，每月有效金流單超過<b>1萬張</b>，金額達<b>八位數</b>。
                 另外我與我的團隊總共對接了超過<b>30個</b>遊戲商，並撰寫了大量的爬蟲，實現併發登入遊戲商後台對單與開設代理等功能。
             `,
             desc2: `
@@ -180,7 +179,7 @@
             ball_photo: "2022_sb2.jpg",
             ball_text: "2024<br>~<br>2022",
             title: "體育遊戲系統",
-            sub_title: "自動擴展pod讓超過<b>200人</b>同時在線的微服務架構",
+            sub_title: "<b>自動部屬</b>超過<b>20個</b>微服務<b>200人</b>同時在線的<b>高併發</b>系統</p>",
             key_word_big: "Golang gRPC Vue3 TypeScript DevOps GCP Kubernetes K8s Docker CI/CD WebSocket API Redis",
             key_word_small: "Gin Vuex Sass CloudBuild GKE Prometheus ELK GitHub Linux UnitTest JWT",
             desc1: `
@@ -205,7 +204,7 @@
             key_word_big: "RESTful API PHP Laravel MVC jQuery WebCrawler API MySQL Bootstrap UnitTest Nginx Git",
             key_word_small: "Twig Javascript Ajax RWD Redis Photoshop Spine PixiJS",
             desc1: `
-                試玩: <a href='http://lottsample.ddns.net:9527/index.php?m=common&c=trygame&a=trygame&type=0' target='_blank'>彩票遊戲</a><a href='http://livesample.ddns.net:9527/game/trygame' target='_blank'>區塊鏈百家樂</a><a href='http://lottsample.ddns.net:9527/egames/public/trygame' target='_blank'>電子遊戲</a>
+                <a href='http://lottsample.ddns.net:9527/index.php?m=common&c=trygame&a=trygame&type=0' target='_blank'>試玩彩票</a><a href='http://livesample.ddns.net:9527/game/trygame' target='_blank'>試玩區塊鏈百家樂</a><a href='http://lottsample.ddns.net:9527/egames/public/trygame' target='_blank'>試玩電子</a>
                 我領導的<b>5~6人</b>全端技術團隊，從零開始原創三款完全不同類型的遊戲，每款遊戲都有完整的前台、後台、排程、API 等架構，三款遊戲總計超過<b>400個</b>對接商戶。
                 2018 彩票遊戲，主體為基於彩票規則的爬蟲獎號概率精算遊戲，累計註冊且遊玩的會員超過<b>27萬人</b>。
                 2019 區塊鏈百家樂，主體為 SHA512 預加密可驗證的公平紙牌機率遊戲，與著名遊戲平台合作，內崁為旗下遊戲之一，該平台就開設超過<b>120個</b>子代理。

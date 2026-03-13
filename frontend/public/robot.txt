@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# 指向你的 Sitemap 位置
+Sitemap: https://twvixstock.qzz.io/sitemap.xml

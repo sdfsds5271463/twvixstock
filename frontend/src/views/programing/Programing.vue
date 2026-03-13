@@ -1,10 +1,20 @@
 <script setup lang="ts">
   import Breadcrumb from '@/components/Breadcrumbs.vue'
+  import { useSeoMeta } from '@unhead/vue'
+  useSeoMeta({
+    title: '本站程式|台股恐慌資訊站 TwVixStock',
+    description: '台股恐慌資訊站主程式GitHub下載及部屬細節',
+    ogImage: 'http://twvixstock.qzz.io/images/profile_photos/small_2026_twvix2.jpg',
+    ogTitle: '本站程式|台股恐慌資訊站 TwVixStock',
+    ogType: 'website',
+    ogLocale: 'zh_TW',
+    keywords: '台股, 恐慌指數, VIX, 股票投資, TwVixStock, 台灣加權, 本益比, 本站程式',
+  });
 </script>
 
 <template>
   <div class="container mx-auto">
-    <Breadcrumb parentTitle='Programing' subParentTitle='本站主程式' />
+    <Breadcrumb parentTitle='本站主程式' subParentTitle='Programing' />
     <BaseCard class="overflow-hidden relative mb-8 p-4">
       <div class="programing_desc card-body">
         <p>

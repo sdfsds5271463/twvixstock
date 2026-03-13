@@ -14,10 +14,12 @@ import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 import VueApexCharts from "vue3-apexcharts";
 
 import { createPinia, Pinia } from 'pinia'
+import { createHead } from '@unhead/vue/client'
 
 // create app
 const app: VueApp = createApp(App)
 const pinia: Pinia = createPinia()
+const head = createHead()
 
 // global components
 app.component("BaseCard", BaseCard)
@@ -29,6 +31,7 @@ app.use(VueApexCharts)
 app.use(store)
 app.use(router)
 app.use(pinia)
+app.use(head)
 
 // mount
 app.mount("#app")

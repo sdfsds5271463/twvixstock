@@ -1,10 +1,20 @@
 <script setup lang="ts">
   import Breadcrumb from '@/components/Breadcrumbs.vue'
+  import { useSeoMeta } from '@unhead/vue'
+  useSeoMeta({
+    title: '股票接口|台股恐慌資訊站 TwVixStock',
+    description: '台股恐慌資訊站所提供的開源台股指數API接口',
+    ogImage: 'http://twvixstock.qzz.io/images/profile_photos/small_2026_twvix2.jpg',
+    ogTitle: '股票接口|台股恐慌資訊站 TwVixStock',
+    ogType: 'website',
+    ogLocale: 'zh_TW',
+    keywords: '台股, 恐慌指數, VIX, 股票投資, TwVixStock, 台灣加權, 本益比, 股票接口',
+  });
 </script>
 
 <template>
   <div class="container mx-auto">
-    <Breadcrumb parentTitle='Stock Api' subParentTitle='股票資料接口' />
+    <Breadcrumb parentTitle='股票資料接口' subParentTitle='Stock Api' />
 
     <BaseCard class="p-4">
       <div class="apiDesc border-b border-gray-300 pb-8 mb-8">
@@ -29,7 +39,7 @@
 
       <div class="">
           <p class="text-xl font-medium">域名 Domain</p>
-          <p class="text-blue-500 border-b border-gray-300 pb-8 mb-8 pt-2 pl-1 text-2xl font-bold ">
+          <p class="text-blue-500 border-b border-gray-300 pb-8 mb-8 pt-2 pl-1 text-xl font-bold ">
             https://twvixstock.qzz.io/api/v1/
           </p>
       </div>
