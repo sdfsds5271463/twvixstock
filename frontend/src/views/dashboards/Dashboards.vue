@@ -427,7 +427,10 @@
             <p>▪️以下三個大盤重要指數在特定條件下有一定程度的<b>正相關</b>： 【台灣<b>加權指數TAIEX】</b>、
                  【台灣<b>恐慌指數VIXTWN+<span class="text-primary">垂直翻轉</span>+<span class="text-primary">通膨率</span>】</b>、
                  【台灣<b>加權本益比TAIPE+<span class="text-primary">通膨率</span>】</b>。
-            正相關如果脫鉤太嚴重，就是整個大盤的異常警訊。 合理建倉時機建議是<b>恐慌指數VIX小於25</b>、<b>本益比PE小於23</b>。</p>
+                正相關如果脫鉤太嚴重，就是整個大盤的異常警訊。 合理建倉時機建議是
+                <b>恐慌指數<span class="text-primary">VIX小於25</span></b>、
+                <b>本益比<span class="text-primary">PE小於23</span></b>。
+            </p>
         </div>
 
         <!-- 頂端開關 -->

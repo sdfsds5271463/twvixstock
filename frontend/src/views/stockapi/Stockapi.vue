@@ -52,7 +52,7 @@
 
       <div class="border-b border-gray-300 pb-8 mb-8 pt-2">
         <BaseCard noPadding class="mx-2 p-2">
-        <table class="apiTable">
+        <table class="apiTable"><tbody>
           <tr>
             <td>Request Method</td><td>GET | POST</td>
           </tr>
@@ -62,7 +62,7 @@
           <tr>
             <td>Response content-type</td><td>application/json</td>
           </tr>
-        </table>
+        </tbody></table>
         </BaseCard>
       </div>
 
@@ -175,7 +175,7 @@
         <div class="col-span-12 xl:col-span-6 m-2">
           ✅請求成功範例:
           <BaseCard noPadding class="p-2">
-            <table class="apiTable">
+            <table class="apiTable"><tbody>
               <tr>
                 <td>Url</td><td>/api/v1/stockDB</td>
               </tr>
@@ -188,14 +188,14 @@
               <tr>
                 <td>Return</td><td>{"code":1000,"data":[{"Type":"TAIEX","Date":"2026-01-02","Close":29349.81},{"Type":"TAIEX","Date":"2026-01-05","Close":30105.04},{"Type":"TAIEX","Date":"2026-01-06","Close":30576.3}]}</td>
               </tr>
-            </table>
+            </tbody></table>
           </BaseCard>
 
         </div>
         <div class="col-span-12 xl:col-span-6 m-2">
           ❌請求失敗範例:
           <BaseCard noPadding class="p-2">
-            <table class="apiTable">
+            <table class="apiTable"><tbody>
               <tr>
                 <td>Url</td><td>/api/v1/stockDB</td>
               </tr>
@@ -208,7 +208,7 @@
               <tr>
                 <td>Return</td><td>{"code":2001,"error":"Request is fail: Key: 'ReqStruct.Start' Error:Field validation for 'Start' failed on the 'required' tag"}</td>
               </tr>
-            </table>
+            </tbody></table>
           </BaseCard>
         </div>
       </div>
@@ -223,7 +223,7 @@
       <div class="grid grid-cols-12 gap-5 border-b border-gray-300 pb-10 mb-10 mt-2">
           <div class="col-span-12 sm:col-span-6 md:col-span-4">
             <p class="text-purple-500 mb-1 pl-1"><i class="i-Calendar text-base"></i><span class="ml-1">股票類型 type</span></p>
-            <table class="apiTable">
+            <table class="apiTable"><tbody>
               <tr>
                 <td>all</td><td>全部 (default)</td>
               </tr>
@@ -236,11 +236,11 @@
               <tr>
                 <td>taipe</td><td>台灣加權本益比</td>
               </tr>
-            </table>
+            </tbody></table>
           </div>
           <div class="col-span-12 sm:col-span-6 md:col-span-4">
             <p class="text-purple-500 mb-1 pl-1"><i class="i-Gears text-base"></i><span class="ml-1">狀態碼 code</span></p>
-            <table class="apiTable">
+            <table class="apiTable"><tbody>
               <tr>
                 <td>1000</td><td>請求成功 (http status:200)</td>
               </tr>
@@ -253,7 +253,7 @@
               <tr>
                 <td>3001</td><td>請求過於頻繁 (http status:429)</td>
               </tr>
-            </table>
+            </tbody></table>
           </div>
       </div>
 

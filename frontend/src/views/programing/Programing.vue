@@ -18,6 +18,10 @@
     <BaseCard class="overflow-hidden relative mb-8 p-4">
       <div class="programing_desc card-body">
         <p>
+          ▪️本站固定域名為
+          <a class="text-primary" href="https://twvixstock.qzz.io" target="_blank">https://twvixstock.qzz.io</a><br>
+        </p>
+        <p>
           ▪️本站開源於
           <a class="text-primary" href="https://github.com/sdfsds5271463/twvixstock" target="_blank">https://github.com/sdfsds5271463/twvixstock</a><br>
         </p>
@@ -137,7 +141,7 @@ E-Mail: sdfsds5271463@gmail.com
   .programing_desc{
     p{
       line-height: 18px;
-      padding: 5px;
+      padding: 6px;
     }
   }
   .Programing_pre{
