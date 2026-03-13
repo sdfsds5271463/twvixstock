@@ -4,6 +4,8 @@ import { Switch } from '@headlessui/vue'
 //import HeaderSearch from '../components/HeaderSearch.vue'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { useStore } from 'vuex'
+import { piniaStock } from '@/store/piniaStock'
+const piniaStockMain = piniaStock()
 
 let store = useStore()
 
@@ -434,6 +436,8 @@ const sideBarToggle = () => {
             <!--HeaderSearch /-->
         </div>
         <div class="flex items-center">
+            <router-link to="/" class="text-sm text-gray-400 hover:text-purple-500">台股今日評分: <b>{{piniaStockMain.GeminiPoint}}</b>
+            </router-link>
             <a
                 class="
                     hidden

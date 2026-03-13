@@ -37,6 +37,7 @@ export const piniaStock = defineStore('piniaStock', {
       TAIPE: [] as number[],
       InitialStockReady: false,
       //gemini
+      GeminiPoint: 0,
       InitialGeminiReady: false,
   }),
 
@@ -118,6 +119,7 @@ export const piniaStock = defineStore('piniaStock', {
         //準備完成
         this.InitialGeminiReady = true;
         this.geminiLoading = false;
+        this.GeminiPoint = data.data.Point;
       } catch (err) {
         //出錯
         this.geminiError = err.message;

@@ -273,7 +273,7 @@
 
     position: sticky; //吸頂
     top: 45px;
-    z-index: 88;
+    z-index: 10;
 
     div{
         background-color: #EEE;
