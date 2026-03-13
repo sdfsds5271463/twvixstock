@@ -2,7 +2,7 @@
     <div class="grid grid-cols-12 gap-4">
         <template v-for="i in projects_data">
             <div class="col-span-12 xl:col-span-3 lg:col-span-4 md:col-span-6">
-                <BaseCard class="text-center">
+                <div class="basecard_custom p-5 text-center h-full grid">
                     <img class="w-20 h-20 object-cover object-center m-auto rounded-full shadow-lg mb-2" 
                         :src="profile_photos[keyOfPhotos[i.logoImg]]['name'].replace(/photos\//g, 'photos/small_')" 
                         :alt="profile_photos[keyOfPhotos[i.logoImg]]['desc']"
@@ -11,29 +11,31 @@
                     <p class="text-sm">{{i.desc}}</p>
                     <p class="keyword text-xs font-semibold text-blue-500 pt-1"># {{i.keyword}}</p>
                     <p class="project_content my-3 text-left indent-8" v-html="i.content"></p>
-                    <!-- 試玩按鈕區塊 -->
-                    <BaseBtn v-if="i.links[0]!=''" rounded class="bg-purple-500 text-white hover:animate-pulse">
-                        <i class="i-Gamepad-2 mr-2"></i>
-                        <a :href="i.links[0]" target="_blank">
-                            {{ i.links[1] }}
-                        </a>
-                    </BaseBtn>
-                    <!-- 小圖片區塊 -->
-                    <div class="mt-3 text-sm" v-if="i.photoNames.length>0">photos:</div>
-                    <div class="mt-0 flex gap-x-1">
-                        <div :class="'linkimg_'+i.photoNames.length+'_block'"></div> <!-- 預留空間 -->
-                        <!-- 小圖片本體 -->
-                        <img v-for="i2 in i.photoNames" class="
-                            shadow-lg mb-3 rounded-lg cursor-pointer
-                            linkimg h-1/3
-                            hover:opacity-50
-                        " 
-                            @click = "currentImageName = profile_photos[keyOfPhotos[i2]]['name']"
-                            :src="profile_photos[keyOfPhotos[i2]]['name'].replace(/photos\//g, 'photos/small_')" 
-                            :alt="profile_photos[keyOfPhotos[i2]]['desc']"
-                        />
+                    <div class="self-end">
+                        <!-- 試玩按鈕區塊 -->
+                        <BaseBtn v-if="i.links[0]!=''" rounded class="bg-purple-500 text-white hover:animate-pulse">
+                            <i class="i-Gamepad-2 mr-2"></i>
+                            <a :href="i.links[0]" target="_blank">
+                                {{ i.links[1] }}
+                            </a>
+                        </BaseBtn>
+                        <!-- 小圖片區塊 -->
+                        <div class="mt-3 text-sm" v-if="i.photoNames.length>0">photos:</div>
+                        <div class="mt-0 flex gap-x-1">
+                            <div :class="'linkimg_'+i.photoNames.length+'_block'"></div> <!-- 預留空間 -->
+                            <!-- 小圖片本體 -->
+                            <img v-for="i2 in i.photoNames" class="
+                                shadow-lg mb-3 rounded-lg cursor-pointer
+                                linkimg h-1/3
+                                hover:opacity-50
+                            " 
+                                @click = "currentImageName = profile_photos[keyOfPhotos[i2]]['name']"
+                                :src="profile_photos[keyOfPhotos[i2]]['name'].replace(/photos\//g, 'photos/small_')" 
+                                :alt="profile_photos[keyOfPhotos[i2]]['desc']"
+                            />
+                        </div>
                     </div>
-                </BaseCard>
+                </div>
             </div>
         </template>
     </div>
@@ -214,6 +216,11 @@
     .project_content p{ //計畫內容
         line-height: 18px;
         padding: 2px 0px;
+    }
+
+    .basecard_custom {  //自訂卡片
+        border-radius: 10px;
+        box-shadow: 0 4px 20px 1px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.08);
     }
 
 </style>

@@ -1,11 +1,15 @@
 <script setup lang="ts">
 
     import Breadcrumbs from "@/components/Breadcrumbs.vue"
-    import { onMounted, ref, watch, nextTick } from "vue"
+    import { onMounted, ref, watch, nextTick, computed } from "vue"
     import { piniaStock } from '@/store/piniaStock'
 
     // 使用 pinia
     const piniaStockMain = piniaStock()
+
+
+
+// 折線圖
 
     // 定義圖表用的參數
     let DateArr = ref<string[]>([])
@@ -20,12 +24,22 @@
     let vixIsReverse = ref<boolean>(false);  //VIX 是否顛倒
     let vixIsInflation = ref<boolean>(false);  //VIX 是否通膨
     let peIsInflation = ref<boolean>(false);  //PE 是否通膨
+    let showDays = ref<number>(0);  //顯示日子數量
+    let dataDate = ref<string>("0000-00-00");  //資料日期
+    let lastEX = ref<number>(0);  //當前EX
 
+    // GEMIMI用了
+    let geminiDate = ref<string>("0000-00-00");
+    let geminiPoint = ref<number>(0); 
+    let geminiPrice = ref<number>(0); 
+    let geminiReason = ref<string>("Loading...");
 
     // =============================== 以下計算 ===============================
 
     // 設定日期範圍
     const setDateRange = (days:number)=>{
+        showDays.value = days;
+
         // 重新初始化參數
         DateArr.value = [];
         TAIEX.value = [];
@@ -164,29 +178,50 @@
 
     // =============================== 以下初始 ===============================
 
-    // pinia通知初始完成時(初次進首頁) --> 初始
-    watch(() => piniaStockMain.InitialReady, (newval, oldval)=>{    
+    // pinia STOCK 通知初始完成時(初次進首頁) --> 初始
+    watch(() => piniaStockMain.InitialStockReady, (newval, oldval)=>{    
         if(newval){ //初始化剛剛完成
-            initialChart();
+            initialChart(); //繪圖
+            dataDate.value = piniaStockMain.DateArr[ piniaStockMain.DateArr.length -1 ]  //資料日期
+            lastEX.value = piniaStockMain.TAIEX[ piniaStockMain.TAIEX.length -1 ]  //當前EX
+        }
+    }, {deep:true});
+
+    // pinia GEMINI 通知初始完成時(初次進首頁) --> 初始
+    watch(() => piniaStockMain.InitialGeminiReady, (newval, oldval)=>{    
+        if(newval){ //初始化剛剛完成
+            initialGemini(); //GEMINI參數
         }
     }, {deep:true});
 
     // 掛載時(route進來的時候) --> 初始
     onMounted(async (): Promise<void> => {
-        if(piniaStockMain.InitialReady){ //初始化早就完成了
-            initialChart();
+        if(piniaStockMain.InitialStockReady){ //Stock初始化早就完成了
+            initialChart(); //繪圖
+            dataDate.value = piniaStockMain.DateArr[ piniaStockMain.DateArr.length -1 ]  //資料日期
+            lastEX.value = piniaStockMain.TAIEX[ piniaStockMain.TAIEX.length -1 ]  //當前EX
+        }
+        if(piniaStockMain.InitialGeminiReady){ //gemini初始化早就完成了
+            initialGemini(); //GEMINI參數
         }
     })
 
     //初始動作
-    const initialChart = ()=>{
+    const initialChart = ()=>{  //圖表
         setTimeout(()=>{ //等畫布完全載入
             setDateRange(365);    //給初始日期
         }, 200);
     }
 
+    const initialGemini = ()=>{  //GEMINI參數
+        geminiDate.value = piniaStockMain.geminiData.data.Date;
+        geminiPoint.value = piniaStockMain.geminiData.data.Point;
+        geminiPrice.value = piniaStockMain.geminiData.data.Price;
+        geminiReason.value = piniaStockMain.geminiData.data.Reason;
+    }
 
-    // =============================== 以下圖表 ===============================
+
+    // =============================== 以下圖表 折線圖 ===============================
 
     // 1. 資料定義：series 陣列裡放幾個物件，就有幾條線
     const series = ref([
@@ -297,53 +332,134 @@
         }
     });
 
+
+    // =============================== 以下圖表 圓環圖 ===============================
+
+    const series2  = computed(() => [geminiPoint.value]);
+    //const series2 = ref([80]);
+    const chartOptions2 = ref({
+        colors: ['#d96570'],
+        chart: {
+            height: 350,
+            type: 'radialBar',
+            toolbar: {
+                show: false
+            }
+        },
+        plotOptions: {
+            radialBar: {
+            startAngle: -135,
+            endAngle: 225,
+            hollow: {
+                margin: 0,
+                size: '65%',
+                background: '#fff',
+                image: undefined,
+                imageOffsetX: 0,
+                imageOffsetY: 0,
+                position: 'front',
+                dropShadow: {
+                    enabled: true,
+                    top: 3,
+                    left: 0,
+                    blur: 4,
+                    opacity: 0.5
+                }
+            },
+            track: {
+                background: '#fff',
+                strokeWidth: '67%',
+                margin: 0, // margin is in pixels
+                dropShadow: {
+                    enabled: true,
+                    top: -3,
+                    left: 0,
+                    blur: 4,
+                    opacity: 0.7
+                }
+            },
+            dataLabels: {
+                show: true,
+                name: {
+                    offsetY: -10,
+                    show: true,
+                    color: '#555',
+                    fontSize: '17px'
+                },
+                value: {
+                    formatter: function(val) {
+                        return parseInt(val);
+                    },
+                    color: '#333',
+                    fontSize: '42px',
+                    show: true,
+                }
+            }
+            }
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'light',
+                type: 'horizontal',
+                gradientToColors: ['#4285f4'], // 最後顏色 (藍)
+                stops: [0, 33, 66, 100], // 顏色位置
+                colorStops: [
+                    { offset: 0, color: '#d96570' },
+                    { offset: 33, color: '#9b72cb' },
+                    { offset: 66, color: '#4285f4' },
+                    { offset: 100, color: '#4285f4' }
+                ]
+            }
+        },
+        stroke: {
+            lineCap: 'round'
+        },
+        labels: ["📈台灣加權指數評分"],
+    });
 </script>
 
 <template>
     <div class="container mx-auto">
-
-
         <Breadcrumbs parentTitle="Dashboard" subParentTitle="台股恐慌儀表板" />
 
+        <div class="Dashboard_desc px-4 mb-4">
+            <p>▪️以下三個大盤重要指數在特定條件下有一定程度的<b>正相關</b>： 【台灣<b>加權指數TAIEX】</b>、
+                 【台灣<b>恐慌指數VIXTWN+<span class="text-primary">垂直翻轉</span>+<span class="text-primary">通膨率</span>】</b>、
+                 【台灣<b>加權本益比TAIPE+<span class="text-primary">通膨率</span>】</b>。
+            正相關如果脫鉤太嚴重，就是整個大盤的異常警訊。 合理建倉時機建議是<b>恐慌指數VIX小於25</b>、<b>本益比PE小於23</b>。</p>
+        </div>
 
-
-        <BaseCard noPadding class="md:p-8 sm:p-4">
-            <div class="text-lg font-medium text-gray-600 m-4">
-                <!--span class="text-lg font-medium">VIX垂直翻轉</span-->
-
-
-
-        <label class="switchWord">
-            <span class="switchText">VIX垂直翻轉</span>
-            <span class="switch">
-            <input type="checkbox" v-model="vixIsReverse">
-            <span class="slider"></span>
-            </span>
-        </label>
-        <label class="switchWord">
-            <span class="switchText">VIX加通膨率</span>
-            <span class="switch">
-            <input type="checkbox" v-model="vixIsInflation">
-            <span class="slider"></span>
-            </span>
-        </label>
-        <label class="switchWord">
-            <span class="switchText">PE加通膨率</span>
-            <span class="switch">
-            <input type="checkbox" v-model="peIsInflation">
-            <span class="slider"></span>
-            </span>
-        </label>
-        <br>
-        <span class="text-sm">VIX翻轉通膨後與加權正相關</span> <span class="text-sm">PE通膨後與加權正相關</span>
-
-
-
-
+        <!-- 頂端開關 -->
+        <div class="basecard_custom py-4 sm:p-4  lg:px-8">
+            <div class="text-center text-sm">
+                資料日期 <b>{{ dataDate }}</b> <span class="text-xs text-gray-400">(每日下午3點後更新)</span>
+            </div>
+            <div class="topSwitchDiv text-lg font-medium text-gray-600 mb-4">
+                <label class="switchWord" :class="{'switchWordAct': vixIsReverse }">
+                    <span class="switchText">VIX垂直翻轉</span>
+                    <span class="switch">
+                    <input type="checkbox" v-model="vixIsReverse">
+                    <span class="slider"></span>
+                    </span>
+                </label>
+                <label class="switchWord" :class="{'switchWordAct': vixIsInflation }">
+                    <span class="switchText">VIX加通膨率</span>
+                    <span class="switch">
+                    <input type="checkbox" v-model="vixIsInflation">
+                    <span class="slider"></span>
+                    </span>
+                </label>
+                <label class="switchWord" :class="{'switchWordAct': peIsInflation }">
+                    <span class="switchText">PE加通膨率</span>
+                    <span class="switch">
+                    <input type="checkbox" v-model="peIsInflation">
+                    <span class="slider"></span>
+                    </span>
+                </label>
             </div>
 
-
-
+            <!-- 畫布區 -->
             <div class="loading-container" v-if="piniaStockMain.stockLoading">正在分析台股數據...
                 <div class="spinner"></div>
             </div>
@@ -356,40 +472,73 @@
                     :series="series"
             ></apexchart>
 
+            <!-- 年份切換區 -->
+            <div class="setDateRangeDiv">
+                <span class="block m-2 text-sm">time range: </span>
+                <div @click="setDateRange(1825)" :class="{'daysActivy':showDays==1825 }">5年</div>
+                <div @click="setDateRange(1460)" :class="{'daysActivy':showDays==1460 }">4年</div>
+                <div @click="setDateRange(1095)" :class="{'daysActivy':showDays==1095 }">3年</div>
+                <div @click="setDateRange(730)" :class="{'daysActivy':showDays==730 }">2年</div>
+                <div @click="setDateRange(365)" :class="{'daysActivy':showDays==365 }">1年</div>
+                <div @click="setDateRange(182)" :class="{'daysActivy':showDays==182 }">6月</div>
+                <div @click="setDateRange(91)" :class="{'daysActivy':showDays==91 }">3月</div>
+                <!--div @click="setDateRange(60)" :class="{'daysActivy':showDays==60 }">2月</div>
+                <div @click="setDateRange(30)" :class="{'daysActivy':showDays==30 }">1月</div-->
+            </div>
 
-            <span @click="setDateRange(1825)">
-                5年
-            </span>
+        </div>
 
-            <span @click="setDateRange(1095)">
-                3年
-            </span>
+        <div class="grid mt-4 gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 ">
+            <div class="">
+                <div class="basecard_custom p-5 h-full">
+                    <div>
+                        <span class="inline-block w-[20px] h-[20px] align-middle mb-1
+                                    bg-gradient-to-tr from-[#4285f4] via-[#9b72cb] to-[#d96570]
+                                    [clip-path:polygon(50%_0%,_61%_39%,_100%_50%,_61%_61%,_50%_100%,_39%_61%,_0%_50%,_39%_39%)]">
+                        </span>
+                        Gemini AI 評分:
+                    </div>
+                    <apexchart type="radialBar" height="350" :options="chartOptions2" :series="series2"></apexchart>
+                    <div class="text-center text-sm">0分為空頭市場，100分為多頭市場</div>
+                </div>
+            </div>
+            <div class="">
+                <div class="basecard_custom p-5 h-full flex flex-col justify-between">
+                    <div>
+                        <span class="inline-block w-[20px] h-[20px] align-middle mb-1
+                                    bg-gradient-to-tr from-[#4285f4] via-[#9b72cb] to-[#d96570]
+                                    [clip-path:polygon(50%_0%,_61%_39%,_100%_50%,_61%_61%,_50%_100%,_39%_61%,_0%_50%,_39%_39%)]">
+                        </span>
+                        Gemini AI 估值:
+                    </div>
+                    <div class="text-sm text-center my-3">台灣加權指數合理價:</div>
+                    <div class="
+                        text-7xl text-center font-black my-3
+                        breathing-text font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#9b72cb] to-[#d96570] 
+                        bg-[length:200%_auto] animate-gradient-move
+                    ">
+                        {{ geminiPrice }}
+                    </div>
+                    <div class="text-sm text-center mt-8 mb-2">當前收盤價 {{ dataDate }}: </div>
+                    <div class="text-3xl text-center font-semibold my-3">{{lastEX}}</div>
+                    <div class="text-sm text-center mt-3">AI 估值僅供參考，無任何引導意圖</div>
+                </div>
+            </div>
+            <div class="col-span-1 md:col-span-2">
+                <div class="basecard_custom p-5 h-full">
+                    <div>
+                        <span class="inline-block w-[20px] h-[20px] align-middle mb-1
+                                    bg-gradient-to-tr from-[#4285f4] via-[#9b72cb] to-[#d96570]
+                                    [clip-path:polygon(50%_0%,_61%_39%,_100%_50%,_61%_61%,_50%_100%,_39%_61%,_0%_50%,_39%_39%)]">
+                        </span>
+                        Gemini AI 建議:
+                        <p class="p-6" v-html="geminiReason.replace(/\n/g, '<br>')"></p>
+                        <div class="text-right mr-6 text-sm">資料日期: {{ geminiDate }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <span @click="setDateRange(730)">
-                2年
-            </span>
-
-            <span @click="setDateRange(365)">
-                1年
-            </span>
-
-            <span @click="setDateRange(182)">
-                6月
-            </span>
-
-            <span @click="setDateRange(91)">
-                3月
-            </span>
-
-            <span @click="setDateRange(60)">
-                2月
-            </span>
-
-            <span @click="setDateRange(30)">
-                1月
-            </span>
-
-        </BaseCard>
     </div>
 </template>
 
@@ -486,13 +635,141 @@
     }
 
     input:checked + .slider {
-    background: #4f46e5;
+    background: #a855f7;
     }
 
     input:checked + .slider:before {
     transform: translateX(20px);
     }
 
+    //我自訂的開關樣式
+    .topSwitchDiv{ //大外層
+        color: #BBB;
+        user-select: none;
+        transition: color 0.3s; 
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .switchWordAct{
+        color: #555;
+        font-weight: 600;
+    }
+
+    //頂端說明
+    .Dashboard_desc{
+        p{
+            line-height: 22px;
+            padding: 2px;
+        }
+    }
+
+    // 下方 days 選擇用
+    .setDateRangeDiv{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        color: #AAA;
+        padding: 10px 4px;
         
+        div{
+            background-color: #EEE;
+            border-radius: 10px;
+            padding: 4px 15px;
+            margin: 2px 3px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s,color 0.3s, scale 0.3s; 
+        }
+        div:hover{
+            color: #eee;
+            background-color: #d1b8e6;
+        }
+        div.daysActivy{
+            color: #fff;
+            font-weight: 600;
+            background-color: #a457e6;
+            scale: 110%;
+        }
+    }
+
+
+    // gemini icon
+    .gemini-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-bottom: 0.2rem; // 微調對齊文字的高度
+    
+    // 使用稍微圓潤一點的四角星路徑
+    clip-path: polygon(
+        50% 0%, 62% 38%, 
+        100% 50%, 62% 62%, 
+        50% 100%, 38% 62%, 
+        0% 50%, 38% 38%
+    );
+
+    // 在小尺寸下，對角線漸層最能展現色彩感
+    background: linear-gradient(135deg, #4285f4, #9b72cb, #d96570);
+    
+    // 讓顏色更亮一點，在小圖標上才顯眼
+    filter: saturate(1.4) brightness(1.1);
+    }
+
+
+
+    //自訂卡片
+    .basecard_custom {  
+        border-radius: 10px;
+        box-shadow: 0 4px 20px 1px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+
+
+    //估值股價動畫文字
+    @keyframes flow-and-breathe {
+    0% {
+        background-position: 0% 50%;
+        opacity: 0.8;
+    }
+    50% {
+        background-position: 100% 50%;
+        opacity: 1; // 呼吸到最亮
+    }
+    100% {
+        background-position: 0% 50%;
+        opacity: 0.8;
+    }
+    }
+
+    .breathing-text {
+    // 1. 漸層文字核心
+    font-weight: bold;
+    background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570, #4285f4);
+    background-size: 300% auto; // 放大背景，讓移動有空間
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    // 2. 動畫掛載
+    animation: flow-and-breathe 9s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+    0%, 100% {
+        filter: drop-shadow(0 0 2px rgba(155, 114, 203, 0.3));
+    }
+    50% {
+        filter: drop-shadow(0 0 8px rgba(155, 114, 203, 0.8));
+    }
+    }
+
+    .breathing-text {
+    // 疊加剛才的動畫
+    animation: flow-and-breathe 9s infinite, glow 9s infinite;
+    }
+
+
 
 </style>

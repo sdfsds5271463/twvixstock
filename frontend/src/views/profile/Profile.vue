@@ -96,7 +96,7 @@
               </Tab>
             </TabList>
 
-            <TabPanels class="mt-10">
+            <TabPanels class="mt-6">
               <TabPanel>
                 <Aboutme></Aboutme>
               </TabPanel>

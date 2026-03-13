@@ -19,9 +19,9 @@ func main() {
 	// 設定 Gin
 	r := gin.Default()
 
-	// 設定 tollbooth 限流 ( 每2分鐘最多請求20次 => 1/6秒充能速率+20充能上限 )
+	// 設定 tollbooth 限流 ( 每分鐘最多請求10次 => 1/6秒充能速率+10充能上限 )
 	limiter := tollbooth.NewLimiter((10.0/60.0), nil)  //每秒恢復請求充能 (10.0/60.0) (每六秒才能充一次)
-	limiter.SetBurst(20)  //請求充能上限 (每次請求扣1，沒充能不給訪問)
+	limiter.SetBurst(10)  //請求充能上限 (每次請求扣1，沒充能不給訪問)
     limiter.SetMessage("{'code':3001, 'error':'too many requests'}")
 	limiter.SetMessageContentType("application/json")
 	limiter.SetStatusCode(429)

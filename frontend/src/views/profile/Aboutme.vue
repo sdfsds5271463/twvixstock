@@ -1,6 +1,6 @@
 <template>
     <div class="p-5">
-        <p class="text-xl font-semibold mb-2 text-primary">Allen Zheng</p>
+        <!-- p class="text-xl font-semibold mb-2 text-primary">Allen Zheng</p -->
         <div class="border-b border-gray-300 pb-10 mb-8 aboutme_content">
           <p>
             資深網路工程師，在業界任職13年且從來沒有換過工作。精通領域有 <b>前端、後端、自動部屬、API對接、爬蟲</b>，

@@ -30,11 +30,14 @@ export const piniaStock = defineStore('piniaStock', {
       geminiRetry: 4,
 
     //分析用資料
+      //stock
       DateArr: [] as string[],
       TAIEX: [] as number[],
       VIXTWN: []as number[],
       TAIPE: [] as number[],
-      InitialReady: false,
+      InitialStockReady: false,
+      //gemini
+      InitialGeminiReady: false,
   }),
 
   actions: {
@@ -112,7 +115,8 @@ export const piniaStock = defineStore('piniaStock', {
         this.geminiData = data; // 將結果存入 state
         console.log("pinia geminiData AJAX:", this.geminiRetry, data);
 
-        //分析
+        //準備完成
+        this.InitialGeminiReady = true;
         this.geminiLoading = false;
       } catch (err) {
         //出錯
@@ -274,12 +278,8 @@ export const piniaStock = defineStore('piniaStock', {
       this.VIXTWN = VIXTWNArr;
       this.TAIPE = TAIPEArr;
 
-      this.InitialReady = true;
+      this.InitialStockReady = true;
     },
-
-
-
-
 
 
   },

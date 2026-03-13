@@ -17,7 +17,7 @@
           。
         </p>
         <p>▪️資料開放 API 進行下載，以下接口請求方式允許 <b>GET</b> 或 <b>POST</b> ，請求格式允許 <b>uri-query</b>、<b>form</b> 或 <b>json</b>。</p>
-        <p>▪️請求頻率同 IP <b>每2分鐘最多20次</b> ，請求過於頻繁將返回錯誤碼 3001。</p>
+        <p>▪️請求頻率同 IP <b>每分鐘最多10次</b> ，請求過於頻繁將返回錯誤碼 3001。</p>
         <p>
           ▪️開始對接之前，試試看點一下這個連結
           <a class="text-primary" href="https://twvixstock.qzz.io/api/v1/stockDB?start=2026-01-01&end=2026-01-05" target="_blank">
