@@ -36,8 +36,10 @@
     let vixIsInflation = ref<boolean>(false);  //VIX 是否通膨
     let peIsInflation = ref<boolean>(false);  //PE 是否通膨
     let showDays = ref<number>(0);  //顯示日子數量
-    let dataDate = ref<string>("0000-00-00");  //資料日期
+    let lastDate = ref<string>("0000-00-00");  //資料日期
     let lastEX = ref<number>(0);  //當前EX
+    let lastVIX = ref<number>(0);  //當前VIX
+    let lastPE = ref<number>(0);  //當前PE
 
     // GEMIMI用了
     let geminiDate = ref<string>("0000-00-00");
@@ -178,15 +180,6 @@
 
     // =============================== 以下初始 ===============================
 
-    // pinia STOCK 通知初始完成時(初次進首頁) --> 初始
-    watch(() => piniaStockMain.InitialStockReady, (newval, oldval)=>{    
-        if(newval){ //初始化剛剛完成
-            initialChart(); //繪圖
-            dataDate.value = piniaStockMain.DateArr[ piniaStockMain.DateArr.length -1 ]  //資料日期
-            lastEX.value = piniaStockMain.TAIEX[ piniaStockMain.TAIEX.length -1 ]  //當前EX
-        }
-    }, {deep:true});
-
     // pinia GEMINI 通知初始完成時(初次進首頁) --> 初始
     watch(() => piniaStockMain.InitialGeminiReady, (newval, oldval)=>{    
         if(newval){ //初始化剛剛完成
@@ -194,26 +187,42 @@
         }
     }, {deep:true});
 
+    // pinia STOCK 通知初始完成時(初次進首頁) --> 初始
+    watch(() => piniaStockMain.InitialStockReady, (newval, oldval)=>{    
+        if(newval){ //初始化剛剛完成
+            initialChart(); //繪圖
+            initialStock(); //STOCK參數初始
+        }
+    }, {deep:true});
+
     // 掛載時(route進來的時候) --> 初始
     onMounted(async (): Promise<void> => {
         if(piniaStockMain.InitialStockReady){ //Stock初始化早就完成了
-            initialChart(); //繪圖
-            dataDate.value = piniaStockMain.DateArr[ piniaStockMain.DateArr.length -1 ]  //資料日期
-            lastEX.value = piniaStockMain.TAIEX[ piniaStockMain.TAIEX.length -1 ]  //當前EX
+            initialChart(); //圖表初始
+            initialStock(); //STOCK參數初始
         }
         if(piniaStockMain.InitialGeminiReady){ //gemini初始化早就完成了
-            initialGemini(); //GEMINI參數
+            initialGemini(); //GEMINI參數初始
         }
     })
 
-    //初始動作
+    //圖表初始
     const initialChart = ()=>{  //圖表
         setTimeout(()=>{ //等畫布完全載入
             setDateRange(365);    //給初始日期
         }, 200);
     }
 
-    const initialGemini = ()=>{  //GEMINI參數
+    //STOCK參數初始
+    const initialStock = ()=>{
+        lastDate.value = piniaStockMain.DateArr[ piniaStockMain.DateArr.length -1 ]  //資料日期
+        lastEX.value = piniaStockMain.TAIEX[ piniaStockMain.TAIEX.length -1 ]
+        lastPE.value = piniaStockMain.TAIPE[ piniaStockMain.TAIPE.length -1 ]
+        lastVIX.value = piniaStockMain.VIXTWN[ piniaStockMain.VIXTWN.length -1 ]
+    }
+
+    //GEMINI參數初始
+    const initialGemini = ()=>{  
         geminiDate.value = piniaStockMain.geminiData.data.Date;
         geminiPoint.value = piniaStockMain.geminiData.data.Point;
         geminiPrice.value = piniaStockMain.geminiData.data.Price;
@@ -236,7 +245,7 @@
             //data: [84, 95, 81, 97, 82, 73, 81, 71, 96, 87, 43]
             data: VIXTWN
         },{
-            name: '台灣加權本益比(估值) TAIEX',
+            name: '台灣本益比估值 TAIEX',
             type: 'line',
             //data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
             data: TAIPE
@@ -251,6 +260,9 @@
             //type: 'line',
             stacked: false,
             parentHeightOffset: 0,
+            toolbar: { show: true },
+            zoom: { enabled: false },
+            selection: { enabled: false },
         },
         stroke: {
             width: [1.5, 1.5, 1.5],
@@ -298,7 +310,7 @@
                     offsetX: -15,
                 }
             },{
-                seriesName: ['台灣恐慌指數 VIXTWN', '台灣加權本益比(估值) TAIEX'],
+                seriesName: ['台灣恐慌指數 VIXTWN', '台灣本益比估值 TAIEX'],
                 opposite: true, // 放在右邊
                 //title: { text: "TEAM B B (Percentage)" },
                 labels: {
@@ -342,9 +354,9 @@
         chart: {
             height: 350,
             type: 'radialBar',
-            toolbar: {
-                show: false
-            }
+            toolbar: { show: false },
+            zoom: { enabled: false },
+            selection: { enabled: false },
         },
         plotOptions: {
             radialBar: {
@@ -428,33 +440,38 @@
                  【台灣<b>恐慌指數VIXTWN+<span class="text-primary">垂直翻轉</span>+<span class="text-primary">通膨率</span>】</b>、
                  【台灣<b>加權本益比TAIPE+<span class="text-primary">通膨率</span>】</b>。
                 正相關如果脫鉤太嚴重，就是整個大盤的異常警訊。 合理建倉時機建議是
-                <b>恐慌指數<span class="text-primary">VIX小於25</span></b>、
-                <b>本益比<span class="text-primary">PE小於23</span></b>。
+                <b>恐慌指數<span class="text-primary">VIX小於25</span></b><span class="text-xs">(當前<b>{{ lastVIX }}</b>)</span>、
+                <b>本益比<span class="text-primary">PE小於23</span></b><span class="text-xs">(當前<b>{{ lastPE }}</b>)</span>。
             </p>
+        </div>
+
+        <div class="text-center text-sm flex gap-4 justify-center items-end text-gray-500">
+            <span class="text-xs">{{ lastDate }}</span>
+            <span class=""><span class="text-xs">EX:</span><b>{{ lastEX }}</b></span>
+            <span class=""><span class="text-xs">VIX:</span><b>{{ lastVIX }}</b></span>
+            <span class=""><span class="text-xs">PE:</span><b>{{ lastPE }}</b></span>
         </div>
 
         <!-- 頂端開關 -->
         <div class="basecard_custom py-4 sm:p-4  lg:px-8">
-            <div class="text-center text-sm">
-                資料日期 <b>{{ dataDate }}</b> <span class="text-xs text-gray-400">(每日下午3點後更新)</span>
-            </div>
-            <div class="topSwitchDiv text-lg font-medium text-gray-600 mb-4">
+
+            <div class="topSwitchDiv text-lg font-medium text-gray-600 mb-0">
                 <label class="switchWord" :class="{'switchWordAct': vixIsReverse }">
-                    <span class="switchText">VIX垂直翻轉</span>
+                    <span class="switchText">VIX<br class="inline sm:hidden">垂直翻轉</span>
                     <span class="switch">
                     <input type="checkbox" v-model="vixIsReverse">
                     <span class="slider"></span>
                     </span>
                 </label>
                 <label class="switchWord" :class="{'switchWordAct': vixIsInflation }">
-                    <span class="switchText">VIX加通膨率</span>
+                    <span class="switchText">VIX<br class="inline sm:hidden">加通膨率</span>
                     <span class="switch">
                     <input type="checkbox" v-model="vixIsInflation">
                     <span class="slider"></span>
                     </span>
                 </label>
                 <label class="switchWord" :class="{'switchWordAct': peIsInflation }">
-                    <span class="switchText">PE加通膨率</span>
+                    <span class="switchText">PE<br class="inline sm:hidden">加通膨率</span>
                     <span class="switch">
                     <input type="checkbox" v-model="peIsInflation">
                     <span class="slider"></span>
@@ -477,7 +494,7 @@
 
             <!-- 年份切換區 -->
             <div class="setDateRangeDiv">
-                <span class="block m-2 text-sm">time range: </span>
+                <span class="hidden sm:block m-2 text-sm">time range: </span>
                 <div @click="setDateRange(1825)" :class="{'daysActivy':showDays==1825 }">5年</div>
                 <div @click="setDateRange(1460)" :class="{'daysActivy':showDays==1460 }">4年</div>
                 <div @click="setDateRange(1095)" :class="{'daysActivy':showDays==1095 }">3年</div>
@@ -522,7 +539,7 @@
                     ">
                         {{ geminiPrice }}
                     </div>
-                    <div class="text-sm text-center mt-8 mb-2">當前收盤價 {{ dataDate }}: </div>
+                    <div class="text-sm text-center mt-8 mb-2">當前收盤價 {{ lastDate }}: </div>
                     <div class="text-3xl text-center font-semibold my-3">{{lastEX}}</div>
                     <div class="text-sm text-center mt-3">AI 估值僅供參考，無任何引導意圖</div>
                 </div>
@@ -541,8 +558,8 @@
                 </div>
             </div>
         </div>
-
     </div>
+    <div class="text-center text-gray-500 mt-4 mx-6 text-sm">本站同步證交所資料，加權指數於下午3~4點更新，恐慌指數於下午4~5點更新，所有資料更新後Gemini才給出當日建議。</div>
 </template>
 
 
@@ -589,9 +606,9 @@
     .switchWord {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 2px;
     cursor: pointer;
-    padding: 6px 10px;
+    padding: 3px 6px;
     border-radius: 8px;
     transition: background 0.2s;
     }
@@ -601,7 +618,9 @@
     }
 
     .switchText {
-    font-size: 14px;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
     }
 
     /* switch本體 */
@@ -695,7 +714,13 @@
             scale: 110%;
         }
     }
-
+    @media (max-width: 500px) {
+        .setDateRangeDiv div{
+            padding: 6px 10px;
+            margin: 1px 1px;
+            font-size: 14px;
+        }
+    }
 
     // gemini icon
     .gemini-icon {

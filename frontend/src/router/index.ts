@@ -17,9 +17,8 @@ const routes: RouteRecordRaw[] = [
         path: '/dashboards',
         alias: '/',
         name: 'Dashboards',
-        //component: import('../views/dashboards/Dashboards.vue'),  //直接載入
+        component: import('../views/dashboards/Dashboards.vue'),  //直接載入
         //component: () => import('../views/dashboards/Dashboards.vue'),   //延遲載入
-        component: () => import(/* webpackPrefetch: true */ '../views/dashboards/Dashboards.vue'),   //延遲載入但自動先抓取
         meta: {
           title: 'Dashboard',
         },
@@ -27,9 +26,8 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/stockapi',
         name: 'stockapi',
-        //component: import('../views/stockapi/Stockapi.vue'),  //直接載入
+        component: import('../views/stockapi/Stockapi.vue'),  //直接載入
         //component: () => import('../views/stockapi/Stockapi.vue'),   //延遲載入
-        component: () => import(/* webpackPrefetch: true */ '../views/stockapi/Stockapi.vue'),   //延遲載入但自動先抓取
         meta: {
           title: 'Stock Api',
         },
@@ -37,9 +35,8 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/programing',
         name: 'programing',
-        //component: import('../views/programing/Programing.vue'),  //直接載入
+        component: import('../views/programing/Programing.vue'),  //直接載入
         //component: () => import('../views/programing/Programing.vue'),   //延遲載入
-        component: () => import(/* webpackPrefetch: true */ '../views/programing/Programing.vue'),   //延遲載入但自動先抓取
         meta: {
           title: 'Programing',
         },
@@ -47,9 +44,8 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/profile',
         name: 'profile',
-        //component: import('../views/profile/Profile.vue'),  //直接載入
+        component: import('../views/profile/Profile.vue'),  //直接載入
         //component: () => import('../views/profile/Profile.vue'),   //延遲載入
-        component: () => import(/* webpackPrefetch: true */ '../views/profile/Profile.vue'),   //延遲載入但自動先抓取
         meta: {
           title: 'Profile',
         },

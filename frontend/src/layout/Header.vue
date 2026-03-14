@@ -21,12 +21,8 @@ const sideBarToggle = () => {
 </script>
 
 <template>
-    <div class="header-wrapper flex bg-white justify-between px-4">
+    <div class="header-wrapper flex bg-white justify-between pl-0 pr-4 sm:pl-4">
         <div class="flex items-center">
-            <router-link class="logo flex justify-center" to="/">
-                <img src="/images/a_icon.png">
-                <span class="text-3xl pl-1 text-purple-500">TwVix</span>
-            </router-link>
             <div class="mx-0">
                 <button
                     @click="sideBarToggle"
@@ -56,6 +52,11 @@ const sideBarToggle = () => {
                     </svg>
                 </button>
             </div>
+            <router-link class="logo flex justify-center" to="/">
+                <!--img src="/images/a_icon.png">
+                <span class="text-3xl pl-1 text-purple-500">TwVix</span-->
+                <span class="text-md pl-1 text-purple-500">台股恐慌資訊站</span>
+            </router-link>
             <!-- mega-menu  -->
 
             <!-- hidden 隱藏起來 20260308-->
@@ -436,7 +437,8 @@ const sideBarToggle = () => {
             <!--HeaderSearch /-->
         </div>
         <div class="flex items-center">
-            <router-link to="/" class="text-sm text-gray-400 hover:text-purple-500">台股今日評分: <b>{{piniaStockMain.GeminiPoint}}</b>
+            <router-link to="/" class="text-sm text-gray-400 hover:text-gray-300">
+                <span class="hidden sm:inline">台股</span>今日評分: <b>{{piniaStockMain.GeminiPoint}}</b>
             </router-link>
             <a
                 class="
