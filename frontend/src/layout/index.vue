@@ -94,7 +94,7 @@ piniaStockMain.initPiniaStock()
             width: calc(100% - 100px);
             margin-left: 80px;
             // min-height: 100vh;
-            margin-top: 50px;
+            margin-top: 30px;
             transition: all 0.24s ease-in-out;
             .main-content-body{
                 min-height: calc(100vh - 80px);

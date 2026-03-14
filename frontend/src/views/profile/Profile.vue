@@ -241,6 +241,44 @@
   line-height: 18px;
   padding: 4px 0px;
 }
+
+// 新按鈕
+.newBtnDiv{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    color: #AAA;
+    padding: 4px 4px;
+    margin: 0px 0px;
+    background-color: rgba(255, 255, 255, 0.8);
+
+    position: sticky; //吸頂
+    top: 45px;
+    z-index: 10;
+
+    >div{
+        background-color: #EEE;
+        border-radius: 6px;
+        padding: 8px 12px;
+        margin: 2px 4px;
+        cursor: pointer;
+        user-select: none;
+        box-shadow: 1px 1px 4px #545454;
+        transition: background-color 0.3s,color 0.3s, scale 0.3s; 
+    }
+    >div:hover{
+        color: #eee;
+        background-color: #d1b8e6;
+    }
+    >div.btnActivy{
+        color: #fff;
+        font-weight: 600;
+        background-color: #a457e6;
+        scale: 110%;
+    }
+}
+
+// RWD
 @media (max-width: 767px) {
   .profile_desc .rwd {
     display: inline;
@@ -258,43 +296,9 @@
   }
   .newBtnDiv div{
     font-size: 12px;
+    padding: 8px 10px;
   }
 }
 
-// 新按鈕
-.newBtnDiv{
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    color: #AAA;
-    padding: 4px 4px;
-    margin: 0px 0px;
-    background-color: rgba(255, 255, 255, 0.8);
-
-    position: sticky; //吸頂
-    top: 45px;
-    z-index: 10;
-
-    div{
-        background-color: #EEE;
-        border-radius: 6px;
-        padding: 8px 12px;
-        margin: 2px 4px;
-        cursor: pointer;
-        user-select: none;
-        box-shadow: 1px 1px 4px #545454;
-        transition: background-color 0.3s,color 0.3s, scale 0.3s; 
-    }
-    div:hover{
-        color: #eee;
-        background-color: #d1b8e6;
-    }
-    div.btnActivy{
-        color: #fff;
-        font-weight: 600;
-        background-color: #a457e6;
-        scale: 110%;
-    }
-}
 
 </style>

@@ -18,6 +18,10 @@
     // 使用 pinia
     const piniaStockMain = piniaStock()
 
+    // 建議值
+    const vixSuggest = 25;
+    const peSuggest = 23;
+
 
 
 // 折線圖
@@ -429,6 +433,79 @@
         },
         labels: ["📈台灣加權指數評分"],
     });
+
+    // =============================== 以下圖表 長條圖 ===============================
+
+    const series3 = computed(() => [{
+        name: 'Actual',
+        data: [{
+            x: '恐慌指數VIX',
+            y: lastVIX.value,
+            fillColor: '#FF4560',
+            goals: [{
+                name: 'Expected',
+                value: vixSuggest,
+                strokeWidth: 4,
+                strokeHeight: 20,
+                strokeColor: '#00f0f9',
+                strokeDashArray: 8 
+            }]
+        },{
+            x: '本益比PE',
+            y: lastPE.value,
+            fillColor: '#3b82f6',
+            goals: [{
+                name: 'Expected',
+                value: peSuggest,
+                strokeWidth: 4,
+                strokeHeight: 20,
+                strokeColor: '#00f0f9',
+                strokeDashArray: 8
+            }]
+        }]
+    }]);
+    const chartOptions3 = {
+        chart: {
+            height: 200,
+            type: 'bar'
+        },
+        plotOptions: {
+            bar: {
+                horizontal: true,
+            }
+        },
+        colors: ['#00E396'],
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                type: 'horizontal',
+                shadeIntensity: 0.4,
+                gradientToColors: ['#a855f7'],
+                opacityFrom: 1,
+                opacityTo: 0.85,
+                stops: [0, 90, 100]
+            }
+        },
+        dataLabels: {
+            formatter: function(val, opt) {
+                const goals = opt.w.config.series[opt.seriesIndex].data[opt.dataPointIndex].goals;
+                if (goals && goals.length) {
+                    return `${val} / ${goals[0].value}`;
+                }
+                return val;
+            }
+        },
+        legend: {
+            show: true,
+            showForSingleSeries: true,
+            customLegendItems: ['當前值', '合理值'],
+            markers: {
+                fillColors: ['#a855f7', '#00f0f9']
+            }
+        }
+    };
+
 </script>
 
 <template>
@@ -439,9 +516,11 @@
             <p>▪️以下三個大盤重要指數在特定條件下有一定程度的<b>正相關</b>： 【台灣<b>加權指數TAIEX】</b>、
                  【台灣<b>恐慌指數VIXTWN+<span class="text-primary">垂直翻轉</span>+<span class="text-primary">通膨率</span>】</b>、
                  【台灣<b>加權本益比TAIPE+<span class="text-primary">通膨率</span>】</b>。
-                正相關如果脫鉤太嚴重，就是整個大盤的異常警訊。 合理建倉時機建議是
-                <b>恐慌指數<span class="text-primary">VIX小於25</span></b><span class="text-xs">(當前<b>{{ lastVIX }}</b>)</span>、
-                <b>本益比<span class="text-primary">PE小於23</span></b><span class="text-xs">(當前<b>{{ lastPE }}</b>)</span>。
+                正相關如果脫鉤太嚴重，就是整個大盤的異常警訊。 
+            </p>
+            <p>▪️合理建倉時機建議是
+                <b>恐慌指數<span class="text-primary">VIX小於{{vixSuggest}}</span></b><span class="text-xs">(當前<b>{{ lastVIX }}</b>)</span>、
+                <b>本益比<span class="text-primary">PE小於{{peSuggest}}</span></b><span class="text-xs">(當前<b>{{ lastPE }}</b>)</span>。
             </p>
         </div>
 
@@ -554,6 +633,29 @@
                         Gemini AI 建議:
                         <p class="p-6" v-html="geminiReason.replace(/\n/g, '<br>')"></p>
                         <div class="text-right mr-6 text-sm">資料日期: {{ geminiDate }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-1 md:col-span-2 xl:col-span-4">
+                <div class="basecard_custom p-5 h-full">
+                    📈恐慌本益比:
+                    <div class="pt-3 pl-3 text-sm">
+                        建倉合理值為
+                        <b>恐慌指數<span class="text-primary">VIX小於{{vixSuggest}}</span></b>(當前<b>{{ lastVIX }}</b>)、
+                        <b>本益比<span class="text-primary">PE小於{{peSuggest}}</span></b>(當前<b>{{ lastPE }}</b>)
+                    </div>
+                    <div class="flex flex-row">
+                        <apexchart class="BarVixPe" type="bar" height="200" :options="chartOptions3" :series="series3"></apexchart>
+                        <div class="BarVixPeDesc text-xs">
+                            <div class="mt-12">
+                                <span class="text-red-400"  v-if="(lastVIX/vixSuggest) > 1">超標 {{ (lastVIX/vixSuggest * 100).toFixed(0) }} %</span>
+                                <span class="text-blue-400" v-if="(lastVIX/vixSuggest) <= 1">達標 {{ (lastVIX/vixSuggest * 100).toFixed(0) }} %</span>
+                            </div>
+                            <div class="mt-10">
+                                <span class="text-red-400"  v-if="(lastPE/peSuggest) > 1">超標 {{ (lastPE/peSuggest * 100).toFixed(0) }} %</span>
+                                <span class="text-blue-400" v-if="(lastPE/peSuggest) <= 1">達標 {{ (lastPE/peSuggest * 100).toFixed(0) }} %</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -799,5 +901,12 @@
     }
 
 
+    // 以下長條圖
+    .BarVixPe{
+        width: calc(100% - 70px);
+    }
+    .BarVixPeDesc{
+        width: 70px;
+    }
 
 </style>
