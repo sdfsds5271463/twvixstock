@@ -363,7 +363,7 @@
   .img_desc{ //圖片敘述文字
     pointer-events: none;
     text-shadow: 1px 1px 5px black;
-    z-index: 50;
+    z-index: 2;
   }
   .timeline_img{ //圖片滑動效果
     transition: opacity 0.2s ease;

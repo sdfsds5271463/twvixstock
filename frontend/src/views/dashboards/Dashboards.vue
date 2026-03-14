@@ -648,12 +648,12 @@
                         <apexchart class="BarVixPe" type="bar" height="200" :options="chartOptions3" :series="series3"></apexchart>
                         <div class="BarVixPeDesc text-xs">
                             <div class="mt-12">
-                                <span class="text-red-400"  v-if="(lastVIX/vixSuggest) > 1">超標 {{ (lastVIX/vixSuggest * 100).toFixed(0) }} %</span>
-                                <span class="text-blue-400" v-if="(lastVIX/vixSuggest) <= 1">達標 {{ (lastVIX/vixSuggest * 100).toFixed(0) }} %</span>
+                                <span class="text-red-400"  v-if="(lastVIX/vixSuggest) > 1">{{ (lastVIX/vixSuggest * 100).toFixed(0) }}% 超標</span>
+                                <span class="text-blue-400" v-if="(lastVIX/vixSuggest) <= 1">{{ (lastVIX/vixSuggest * 100).toFixed(0) }}% 達標</span>
                             </div>
                             <div class="mt-10">
-                                <span class="text-red-400"  v-if="(lastPE/peSuggest) > 1">超標 {{ (lastPE/peSuggest * 100).toFixed(0) }} %</span>
-                                <span class="text-blue-400" v-if="(lastPE/peSuggest) <= 1">達標 {{ (lastPE/peSuggest * 100).toFixed(0) }} %</span>
+                                <span class="text-red-400"  v-if="(lastPE/peSuggest) > 1">{{ (lastPE/peSuggest * 100).toFixed(0) }}% 超標</span>
+                                <span class="text-blue-400" v-if="(lastPE/peSuggest) <= 1">{{ (lastPE/peSuggest * 100).toFixed(0) }}% 達標</span>
                             </div>
                         </div>
                     </div>
