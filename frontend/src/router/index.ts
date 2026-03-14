@@ -2,11 +2,18 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import NotFound from '../views/NotFound.vue'
 import store from '../store'
 
+import Layout from '../layout/index.vue'
+import Dashboards from '../views/dashboards/Dashboards.vue'
+import stockapi from '../views/stockapi/Stockapi.vue'
+import programing from '../views/programing/Programing.vue'
+import profile from '../views/profile/Profile.vue'
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/layout',
     name: 'Home',
-    component: () => import('../layout/index.vue'),
+    component: Layout,
+    //component: () => import('../layout/index.vue'),
     redirect: '/',
     meta: {
       title: 'Home',
@@ -17,7 +24,7 @@ const routes: RouteRecordRaw[] = [
         path: '/dashboards',
         alias: '/',
         name: 'Dashboards',
-        component: import('../views/dashboards/Dashboards.vue'),  //直接載入
+        component: Dashboards,  //直接載入
         //component: () => import('../views/dashboards/Dashboards.vue'),   //延遲載入
         meta: {
           title: 'Dashboard',
@@ -26,7 +33,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/stockapi',
         name: 'stockapi',
-        component: import('../views/stockapi/Stockapi.vue'),  //直接載入
+        component: stockapi,  //直接載入
         //component: () => import('../views/stockapi/Stockapi.vue'),   //延遲載入
         meta: {
           title: 'Stock Api',
@@ -35,7 +42,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/programing',
         name: 'programing',
-        component: import('../views/programing/Programing.vue'),  //直接載入
+        component: programing,  //直接載入
         //component: () => import('../views/programing/Programing.vue'),   //延遲載入
         meta: {
           title: 'Programing',
@@ -44,7 +51,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/profile',
         name: 'profile',
-        component: import('../views/profile/Profile.vue'),  //直接載入
+        component: profile,  //直接載入
         //component: () => import('../views/profile/Profile.vue'),   //延遲載入
         meta: {
           title: 'Profile',
