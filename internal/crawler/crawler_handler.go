@@ -26,18 +26,18 @@ func CheckForNeedCrawler()(needCrawler model.NeedCrawler){
 	timeStr := time.Now().Format("2006-01-02") //今日日期
 	stocks, err := service.GetStocksByDate(timeStr, timeStr, "all")
 	if err != nil {
-		fmt.Println("CheckForNeedCrawler DB ERROR!!")
+		log.Println("CheckForNeedCrawler DB ERROR!!")
 		return
 	}
 
 	for _ ,v := range(stocks){
 		if(v.Type == "TAIEX"){ //TAIEX 有紀錄，不用抓了
 			needCrawler.TAIEX = false
-			fmt.Println("TAIEX check already has datas")
+			log.Println("TAIEX check already has datas")
 		}
 		if(v.Type == "VIXTWN"){ //VIXTWN 有紀錄，不用抓了
 			needCrawler.VIXTWN = false
-			fmt.Println("VIXTWN check already has datas")
+			log.Println("VIXTWN check already has datas")
 		}
 	}
 
@@ -53,29 +53,29 @@ func CheckForNeedCrawler()(needCrawler model.NeedCrawler){
 	lastMonthtimeStr := fmt.Sprintf("%04d-%02d-%02d", ly, lm, 1)
 	stocks2, err := service.GetStocksByDate(lastMonthtimeStr, lastMonthtimeStr, "all")
 	if err != nil {
-		fmt.Println("CheckForNeedCrawler DB ERROR!!")
+		log.Println("CheckForNeedCrawler DB ERROR!!")
 		return
 	}
 	if(len(stocks2) == 1){ //TAIPE 有紀錄，不用抓了
 		needCrawler.TAIPE = false
-		fmt.Println("TAIPE check already has datas")
+		log.Println("TAIPE check already has datas")
 	}
 
 	//檢查 GEMINI (當 TAIEX VIXTWN 都有時才抓)
 	if (!needCrawler.TAIEX && !needCrawler.VIXTWN) {
 		needCrawler.GEMINI = true
 	}else{
-		fmt.Println("GEMINI skip because TAIEX|VIXTWN not ready")
+		log.Println("GEMINI skip because TAIEX|VIXTWN not ready")
 	}
 	if ( needCrawler.GEMINI == true ){  //如果要抓
 		geminiChk, err := service.GetGeminiTextByDate(timeStr)  //檢查有沒有資料囉
 		if err != nil {
-			fmt.Println("CheckForNeedGemini DB ERROR!!")
+			log.Println("CheckForNeedGemini DB ERROR!!")
 			return
 		}
 		if (geminiChk.Reason != ""){  //有資料
 			needCrawler.GEMINI = false  //別抓
-			fmt.Println("GEMINI check already has datas")
+			log.Println("GEMINI check already has datas")
 		}
 	}
 	return
@@ -124,7 +124,7 @@ func FetchDataTAIEX(all bool, configCrawler config.CrawlerConfig) {
 		return
 	}
 
-	fmt.Println("TAIEX 解析筆數:", count)
+	log.Println("TAIEX 解析筆數:", count)
 }
 
 // 台灣恐慌爬蟲
@@ -182,7 +182,7 @@ func FetchDataVIXTWN(all bool, configCrawler config.CrawlerConfig) {
 		return
 	}
 
-	fmt.Println("VIXTWN 解析筆數:", count)
+	log.Println("VIXTWN 解析筆數:", count)
 }
 
 // 台灣PE爬蟲
@@ -225,7 +225,7 @@ func FetchDataTAIPE(all bool, configCrawler config.CrawlerConfig) {
 		return
 	}
 
-	fmt.Println("TAIPE 解析筆數:", count)
+	log.Println("TAIPE 解析筆數:", count)
 }
 
 // GEMINI API
@@ -234,5 +234,5 @@ func FetchGeminiApi(all bool, configCrawler config.CrawlerConfig) {
 
 	// 交給服務進行資料解析
 	count, err := service.GeminiApiFetch(configCrawler)
-	fmt.Println("GEMINI:", count, err)
+	log.Println("GEMINI:", count, err)
 }

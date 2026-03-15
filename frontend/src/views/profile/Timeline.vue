@@ -152,7 +152,7 @@
             `,
             desc2: `
                 本站是一個完整專案架構，具有前端、後端、排程、部屬，其 GCP 自動部屬流程為 Git → GitHub → CloudBuild → Registry → GKE → gke-deploy → (運行服務開放端口) → Cloudflare。
-                技術實現上，使用 Go + Gin 框架實現後端響應及排程，並使用 Vue3Vite + Vuex + VueRouter + TailwindCSS 撰寫前端分析頁面。
+                技術實現上，使用 Go + Gin 框架實現後端響應及排程，並使用 Vue3Vite + Pinia + VueRouter + TailwindCSS 撰寫前端分析頁面。
             `,
             photos: ["2026_twvix5.jpg","2026_twvix4.jpg","2026_twvix2.jpg","2026_twvix1.jpg"],
             float_right: false, //奇數物件根據祖先長度，決定是否飄右邊

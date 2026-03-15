@@ -16,6 +16,17 @@ func main() {
 	config.LoadConfig("")
 	repository.InitDB()
 
+	//路由初始
+	r := SetupRouter()
+
+	// 啟動
+	port := fmt.Sprintf(":%d", config.AppConfig.Server.Port)
+	fmt.Printf("Server 啟動於 %s\n", port)
+	r.Run(port)
+}
+
+//路由初始
+func SetupRouter() *gin.Engine {
 	// 設定 Gin
 	r := gin.Default()
 
@@ -79,8 +90,5 @@ func main() {
 		c.File("./static/index.html")
 	})
 
-	// 啟動
-	port := fmt.Sprintf(":%d", config.AppConfig.Server.Port)
-	fmt.Printf("Server 啟動於 %s\n", port)
-	r.Run(port)
+	return r
 }
