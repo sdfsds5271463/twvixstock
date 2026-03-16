@@ -526,14 +526,17 @@
     const chartOptions3 = {
         chart: {
             height: 200,
-            type: 'bar'
+            type: 'bar',
+            toolbar: { show: false },
+            zoom: { enabled: false },
+            selection: { enabled: false },
         },
         plotOptions: {
             bar: {
                 horizontal: true,
             }
         },
-        colors: ['#00E396'],
+        colors: ['#a855f7'],
         fill: {
             type: 'gradient',
             gradient: {
