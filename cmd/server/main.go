@@ -70,7 +70,7 @@ func SetupRouter() *gin.Engine {
 				3001 請求過於頻繁 (429)
 		*/
 
-		//api.GET("/v1/geminiData", handler.GeminiDataShow)
+		api.GET("/v1/geminiData", handler.GeminiDataShow)
 		api.POST("/v1/geminiData", handler.GeminiDataShow)
 	}
 

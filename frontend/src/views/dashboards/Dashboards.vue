@@ -22,6 +22,11 @@
     const vixSuggest = 25;
     const peSuggest = 23;
 
+    // 系列名
+    const seriesNameEX  = "台灣加權指數 TAIEX";
+    const seriesNameVIX = "台灣恐慌指數 VIXTWN";
+    const seriesNamePE  = "台灣本益比估值 TAI";
+
 
 
 // 折線圖
@@ -33,6 +38,9 @@
     let VIXTWN_base = ref<number[]>([])  //vix 計算的基準
     let TAIPE = ref<number[]>([])
     let TAIPE_base = ref<number[]>([])  //pe 計算的基準
+    let hidden_EX = ref<boolean>(false)
+    let hidden_VIX = ref<boolean>(false)
+    let hidden_PE = ref<boolean>(false)
 
     // 運算用的
     const myChart = ref(null);  //圖表本體
@@ -55,6 +63,11 @@
 
     // 設定日期範圍
     const setDateRange = (days:number)=>{
+
+        // 記錄當前隱藏系列並設置
+        getHiddenSeries();
+
+        // 日子參數
         showDays.value = days;
 
         // 重新初始化參數
@@ -94,6 +107,9 @@
                 labels: DateArr.value 
             });
         });
+
+        // 隱藏應該隱藏的系列
+        //setHiddenSeries(hidedenSeriesName);
     }
 
     // 監控變化 進行運算
@@ -110,7 +126,12 @@
 
     // vix 運算(依據顛倒 通膨旗標)
     const vixCompute = ()=>{
-        VIXTWN.value = [...VIXTWN_base.value]; //還原基準 vix
+
+        // 記錄當前隱藏系列並設置
+        getHiddenSeries();
+
+        //還原基準 vix
+        VIXTWN.value = [...VIXTWN_base.value]; 
 
         //顛倒旗標
         let AvgTmp = 0;
@@ -131,16 +152,27 @@
         if(vixIsInflation.value){
             VIXTWN.value = inflationCompute(VIXTWN.value);
         }
+
+        // 隱藏應該隱藏的系列
+        //setHiddenSeries(hidedenSeriesName);
     }
 
     // pe 運算(依據 通膨旗標)
     const peCompute = ()=>{
-        TAIPE.value = [...TAIPE_base.value]; //還原基準 pe
+
+        // 記錄當前隱藏系列並設置
+        getHiddenSeries();
+
+        //還原基準 pe
+        TAIPE.value = [...TAIPE_base.value];
 
         //通膨旗標
         if(peIsInflation.value){
             TAIPE.value = inflationCompute(TAIPE.value);
         }
+
+        // 隱藏應該隱藏的系列
+        //setHiddenSeries(hidedenSeriesName);
     }
 
     //通膨率運算
@@ -181,6 +213,30 @@
         return NumArr;
     }
     
+
+        //顯示隱藏系列相關方法整理
+            // myChart.value.chart.w.globals.seriesNames  全系列名
+            // myChart.value.chart.w.globals.collapsedSeries  被隱藏的系列 data
+            // myChart.value.chart.w.globals.collapsedSeriesIndices  被隱藏的系列 id
+            // myChart.value.hideSeries("台灣加權指數 TAIEX")  執行隱藏
+            // myChart.value.showSeries("台灣加權指數 TAIEX")  執行顯示
+
+    // 取得隱藏系列名
+    const getHiddenSeries = ()=>{
+        // 還原顯示參數
+        hidden_EX.value = false; 
+        hidden_VIX.value = false; 
+        hidden_PE.value = false; 
+        myChart.value.chart.w.globals.collapsedSeriesIndices.forEach((v,_) => {
+            // 系列名
+            let nameTmp = myChart.value.chart.w.globals.seriesNames[v]; 
+
+            // 設置預設是否隱藏
+            if ( nameTmp == seriesNameEX){ hidden_EX.value = true; }
+            if ( nameTmp == seriesNameVIX){ hidden_VIX.value = true; }
+            if ( nameTmp == seriesNamePE){ hidden_PE.value = true; }
+        });
+    };
 
     // =============================== 以下初始 ===============================
 
@@ -239,20 +295,23 @@
     // 1. 資料定義：series 陣列裡放幾個物件，就有幾條線
     const series = ref([
         {
-            name: '台灣加權指數 TAIEX',
+            name: seriesNameEX,
             type: 'area',
             //data: [2300, 1100, 2200, 2700, 1300, 2200, 3700, 2100, 4400, 2200, 3000]
-            data: TAIEX
+            data: TAIEX,
+            hidden: hidden_EX
         },{
-            name: '台灣恐慌指數 VIXTWN',
+            name: seriesNameVIX,
             type: 'line',
             //data: [84, 95, 81, 97, 82, 73, 81, 71, 96, 87, 43]
-            data: VIXTWN
+            data: VIXTWN,
+            hidden: hidden_VIX
         },{
-            name: '台灣本益比估值 TAIEX',
+            name: seriesNamePE,
             type: 'line',
             //data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
-            data: TAIPE
+            data: TAIPE,
+            hidden: hidden_PE
         }
     ]);
 
@@ -305,7 +364,7 @@
         },
         yaxis: [
             {
-                seriesName: '台灣加權指數 TAIEX', // 與 series 裡的 name 對應
+                seriesName: seriesNameEX, // 與 series 裡的 name 對應
                 //title: { text: "TEAM A (Points)" },
                     labels: {
                     formatter: function (val) {
@@ -314,7 +373,7 @@
                     offsetX: -15,
                 }
             },{
-                seriesName: ['台灣恐慌指數 VIXTWN', '台灣本益比估值 TAIEX'],
+                seriesName: [seriesNameVIX, seriesNamePE],
                 opposite: true, // 放在右邊
                 //title: { text: "TEAM B B (Percentage)" },
                 labels: {
@@ -584,7 +643,6 @@
                 <!--div @click="setDateRange(60)" :class="{'daysActivy':showDays==60 }">2月</div>
                 <div @click="setDateRange(30)" :class="{'daysActivy':showDays==30 }">1月</div-->
             </div>
-
         </div>
 
         <div class="grid mt-4 gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 ">

@@ -439,10 +439,14 @@ func GeminiApiFetch(configCrawler config.CrawlerConfig)(count int, err error){
 	}
 
 	// 拆解結果
-	rawText := string(data.Candidates[0].Content.Parts[0]["text"])  //
+	rawText := string(data.Candidates[0].Content.Parts[0]["text"])
 	cleanJSON := strings.TrimPrefix(rawText, "```json\n")
+	cleanJSON = strings.TrimPrefix(cleanJSON, "```")
+	cleanJSON = strings.TrimPrefix(cleanJSON, "json")
 	cleanJSON = strings.TrimSuffix(cleanJSON, "\n```")
-
+	cleanJSON = strings.TrimSuffix(cleanJSON, "```")
+	cleanJSON = strings.TrimSpace(cleanJSON)
+	
 	// 取得最後一天 EX 日期
 	allExKey := GetMapSortKeys(recentData.TAIEX)
 	timeStr := allExKey[len(allExKey)-1] // 2026-03-11
