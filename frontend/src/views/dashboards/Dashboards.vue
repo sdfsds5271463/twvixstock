@@ -25,7 +25,7 @@
     // 系列名
     const seriesNameEX  = "台灣加權指數 TAIEX";
     const seriesNameVIX = "台灣恐慌指數 VIXTWN";
-    const seriesNamePE  = "台灣本益比估值 TAI";
+    const seriesNamePE  = "台灣本益比估值 TAIPE";
 
 
 

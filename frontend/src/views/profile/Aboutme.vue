@@ -104,7 +104,7 @@
       <h2 class="text-xl font-bold mb-4 text-gray-600">參與專案 & 語言使用率</h2>
       <apexchart
         type="line"
-        height="400"
+        height="300"
         :options="chartOptions"
         :series="series"
       ></apexchart>
@@ -159,11 +159,11 @@
     },
     {
       name: ["JAVASCRIPT","jQuery"],
-      data: [45, 40,  5, 30, 60, 75, 50,  20,  5,  0,  0, 5],
+      data: [45, 40,  5, 30, 60, 75, 50,  20,  5,  0,  0, 0],
     },
     {
       name: ["TYPESCRIPT","Vue"],
-      data: [ 0,  0,  0,  0,  0,  0,  0,  10, 30,  0, 15, 50],
+      data: [ 0,  0,  0,  0,  0,  0,  0,  10, 30,  0, 15, 55],
     },
   ]);
 
