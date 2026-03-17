@@ -82,11 +82,11 @@
 
         <div class="text-sm text-gray-400">技術經歷:</div>
         <div class="border-b border-gray-300 pb-6 mb-6 aboutme_skill">
-          <p>▪️金流系統: 設計<b>交易狀態機</b>(pending/success/failed)，透過<b>idempotency key</b>避免重複扣款，使用<b>Mutex+DB transaction</b>防止資源競爭，回調一律做<b>二次驗證</b>(查詢第三方狀態)。</p>
-          <p>▪️併發爬蟲: 使用 <b>Playwright</b> 處理多重跳轉、動態token(JS計算)，必要時引入第三方辨識服務處理驗證碼。 登入後<b>保存登入狀態</b>，用 <b>Scrapy</b> 對第三方後台發起併發請求。</p>
-          <p>▪️多線運算: <b>狀態層與計算層分離</b>。 狀態層(單一pod)：集中管理，確保資料一致性； 計算層(拓展pods)：透過 <b>gRPC</b> worker 水平擴展。 必須同時兼顧資料的<b>一致性與擴展性</b>。</p>
-          <p>▪️自動部屬: 建立完整的 <b>CI/CD pipeline</b>。 CI: build、test 並部署到dev/staging(minikube或測試環境)； CD: deploy到<b>GKE</b>(rolling update)，評估預留 <b>buffer pod</b>，減少流量突增時的冷啟動時間。 </p>
-          <p>▪️監控系統: 分三個層面監控通知。 1.<b>系統資源</b>: 監控CPU、記憶體、磁碟； 2.<b>應用層</b>: 監控錯誤率、API延遲、每秒查詢率(QPS)； 3.<b>業務層</b>: 監控金流狀態、訂單數量、會員數據。 </p>
+          <p>▪️<b>金流系統</b>: 設計<b>交易狀態機</b>(pending/success/failed)，透過<b>idempotency key</b>避免重複扣款，使用<b>Mutex+DB transaction</b>防止資源競爭，回調一律做<b>二次驗證</b>(查詢第三方狀態)。</p>
+          <p>▪️<b>併發爬蟲</b>: 使用 <b>Playwright</b> 處理多重跳轉、動態token(JS計算)，必要時引入第三方辨識服務處理驗證碼。 登入後<b>保存登入狀態</b>，用 <b>Scrapy</b> 對第三方後台發起併發請求。</p>
+          <p>▪️<b>多線運算</b>: <b>狀態層與計算層分離</b>。 狀態層(單一pod)：集中管理，確保資料一致性； 計算層(拓展pods)：透過 <b>gRPC</b> worker 水平擴展。 必須同時兼顧資料的<b>一致性與擴展性</b>。</p>
+          <p>▪️<b>自動部屬</b>: 建立完整的 <b>CI/CD pipeline</b>。 CI: build、test 並部署到dev/staging(minikube或測試環境)； CD: deploy到<b>GKE</b>(rolling update)，評估預留 <b>buffer pod</b>，減少流量突增時的冷啟動時間。 </p>
+          <p>▪️<b>監控系統</b>: 分三個層面監控通知。 1.<b>系統資源</b>: 監控CPU、記憶體、磁碟； 2.<b>應用層</b>: 監控錯誤率、API延遲、每秒查詢率(QPS)； 3.<b>業務層</b>: 監控金流狀態、訂單數量、會員數據。 </p>
         </div>
 
 
