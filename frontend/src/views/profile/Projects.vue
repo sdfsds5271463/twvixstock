@@ -98,11 +98,11 @@
             logoImg:"2022_sb2.jpg",
             title:"體育遊戲系統(2022)",
             desc:"自動部屬超過20個微服務200人同時在線的高併發系統",
-            keyword:"Golang Gin gRPC Vue3 Vuex TypeScript Sass DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus ELK GitHub Docker CI/CD WebSocket API Redis Linux UnitTest JWT",
+            keyword:"Golang Gin gRPC Vue3 Vuex TypeScript Sass DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus Grafana ELK GitHub Docker CI/CD WebSocket API Redis Linux UnitTest JWT",
             content:`
                 我領導的<b>8人</b>全端技術團隊，負責將舊版 PHP 體育系統源碼重新撰寫成 Golang <b>自動部屬</b>至 GCP，包含後續開發維護等全端工作。
                 核心技術 Golang、Gin、TypeScript、Vue、DevOps、GCP、Kubernetes、Docker、CI/CD、WebSocket。
-                我們負責改寫專案 PHP→Go、jQuery→Vue，維運全端、API等所有服務，並全部整合進行 CI/CD。專案由<b>20個</b>以上的 GCP 容器微服務整合運行，通過 GitHub 觸發進行自動部屬，並使用 Prometheus、ELK 做後續的日誌監控。
+                我們負責改寫專案 PHP→Go、jQuery→Vue，維運全端、API等所有服務，並全部整合進行 CI/CD。專案由<b>20個</b>以上的 GCP 容器微服務整合運行，通過 GitHub 觸發進行自動部屬，並使用 Prometheus + Grafana + ELK 監控。
                 架構包含平台、前端、後端、控端、賽程、訊源、視訊等，使用 Go Channel 集中狀態併發 gRPC 給自拓展 pod 運算服務，以應付同時<b>200人</b>在線及每秒達<b>百次</b>以上的賠率運算。
             `,
             links:["", ""],

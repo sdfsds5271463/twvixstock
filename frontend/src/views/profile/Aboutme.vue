@@ -73,6 +73,14 @@
           </div>
         </div>
 
+        <div class="text-sm text-gray-400">精通技能:</div>
+        <div class="border-b border-gray-300 pb-6 mb-6 aboutme_skill">
+          <p>▪️前端: <b>Vue+TypeScript</b> / <b>jQuery+JavaScript</b> / <b>BootStrap</b> / <b>Tailwind CSS</b> / <b>Sass</b></p>
+          <p>▪️後端: <b>PHP+Laravel</b> / <b>Go+Gin</b> / <b>Python+Scrapy</b> / <b>RESTful API</b> / <b>MySQL</b> / <b>Redis</b> / <b>WebSocket</b> </p>
+          <p>▪️部屬: <b>CI/CD</b> / <b>GCP</b> / <b>CloudBuild+GKE-deploy</b> / <b>Prometheus+Grafana+ELK</b> / <b>Docker</b> / <b>Kubernetes</b> / <b>GitHub</b> </p>
+          <p>▪️其他: [測試工具]<b>Playwright</b>(取代Cypress&Selenium) / [動畫引擎]<b>Spine+PixiJS</b> / [部門管理]<b>Agile</b> </p>
+        </div>
+
         <div class="grid grid-cols-12 gap-3">
             <div class="col-span-12 md:col-span-6 lg:col-span-3 break-all">
                 <p class="text-purple-500 mb-1"><i class="i-Professor text-base"></i><span class="ml-1">年資</span></p><span>13 年</span>
@@ -111,12 +119,12 @@
     </div>
 
     <div class="p-5">
-        <div class="text-sm text-gray-400">精通技能關鍵字:</div>
+        <div class="text-sm text-gray-400">精通關鍵字:</div>
         <div class="border-b border-gray-300 pb-10 mb-8 text-blue-500 aboutme_content font-semibold">
-          <p>前端 # Vue3 Vite Pinia Vuex VueRouter TypeScript TailwindCSS BootStrap jQuery Javascript Twig Sass Css Html PixiJS</p>
+          <p>前端 # Vue3 Vite Pinia Vuex VueRouter TypeScript TailwindCSS BootStrap jQuery JavaScript Twig Sass Css Html PixiJS</p>
           <p>後端 # Golang Gin PHP Laravel Python Scrapy RESTfulAPI WebSocket Redis MySQL SQL Gemini API </p>
-          <p>部屬 # DevOps Kubernetes K8s CI/CD Docker GCP GKE CloudBuild Prometheus ELK GitHub Cloudflare Linux Nginx</p>
-          <p>其他 # UnitTest WebCrawler Git SEO MVC RWD Ajax Json Selenium Playwright Photoshop WordPress Spine JWT Apexchart</p>
+          <p>部屬 # DevOps Kubernetes K8s CI/CD Docker GCP GKE CloudBuild Prometheus Grafana ELK GitHub Cloudflare Linux Nginx</p>
+          <p>其他 # UnitTest WebCrawler Git SEO MVC RWD Ajax Json Selenium Playwright Photoshop WordPress Spine JWT Agile</p>
         </div>
     </div>
 
@@ -205,11 +213,11 @@
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
   .aboutme_content p{ //關於我內容格式化
     line-height: 22px;
     text-indent: 2em;
-    padding: 2px;
+    padding: 3px;
     b{
       font-size: 105%;
     }
@@ -220,10 +228,13 @@
     }
   }
 
-</style>
-
-<style lang="scss" scoped>
-
+  .aboutme_skill p{ //關於我內容格式化
+    line-height: 22px;
+    padding: 3px;
+    b{
+      font-size: 105%;
+    }
+  }
 
   //大型遊戲專案
   .bigProjects{

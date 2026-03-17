@@ -181,7 +181,7 @@
             title: "體育遊戲系統",
             sub_title: "<b>自動部屬</b>超過<b>20個</b>微服務<b>200人</b>同時在線的<b>高併發</b>系統</p>",
             key_word_big: "Golang gRPC Vue3 TypeScript DevOps GCP Kubernetes K8s Docker CI/CD WebSocket API Redis",
-            key_word_small: "Gin Vuex Sass CloudBuild GKE Prometheus ELK GitHub Linux UnitTest JWT",
+            key_word_small: "Gin Vuex Sass CloudBuild GKE Prometheus Grafana ELK GitHub Linux UnitTest JWT",
             desc1: `
                 我領導的<b>8人</b>全端技術團隊，負責將舊版 PHP + jQuery 體育系統源碼重新撰寫成 Golang + Vue3 並<b>自動部屬</b>至 GCP，亦包含後續開發維護等全端工作。
                 系統架構包含平台、前端、後端、控端、賽程、訊源、視訊等，由<b>20個</b>以上的 GCP 容器微服務部屬整合運行，具備併發及自動拓展等特性，讓系統可以在超過<b>200人</b>同時在線且每秒更新超過<b>百次</b>賠率的狀況下，穩定運行。
@@ -191,7 +191,7 @@
                 初期我們首要任務是要將一個未完成的大量微服務系統依序部屬到全新的 GCP 上，設定其關聯，並將 GitHub 資料與 CloudBuild 觸發 gke-deploy 實現自動部屬功能。
                 中期我們開始將 PHP + Laravel 的專案改寫成 Go + Gin，需要大量運算的服務我們使用 Go Channel 集中狀態，併發 gRPC 給自拓展的 pod 進行運算服務。
                 後期我們前端版面重構，撰寫新版本的前端連線 WebSocket，並使用，並使用 Vue3 + TypeScript + Sass 重新刻劃 UI 介面。
-                營運方面，我們提供標準 API (JWT) 的平台對接，提供 WebSocket API 的賠率對接，也提供訊源 API 等服務。並使用 Prometheus + ELK 監控負載狀態，必要時手動調整 GCP 負載上限。
+                營運方面，我們提供標準 API (JWT) 的平台對接，提供 WebSocket API 的賠率對接，也提供訊源 API 等服務。並使用 Prometheus + Grafana + ELK 監控，必要時手動調整 GCP 負載上限。
             `,
             photos: ["2022_sb5.jpg","2022_sb4.jpg","2022_sb2.jpg","2022_sb1.jpg"],
             float_right: false, //奇數物件根據祖先長度，決定是否飄右邊
