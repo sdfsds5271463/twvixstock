@@ -6,8 +6,7 @@
           <p>
             資深網路工程師，在業界任職13年（雲科研發處網管4年、博斯特產品開發部9年）。精通領域有 <b>前端、後端、自動部屬、API對接、爬蟲</b>，
             經歷了 <b>PHP→GO、jQuery→Vue、JavaScript→TypeScript、Nginx→CI/CD</b> 的技術變革，
-            處理過 <b>大量金流/遊戲API、併發多線爬蟲、複雜微服務部屬、多線程與多進程運算</b>，以 <b>主管</b> 身分參與過 <b>5個大型專案</b>，
-            精通 <b>5種</b> 主流網頁程式語言。
+            處理過 <b>大量金流/遊戲API、併發多線爬蟲、複雜微服務部屬、多線程與多進程運算</b>。
           </p>
           <p>
             就學階段，從甲工資訊科 → 雲科資工系 → 雲科資工所，一路都在領域內發展，於大三開始產學合作，並以網管技術人員任職於雲科研發處。
@@ -80,6 +79,16 @@
           <p>▪️部屬: <b>CI/CD</b> / <b>GCP</b> / <b>CloudBuild+GKE-deploy</b> / <b>Prometheus+Grafana+ELK</b> / <b>Docker</b> / <b>Kubernetes</b> / <b>GitHub</b> </p>
           <p>▪️其他: [測試工具]<b>Playwright</b>(取代Cypress&Selenium) / [動畫引擎]<b>Spine+PixiJS</b> / [部門管理]<b>Agile</b> </p>
         </div>
+
+        <div class="text-sm text-gray-400">技術經歷:</div>
+        <div class="border-b border-gray-300 pb-6 mb-6 aboutme_skill">
+          <p>▪️金流系統: 設計<b>交易狀態機</b>(pending/success/failed)，透過<b>idempotency key</b>避免重複扣款，使用<b>Mutex+DB transaction</b>防止資源競爭，回調一律做<b>二次驗證</b>(查詢第三方狀態)。</p>
+          <p>▪️併發爬蟲: 使用 <b>Playwright</b> 處理多重跳轉、動態token(JS計算)，必要時引入第三方辨識服務處理驗證碼。 登入後<b>保存登入狀態</b>，用 <b>Scrapy</b> 對第三方後台發起併發請求。</p>
+          <p>▪️多線運算: <b>狀態層與計算層分離</b>。 狀態層(單一pod)：集中管理，確保資料一致性； 計算層(拓展pods)：透過 <b>gRPC</b> worker 水平擴展。 必須同時兼顧資料的<b>一致性與擴展性</b>。</p>
+          <p>▪️自動部屬: 建立完整的 <b>CI/CD pipeline</b>。 CI: build、test 並部署到dev/staging(minikube或測試環境)； CD: deploy到<b>GKE</b>(rolling update)，評估預留 <b>buffer pod</b>，減少流量突增時的冷啟動時間。 </p>
+          <p>▪️監控系統: 分三個層面監控通知。 1.<b>系統資源</b>: 監控CPU、記憶體、磁碟； 2.<b>應用層</b>: 監控錯誤率、API延遲、每秒查詢率(QPS)； 3.<b>業務層</b>: 監控金流狀態、訂單數量、會員數據。 </p>
+        </div>
+
 
         <div class="grid grid-cols-12 gap-3">
             <div class="col-span-12 md:col-span-6 lg:col-span-3 break-all">

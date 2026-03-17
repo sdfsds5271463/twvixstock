@@ -81,7 +81,7 @@
     <BaseCard noPadding class="user-profile relative">
         <div class="header-cover">
           <div class="text-white text-center text-4xl">Allen Zheng</div>
-          <div class="text-white text-center">資深網路工程師</div>
+          <div class="text-white text-center">資深全端工程師 / 技術主管</div>
         </div>
         <div class="flex justify-center z-10 -mt-10">
             <div class="text-center">
@@ -94,6 +94,7 @@
                   <p>▪️帶領<b>5人+</b>團隊，從零開始獨立開發過<b>3個</b>完整遊戲<br class="rwd">系統，不重複註冊總人數超過<b>27萬</b>人。</p>
                   <p>▪️協作開發的體育系統同時在線人數超過<b>200人</b>，自<br class="rwd">動部屬管理該系統<b>20個</b>以上微服務。</p>
                   <p>▪️登入爬蟲超過<b>30間</b>合作廠商後台，達成一鍵式對<br class="rwd">單及開代理等合作商後台批次操作。</p>
+                  <p>▪️以<b>主管</b>身分參與過<b>5個</b>大型專案，精通<br class="rwd"><b>5種</b>主流網頁程式語言。</p>
                 </div>
             </div>
         </div>
