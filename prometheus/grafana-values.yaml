@@ -1,0 +1,6 @@
+persistence:
+  enabled: true
+  size: 1Gi
+adminPassword: "tt123456" # 請修改你的密碼
+service:
+  type: LoadBalancer # 這樣會產生一個外部 IP 讓你直接連線

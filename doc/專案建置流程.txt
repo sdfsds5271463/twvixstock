@@ -22,7 +22,6 @@
     ├── cloudbuild.yaml      # GCP Cloud Build 定義檔 (GitHub推送觸發)
     └── docker-compose.yaml  # 本地開發環境一鍵啟動
 
-
     Backend: Go (Gin Gonic)
     Frontend: Vue.js 3 + Sass
     Database: MySQL 8.0
@@ -30,9 +29,7 @@
     CI/CD: Google Cloud Build, GitHub Actions
     Network: Cloudflare, Google Load Balancer
 
-
-
-git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -> gke-deploy run
+    git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -> gke-deploy run
 
 
     所有章節的指令都是在根目錄輸入
@@ -1697,3 +1694,192 @@ git push -> GitHub -> Cloud Bulid trigger -> build & push to Artifact Registry -
         C域名頁 > (左側)SSL/TLS > 邊緣憑證 > 一律使用 HTTPS(勾) > 啟用 HSTS (設定>全勾) > 自動改寫 HTTPS(勾)
             ⮕ 可以連上 https://twvixstock.qzz.io
 
+
+
+=======================================================================================
+第七章: 監控系統::
+=======================================================================================
+7.i 章節目錄
+    7.1 使用GCP內建的 Prometheus 監控GKE
+        從叢集開啟Prometheus，metrics將會被送到GCP
+    7.2 安裝 Prometheus 介面
+        安裝Prometheus介面工具，可進入看GCP的metrics
+    7.3 安裝 Grafana 介面
+        透過helm直接安裝現成Grafana套件介面
+    7.4 連結 Prometheus 與 Grafana
+        Grafana透過內網地址連接Prometheus資料
+    7.5 使用 Node Exporter 抓取主機指標
+        透過helm直接安裝現成Node Exporter套件，抓取主機指標
+
+
+7.1 使用GCP內建的 Prometheus 監控GKE
+    [指令: 更新叢集參數]
+    gcloud container clusters update go-vue-cluster \
+      --zone asia-east1-b \
+      --enable-managed-prometheus
+    (或在創建叢集時加入 --enable-managed-prometheus)
+
+    [介面: GCP之指標瀏覽器]
+    頁面: 官網左側三條線 → 監控 → metrics explorer
+    操作: (新增查詢) → 選取指標 → Kubernetes Container - Memory usage → 總和  ⮕  [容器總使用記憶體]
+          (新增查詢) → 選取指標 → Kubernetes Container - Memory limit utilization → 不匯總或平均  ⮕  [容器使用記憶體比率(0~1)]
+          (新增查詢) → 選取指標 → Kubernetes Node - Memory usage → 總和  ⮕  [機器總使用記憶體]
+          (新增查詢) → 選取指標 → Kubernetes Node - Total memory → 總和  ⮕  [機器上限之記憶體]
+            ⮕ 也可以記錄下 PormQL 提供給 prometheus | grafana 查詢使用
+          
+    [介面: GCP之監控總覽]
+    頁面: 官網左側三條線 → 監控 → 總覽
+    操作: 往下滾到「Google Kubernetes Engine：觀測叢集」 → 查看到CPU/記憶體/重啟次數
+
+
+7.2 安裝 Prometheus 介面
+    [概念: 指標參數]
+    GKE 已啟用 Managed Prometheus → metrics 已經被送到 GCP
+    因此本節可以讓 frontend(Prometheus) 用 project-id 去查到指標
+
+    [檔案: Prometheus前端介面]
+    📂prometheus/gmp-frontend.yaml
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: frontend
+          namespace: default
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: frontend
+          template:
+            metadata:
+              labels:
+                app: frontend
+            spec:
+              containers:
+              - name: frontend
+                image: gcr.io/gke-release/prometheus-engine/frontend:v0.17.4-gke.1 # 建議檢查最新版本號
+                args:
+                - "--query.project-id=twvixstock" # 替換為你的 Project ID
+                ports:
+                - name: web
+                  containerPort: 19090
+        ---
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: frontend
+          namespace: default
+        spec:
+          ports:
+          - name: web
+            port: 9090
+            targetPort: 19090
+          selector:
+            app: frontend
+
+    [指令: deploy介面]
+    kubectl apply -f prometheus/gmp-frontend.yaml
+        ⮕ 啟用介面
+    kubectl delete -f prometheus/gmp-frontend.yaml
+        ⮕ 停用介面
+
+    [指令: 測試介面]
+    kubectl logs -l app=frontend
+        ⮕ {"caller":"level.go:71","level":"info","listen":":19090","msg":"Starting web server for metrics","ts":"2026-03-18T09:44:27.634357446Z"}
+    kubectl port-forward svc/frontend 9090:9090
+        ⮕ 使用 http://localhost:9090/ 連入介面
+
+
+7.3 安裝 Grafana 介面
+    [指令: 確保有helm]
+    winget install Helm.Helm
+        ⮕ Helm = Kubernetes 的套件管理器
+
+    [檔案: Grafana介面設定檔]
+    📂prometheus/grafana-values.yaml
+        persistence:
+          enabled: true
+          size: 1Gi
+        adminPassword: "tt123456" # 之後登入密碼
+        service:
+          type: LoadBalancer # 這樣會產生一個外部 IP 讓你直接連線
+
+    [指令: 安裝grafana套件]
+    helm repo add grafana https://grafana.github.io/helm-charts
+    helm repo update
+    helm install my-grafana grafana/grafana -f prometheus/grafana-values.yaml
+        ⮕ 啟用介面
+    helm uninstall my-grafana
+        ⮕ 停用介面
+
+    [指令: 進入grafana介面]
+    kubectl get svc my-grafana
+        ⮕ EXTERNAL-IP   104.199.196.227
+        ⮕ 連入該IP:  admin  //  tt123456
+
+
+7.4 連結 Prometheus 與 Grafana
+    [指令: 確保服務都在]
+    kubectl get pods
+        ⮕ frontend-555cc59fb6-vzqrx
+        ⮕ my-grafana-f4547bf54-v4f6v
+
+    [介面: grafana介面內進行連線]
+    Home → Connections(左側) → Add new connection → Prometheus(搜尋它) → 
+        Add new data source → Connection URL 填入 http://frontend.default.svc:9090 → Save & test(最底下)
+
+    [介面: grafana介面創建Dashboards]
+    Dashboards → New → Import → 315(可改其他的模板) → Load → 選擇Prometheus → Import
+        ⮕ 從這裡找更多的模板 https://grafana.com/grafana/dashboards/?search=gke
+        ⮕ 再次進入 Dashboards 可以找到模板，有部分 NoData 是正常
+
+
+7.5 使用 Node Exporter 抓取主機指標
+    [指令: 安裝node-exporter套件 (把「Linux 主機的系統資訊」轉成 Prometheus metrics) ]
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+    helm install node-exporter prometheus-community/prometheus-node-exporter
+        ⮕ 啟用抓取
+    helm uninstall node-exporter
+        ⮕ 停用抓取
+
+    [檔案: 讓 Managed Prometheus 能夠自動抓 Node Exporter 提供的指標]
+    📂prometheus/node-exporter-monitor.yaml
+        apiVersion: monitoring.googleapis.com/v1
+        kind: PodMonitoring
+        metadata:
+          name: node-exporter
+          namespace: default
+        spec:
+          selector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus-node-exporter
+          endpoints:
+          - port: metrics
+            interval: 30s
+
+    [指令: 套用主機指標]
+    kubectl apply -f prometheus/node-exporter-monitor.yaml
+        ⮕ 啟用主機指標
+    kubectl delete -f prometheus/node-exporter-monitor.yaml
+        ⮕ 停用主機指標
+
+    [介面: 測試主機指標是否套用成功]
+    進入 Prometheus(http://localhost:9090/)介面
+    up{job=~".*node-exporter.*"}
+        ⮕ 是否返回1 (若非1表示主機資料還沒送到，再等等)
+    node_memory_MemTotal_bytes
+        ⮕ 是否有主機資料
+
+    [介面: 測試修改 grafana 儀錶板]
+    進入 grafana 的 315 儀表板
+    點 Memory Total 的右上角 ... → Edit(編輯 PormQL)
+        ⮕ sum (machine_memory_bytes{kubernetes_io_hostname=~"^$Node$"}) 改成
+        ⮕ sum (node_memory_MemTotal_bytes)
+        ⮕ 應該就可以正常顯示機器總記憶體
+
+    [總結: 當前監控流程]
+        [node-exporter] → 補 node metrics
+        ⮕ [Managed Prometheus collector]
+        ⮕ [Cloud Monitoring (GCP)]
+        ⮕ [gmp-frontend] → 查資料
+        ⮕ [Grafana]
