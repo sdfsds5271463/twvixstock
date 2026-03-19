@@ -81,20 +81,17 @@
     <BaseCard noPadding class="user-profile relative">
         <div class="header-cover">
           <div class="text-white text-center text-4xl">Allen Zheng</div>
-          <div class="text-white text-center">資深全端工程師 / 技術主管</div>
+          <div class="text-white text-center">資深全端工程師 / Senior full-stack engineer</div>
         </div>
         <div class="flex justify-center z-10 -mt-10">
             <div class="text-center">
                 <img class="relative z-1 w-20 h-20 m-auto rounded-full border-2 border-white" src="/images/faces/allen_small_head2.jpg" />
                 <div class="profile_desc text-gray-600">
                   <p class="text-blue-500 font-extrabold"># PHP Laravel Golang Python TypeScript <br class="rwd">Vue DevOps CI/CD GCP</p>
-                  <p>▪️<b>13年</b>全端開發經歷，<b>7年</b>主管經歷，深耕高併<br class="rwd">發、自動部屬與自動化交易系統。</p>
-                  <p>▪️撰寫超過<b>20個</b>上線網站，對接超過<b>10個</b>遊戲API<br class="rwd">，亦主力開發過<b>4個</b>大型專案的API。</p>
-                  <p>▪️對接超過<b>30個</b>金流API，我所職掌的金流接<br class="rwd">口每月處理超過<b>1萬張</b>有效單。</p>
-                  <p>▪️帶領<b>5人+</b>團隊，從零開始獨立開發過<b>3個</b>完整遊戲<br class="rwd">系統，不重複註冊總人數超過<b>27萬</b>人。</p>
-                  <p>▪️協作開發的體育系統同時在線人數超過<b>200人</b>，自<br class="rwd">動部屬管理該系統<b>20個</b>以上微服務。</p>
-                  <p>▪️登入爬蟲超過<b>30間</b>合作廠商後台，達成一鍵式對<br class="rwd">單及開代理等合作商後台批次操作。</p>
-                  <p>▪️以<b>主管</b>身分參與過<b>5個</b>大型專案，精通<br class="rwd"><b>5種</b>主流網頁程式語言。</p>
+                  <p>▪️13年全端經驗，<b>Javascript</b>(13年) <b>Vue</b>(3年) <b>Typescript</b><br class="rwd">(2年) <b>PHP</b>(13年) <b>Python</b>(5年) <b>Golang</b>(2年)</p>
+                  <p>▪️熟悉自動部屬<b>CI/CD</b>、<b>Docker</b>、<b>Kubernetes</b>、<br class="rwd"><b>GCP</b>，曾管理20+個微服務的分散式系統</p>
+                  <p>▪️擔任7年主管，帶領5+人團隊參與過5個大型專案，曾對接<br class="rwd">超過30+個金流API，併發爬蟲超過30+個商戶後台</p>
+                  <p>▪️執掌開發營運的系統，有200+的同時在線人數、27萬+<br class="rwd">的總註冊人數，每月處理超過萬張金流有效單</p>
                 </div>
             </div>
         </div>
