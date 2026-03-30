@@ -81,16 +81,17 @@
     <BaseCard noPadding class="user-profile relative">
         <div class="header-cover">
           <div class="text-white text-center text-4xl">Allen Zheng</div>
-          <div class="text-white text-center">資深全端工程師 / Senior full-stack engineer</div>
+          <div class="text-white text-center">資深全端工程師 / 技術主管</div>
         </div>
         <div class="flex justify-center z-10 -mt-10">
             <div class="text-center">
                 <img class="relative z-1 w-20 h-20 m-auto rounded-full border-2 border-white" src="/images/faces/allen_small_head2.jpg" />
                 <div class="profile_desc text-gray-600">
-                  <p class="text-blue-500 font-extrabold"># PHP Laravel Golang Python TypeScript <br class="rwd">Vue DevOps CI/CD GCP</p>
-                  <p>▪️13年全端經驗，<b>Javascript</b>(13年) <b>Vue</b>(3年) <b>Typescript</b><br class="rwd">(2年) <b>PHP</b>(13年) <b>Python</b>(5年) <b>Golang</b>(2年)</p>
-                  <p>▪️熟悉自動部屬<b>CI/CD</b>、<b>Docker</b>、<b>Kubernetes</b>、<br class="rwd"><b>GCP</b>，曾管理20+個微服務的分散式系統</p>
-                  <p>▪️擔任7年主管，帶領5+人團隊參與過5個大型專案，曾對接<br class="rwd">超過30+個金流API，併發爬蟲超過30+個商戶後台</p>
+                  <p class="text-blue-500 font-extrabold"># PHP Laravel Golang TypeScript Vue<br class="rwd"> DevOps GCP Docker Kubenetes</p>
+                  <p>▪️13年全端經驗，<b>PHP</b>(13年) <b>Javascript</b>(13年) <b>Vue</b>(4年) <b>Typescript</b><br class="rwd">(2年) <b>Golang</b>(2年) <b>Docker</b>(4年) <b>Kubenetes</b>(4年)</p> 
+                  <p>▪️從傳統 VM 到自動部屬、GitOps 再到將 AI 引入 PR <br class="rwd">流程，曾管理20+個微服務的分散式系統</p>
+                  <p>▪️擅長前後端系統重構與漸進式系統升級，包含容<br class="rwd">器化、自動化、前後端分化、分散式部屬</p>
+                  <p>▪️擔任7年主管，帶領5~8人團隊從零開始建置過三個<br class="rwd">完整功能平台，對接超過30+個金流API</p>
                   <p>▪️執掌開發營運的系統，有200+的同時在線人數、27萬+<br class="rwd">的總註冊人數，每月處理超過萬張金流有效單</p>
                 </div>
             </div>

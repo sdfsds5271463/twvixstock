@@ -4,9 +4,9 @@
         <div class="text-sm text-gray-400">自我介紹:</div>
         <div class="border-b border-gray-300 pb-6 mb-6 aboutme_content">
           <p>
-            資深網路工程師，在業界任職13年（雲科研發處網管4年、博斯特產品開發部9年）。精通領域有 <b>前端、後端、自動部屬、API對接、爬蟲</b>，
-            經歷了 <b>PHP→GO、jQuery→Vue、JavaScript→TypeScript、Nginx→CI/CD</b> 的技術變革，
-            處理過 <b>大量金流/遊戲API、併發多線爬蟲、複雜微服務部屬、多線程與多進程運算</b>。
+            資深網路工程師，在業界任職13年（雲科研發處網管4年、博斯特產品開發部9年）。精通領域有 <b>前端、後端、自動部屬、系統重構、API對接、AI 輔助編程</b>，
+            經歷了 <b>PHP→GO、jQuery→Vue、JavaScript→TypeScript、傳統VM→CI/CD</b> 的技術變革，
+            處理過 <b>金流API系統建置、分散式自動部屬、多進程併發運算、傳統VM重構K8s</b>。
           </p>
           <p>
             就學階段，從甲工資訊科 → 雲科資工系 → 雲科資工所，一路都在領域內發展，於大三開始產學合作，並以網管技術人員任職於雲科研發處。
@@ -17,17 +17,17 @@
         <div class="text-sm text-gray-400">精通技能:</div>
         <div class="border-b border-gray-300 pb-6 mb-6 aboutme_skill">
           <p>▪️前端: <b>Vue+TypeScript</b> / <b>jQuery+JavaScript</b> / <b>BootStrap</b> / <b>Tailwind CSS</b> / <b>Sass</b></p>
-          <p>▪️後端: <b>PHP+Laravel</b> / <b>Go+Gin</b> / <b>Python+Scrapy</b> / <b>RESTful API</b> / <b>MySQL</b> / <b>Redis</b> / <b>WebSocket</b> </p>
-          <p>▪️部屬: <b>CI/CD</b> / <b>GCP</b> / <b>CloudBuild+GKE-deploy</b> / <b>Prometheus+Grafana+ELK</b> / <b>Docker</b> / <b>Kubernetes</b> / <b>GitHub</b> </p>
-          <p>▪️其他: [測試工具]<b>Playwright</b>(取代Cypress&Selenium) / [動畫引擎]<b>Spine+PixiJS</b> / [部門管理]<b>Agile</b> </p>
+          <p>▪️後端: <b>PHP+Laravel</b> / <b>Go+Gin</b> / <b>RESTful API</b> / <b>MySQL</b> / <b>Redis</b> / <b>WebSocket</b> </p>
+          <p>▪️部屬: <b>Docker</b> / <b>Kubernetes</b> / <b>CI/CD</b> / <b>GCP</b> / <b>Prometheus+Grafana+ELK</b> / <b>GitHub Action</b> / <b>ArgoCD</b> / <b>AI CodeReview</b> </p>
         </div>
 
         <div class="text-sm text-gray-400">技術經歷:</div>
         <div class="border-b border-gray-300 pb-6 mb-6 aboutme_skill">
-          <p>▪️<b>金流系統</b>: 設計<b>交易狀態機</b>(pending/success/failed)，透過<b>idempotency key</b>避免重複扣款，使用<b>Mutex+DB transaction</b>防止資源競爭，回調一律做<b>二次驗證</b>(查詢第三方狀態)。</p>
-          <p>▪️<b>併發爬蟲</b>: 使用 <b>Playwright</b> 處理多重跳轉、動態token(JS計算)，必要時引入第三方辨識服務處理驗證碼。 登入後<b>保存登入狀態</b>，用 <b>Scrapy</b> 對第三方後台發起併發請求。</p>
-          <p>▪️<b>多線運算</b>: <b>狀態層與計算層分離</b>。 狀態層(單一pod)：集中管理，確保資料一致性； 計算層(拓展pods)：透過 <b>gRPC</b> worker 水平擴展。 必須同時兼顧資料的<b>一致性與擴展性</b>。</p>
-          <p>▪️<b>自動部屬</b>: 建立完整的 <b>CI/CD pipeline</b>。 CI: build、test 並部署到dev/staging(minikube或測試環境)； CD: deploy到<b>GKE</b>(rolling update)，評估預留 <b>buffer pod</b>，減少流量突增時的冷啟動時間。 </p>
+          <p>▪️<b>金流系統</b>: 定義了標準化的金流處理介面與狀態規範，建立抽象模型達成邏輯保真，對接第三方實現系統的代收、回調、查詢等功能。</p>
+          <p>▪️<b>平台開發</b>: 從零到一完整建置專案，包含容器化、部屬、前端、後端、排程、API、規範定義與文件撰寫。</p>
+          <p>▪️<b>多線運算</b>: 以分散式部屬、集中狀態 + 水平拓展運算單元，達成高併發運算及前端 Websocket 高頻更新需求。</p>
+          <p>▪️<b>自動部屬</b>: 將專案容器化，具部屬 GCP 及 ArgoCD 經歷，能設計完整 CI/CD 流程，GitHub Action → Unit Test → PR → AI Summery</p>
+          <p>▪️<b>系統重構</b>: 梳理未知專案商業邏輯、追蹤log/flow撰寫文件、從單元測試開始漸進式重構代碼，並將底層機器引入自動部屬。</p>
         </div>
 
         <div class="text-sm text-gray-400">大型專案:</div>
@@ -125,20 +125,6 @@
       ></apexchart>
     </div>
 
-    <div class="p-5">
-        <div class="text-sm text-gray-400">精通關鍵字:</div>
-        <div class="border-b border-gray-300 pb-10 mb-8 text-blue-500 aboutme_content font-semibold">
-          <p>前端 # Vue3 Vite Pinia Vuex VueRouter TypeScript TailwindCSS BootStrap jQuery JavaScript Twig Sass Css Html PixiJS</p>
-          <p>後端 # Golang Gin PHP Laravel Python Scrapy RESTfulAPI WebSocket Redis MySQL SQL Gemini API </p>
-          <p>部屬 # DevOps Kubernetes K8s CI/CD Docker GCP GKE CloudBuild Prometheus Grafana ELK GitHub Cloudflare Linux Nginx</p>
-          <p>其他 # UnitTest WebCrawler Git SEO MVC RWD Ajax Json Selenium Playwright Photoshop WordPress Spine JWT Agile</p>
-        </div>
-    </div>
-
-
-
-
-
 </template>
 
 
@@ -162,23 +148,19 @@
   const series = ref([
     {
       name: ["PHP","Laravel"],
-      data: [55, 60, 95, 50, 30, 25, 40,  10,  0, 50, 50,  0],
+      data: [55, 60, 95, 60, 35, 25, 45,  10,  0, 50, 60,  10],
     },
     {
       name: ["GOLANG","Gin"],
-      data: [ 0,  0,  0,  0,  0,  0,  0,  60, 65, 15, 5, 35],
-    },
-    {
-      name: ["PYTHON","Scrapy"],
-      data: [ 0,  0,  0, 20, 10,  0, 10,  0,  0,  35, 30, 10],
+      data: [ 0,  0,  0,  0,  0,  0,  0,  60, 65, 15, 10, 35],
     },
     {
       name: ["JAVASCRIPT","jQuery"],
-      data: [45, 40,  5, 30, 60, 75, 50,  20,  5,  0,  0, 0],
+      data: [45, 40,  5, 40, 65, 75, 55,  20,  5,  0,  0, 0],
     },
     {
       name: ["TYPESCRIPT","Vue"],
-      data: [ 0,  0,  0,  0,  0,  0,  0,  10, 30,  0, 15, 55],
+      data: [ 0,  0,  0,  0,  0,  0,  0,  10, 30,  35, 30, 55],
     },
   ]);
 

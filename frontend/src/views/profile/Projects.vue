@@ -70,7 +70,7 @@
             logoImg:"2026_twvix2.jpg",
             title:"台股恐慌資料站(2026)",
             desc:"排程爬蟲股市並AI分析的自動部屬全端系統",
-            keyword:"RESTful API Gemini Golang Gin Vue3Vite Pinia Vuex VueRouter TypeScript Sass TailwindCSS DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus GitHub Docker CI/CD WebCrawler Apexchart RWD Linux UnitTest SEO Cloudflare",
+            keyword:"RESTful API Gemini Golang Gin Vue3Vite Pinia Vuex VueRouter TypeScript Sass TailwindCSS DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus GitHub Docker CI/CD WebCrawler Apexchart RWD Linux UnitTest Cloudflare",
             content:`<div class='text-sm'>
                 獨立開發的個人網站，<b>自動部屬</b>在 GCP 上並開源於 GitHub。系統排程至證交所進行指數爬蟲，除了提供 API 接口外，亦將指數正規化、按比例權重推算PE估值，並串接 Gemini API 交由 AI 自動分析給出市場評分及估值。
                 核心技術 API、Golang、Gin、VueVite、Pinia、VueRouter、TypeScript、Sass、TailwindCSS、DevOps、GCP、Kubernetes、Docker、CI/CD。
@@ -83,13 +83,14 @@
         {   
             logoImg:"2024_jyb1.jpg",
             title:"大型線上遊戲平台(2024)",
-            desc:"對接超過30個遊戲9個金流的完整遊戲系統",
-            keyword:"RESTful API PHP Laravel MVC Python Vue3 Vuex TypeScript Sass MySQL Redis WebCrawler Bootstrap Scrapy Selenium Playwright UnitTest SEO",
+            desc:"傳統VM重構專案並部屬 ArgoCD GitOps",
+            keyword:"Docker Kubenetes ArgoCD GitOps API PHP Laravel Vue Inertia TypeScript MySQL Redis Tailwind Sass Python Scrapy Playwright UnitTest",
             content:`
-                我領導的<b>5人</b>後端技術團隊，負責大量金流、遊戲對接，並設計爬蟲至合作遊戲商後台，併發對單或操作對方後台功能。
-                核心技術 PHP、Laravel、TypeScript、Vue、Sass、Python、Scrapy、UnitTest、SEO。
-                我執掌對接的金流API商總共<b>9間</b>，每月金流有效單超過<b>1萬張</b>、金額達<b>八位數</b>。
-                遊戲商超過<b>30間</b>，與團隊共同接入 API，並使用爬蟲 Python 框架 Scrapy + Playwright 併發登入所有遊戲商後台，進行對單或批次開設代理。 本專案還有設計 SEO 推廣模型。
+                協助將 2017 架構較老舊之系統，實現前端升級 Laravel Blade → Inertia Vue SSR，以及傳統部屬到 ArgoCD GitOps，並引入 Prometheus + Grafana + ELK 實現監控日誌與通知，設計完整 CI/CD 流程 GitHub Action → Unit Test → PR → Deploy。
+                梳理舊系統商業邏輯脈絡、撰寫缺失內部文件，在不影響營運的狀況下，補足單元測試並漸進式重構系統。
+                對接金流 API 及遊戲 API，並撰寫爬蟲批次控制合作遊戲商後台，重構系統的同時仍能保證營運的例行開發案。
+                本站使用 PHP+Laravel 框架為主體，前端使用 Inertia Vue SSR + Tailwind CSS 進行渲染，所有 API 對接都以 PHP 進行撰寫。
+                使用 Python + Scrapy + Playwright 併發同時登入30間以上遊戲商後台一鍵批次查帳、開代理。
             `,
             links:["", ""],
             photoNames: ["2024_jyb4.jpg","2024_jyb2.jpg","2024_jyb1.jpg",],

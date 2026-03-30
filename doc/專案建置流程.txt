@@ -1462,7 +1462,7 @@
     git init
     git branch -M main
     git remote add origin git@github.com:sdfsds5271463/twvixstock.git
-    git push --set-upstream origin main
+    git push --set-upstream origin main   #有commit再初始這行
 
     [指令: git初次推送]
     git add .
@@ -1714,7 +1714,7 @@
 
 7.1 使用GCP內建的 Prometheus 監控GKE
     [指令: 更新叢集參數]
-    gcloud container clusters update go-vue-cluster \
+    gcloud container clusters update twvixstock-cluster \
       --zone asia-east1-b \
       --enable-managed-prometheus
     (或在創建叢集時加入 --enable-managed-prometheus)
@@ -1730,6 +1730,21 @@
     [介面: GCP之監控總覽]
     頁面: 官網左側三條線 → 監控 → 總覽
     操作: 往下滾到「Google Kubernetes Engine：觀測叢集」 → 查看到CPU/記憶體/重啟次數
+
+    [指令: 若要停用]
+    gcloud container clusters update twvixstock-cluster \
+        --zone asia-east1-b \
+        --monitoring=NONE
+            ⮕ 停止所有 monitoring 比較快，其實有更好的指令
+    gcloud container clusters describe twvixstock-cluster \
+        --zone asia-east1-b \
+        --format="value(monitoringConfig)"
+            ⮕ 檢查設定 componentConfig: {enableComponents: []} 為空正確
+    gcloud container clusters update twvixstock-cluster \
+      --zone asia-east1-b \
+      --disable-managed-prometheus
+            ⮕ 停止所有 prometheus
+    不需要刪除資料，只要執行了 --disable-managed-prometheus，計費已經停止了。剩下的就是等待 6 週讓系統自動清理資源
 
 
 7.2 安裝 Prometheus 介面
