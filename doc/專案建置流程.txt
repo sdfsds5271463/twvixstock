@@ -1271,6 +1271,16 @@
     gcloud compute disks list
         ⮕ 全部叢集磁碟用量，注意免費帳上限為 250G
 
+    [指令: 縮減已存在叢集node]
+    # 先確認 node pool 名稱，通常是 default-pool
+    gcloud container node-pools list --cluster=twvixstock-cluster --region=asia-east1-b
+
+    # 將 node pool 縮減成 1 個 node
+    gcloud container clusters resize twvixstock-cluster \
+        --node-pool=default-pool \
+        --num-nodes=1 \
+        --region=asia-east1-b
+
 
 4.5 yaml檔修改
     [檔案<改寫>: 伺服器端口與映像]
@@ -1744,7 +1754,16 @@
       --zone asia-east1-b \
       --disable-managed-prometheus
             ⮕ 停止所有 prometheus
-    不需要刪除資料，只要執行了 --disable-managed-prometheus，計費已經停止了。剩下的就是等待 6 週讓系統自動清理資源
+            ⮕ 不需要刪除資料，只要執行了 --disable-managed-prometheus，計費已經停止了。剩下的就是等待 6 週讓系統自動清理資源
+    gcloud container clusters update twvixstock-cluster \
+        --region asia-east1-b  \
+        --monitoring=SYSTEM \
+        --logging=SYSTEM
+            ⮕ 手動再把基礎系統指標開回來(SYSTEM層級幾乎不收費)
+    gcloud container clusters update twvixstock-cluster \
+        --region asia-east1-b \
+        --enable-cost-allocation
+            ⮕ 手動再把帳單收集開回來
 
 
 7.2 安裝 Prometheus 介面
