@@ -137,7 +137,7 @@
         </div>
     </div>
 
-    <div class="p-6 mt-2 rounded-xl shadow-lg bg-gray-200 border-b border-gray-300 mb-6">
+    <!--div class="p-6 mt-2 rounded-xl shadow-lg bg-gray-200 border-b border-gray-300 mb-6">
       <h2 class="text-xl font-bold mb-4 text-gray-600">參與專案 & 語言使用率</h2>
       <apexchart
         type="line"
@@ -145,7 +145,7 @@
         :options="chartOptions"
         :series="series"
       ></apexchart>
-    </div>
+    </div-->
 
 </template>
 
