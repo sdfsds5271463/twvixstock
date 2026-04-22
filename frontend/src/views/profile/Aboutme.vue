@@ -4,14 +4,36 @@
         <div class="text-sm text-gray-400">自我介紹:</div>
         <div class="border-b border-gray-300 pb-6 mb-6 aboutme_content">
           <p>
-            資深網路工程師，在業界任職13年（雲科研發處網管4年、博斯特產品開發部9年）。精通領域有 <b>前端、後端、自動部屬、系統重構、API對接、AI 輔助編程</b>，
+            資深全端工程師 / 技術主管 / Devops工程師，在業界任職13年（雲科研發處網管4年、博斯特產品開發部9年）。精通領域有 <b>前端、後端、自動部屬、系統重構、API對接、AI 輔助編程</b>，
             經歷了 <b>PHP→GO、jQuery→Vue、JavaScript→TypeScript、傳統VM→CI/CD</b> 的技術變革，
-            處理過 <b>金流API系統建置、分散式自動部屬、多進程併發運算、傳統VM重構K8s</b>。
+            處理過 <b>金流系統 / 平台開發 / 高併發系統 / 架構設計 / 自動部屬</b>。
           </p>
           <p>
             就學階段，從甲工資訊科 → 雲科資工系 → 雲科資工所，一路都在領域內發展，於大三開始產學合作，並以網管技術人員任職於雲科研發處。
             畢業後亦投入網頁領域的職場中，在任職的第二年底成為部門主管，經歷9年的變遷後，於2025年底離開該公司。
           </p>
+        </div>
+
+        <div class="text-sm text-gray-400">專案經歷:</div>
+        <div class="border-b border-gray-300 pb-6 mb-6 aboutme_skill">
+          <p>▪️<b>2024~2025 遊戲舊平台部屬翻新</b>，帶領5人團隊，前端翻新vue，後端去除技術債，並將傳統Vps部屬至K3s多節點實現自動部屬。
+            <br>　<span class="text-blue-500 text-sm font-semibold">#K3s + docker + kubenetes + php + laravel + javascript&ts + vue + CI/CD + devops + argocd</span></p>
+          <p>▪️<b>2021~2023 承接體育系統開發部</b>，帶領8人團隊，將系統部屬至GCP，go撰寫高併發系統，並設計監控、通知、備援等維運架構。 
+            <br>　<span class="text-blue-500 text-sm font-semibold">#GCP + docker + kubenetes + go + php + laravel + javascript&ts + vue + CI/CD + devops</span></p>
+          <p>▪️<b>2018~2021 開發遊戲產品(真人/電子/彩票)</b>，帶領5~6人團隊，從零開始建置全端完整專案，包含前後台、介面、遊戲特效、API接口，並協助客戶對接。 
+            <br>　<span class="text-blue-500 text-sm font-semibold">#nginx + php + laravel + javascript + vue</span></p>
+          <p>▪️<b>2017~2018 建置平台金流系統</b>，包含排程掃表、MQ設計(ACK、DLQ、RECOVER、融斷)，對接30個以上金流API。 
+            <br>　<span class="text-blue-500 text-sm font-semibold">#php + laravel + redis + mysql + api</span></p>
+        </div>
+
+        <div class="text-sm text-gray-400">專案架構圖:</div>
+        <div class="border-b border-gray-300 pb-6 mb-6 flex flex-wrap gap-3">
+          <div v-for="img in architectureImages" :key="img.thumb" class="flex flex-col items-center">
+            <span class="text-xs text-gray-500 mb-1">{{ img.label }}</span>
+            <a :href="img.large" target="_blank">
+              <img :src="img.thumb" class="w-[200px] h-[120px] object-fill cursor-pointer hover:opacity-80 transition-opacity">
+            </a>
+          </div>
         </div>
 
         <div class="text-sm text-gray-400">精通技能:</div>
@@ -23,11 +45,11 @@
 
         <div class="text-sm text-gray-400">技術經歷:</div>
         <div class="border-b border-gray-300 pb-6 mb-6 aboutme_skill">
-          <p>▪️<b>金流系統</b>: 定義了標準化的金流處理介面與狀態規範，建立抽象模型達成邏輯保真，對接第三方實現系統的代收、回調、查詢等功能。</p>
+          <p>▪️<b>金流系統</b>: 設計排程掃表及金流MQ，標準化金流介面規範，對接第三方實現系統的代收、回調、查詢等功能。</p>
           <p>▪️<b>平台開發</b>: 從零到一完整建置專案，包含容器化、部屬、前端、後端、排程、API、規範定義與文件撰寫。</p>
-          <p>▪️<b>多線運算</b>: 以分散式部屬、集中狀態 + 水平拓展運算單元，達成高併發運算及前端 Websocket 高頻更新需求。</p>
-          <p>▪️<b>自動部屬</b>: 將專案容器化，具部屬 GCP 及 ArgoCD 經歷，能設計完整 CI/CD 流程，GitHub Action → Unit Test → PR → AI Summery</p>
-          <p>▪️<b>系統重構</b>: 梳理未知專案商業邏輯、追蹤log/flow撰寫文件、從單元測試開始漸進式重構代碼，並將底層機器引入自動部屬。</p>
+          <p>▪️<b>高併發系統</b>: 以分散式部屬、水平拓展運算單元，考慮HPA及架構瓶頸，達成高併發運算及 Websocket 高頻更新需求。</p>
+          <p>▪️<b>架構設計</b>: 從商業需求、規模到技術套件引入，從底層機器、拓展性及可用性設計，完整規劃部屬或重構專案。</p>
+          <p>▪️<b>自動部屬</b>: 將專案容器化，設計完整 CI/CD 流程，並通過 Metrics/Logs/Tracing 完善維運系統。</p>
         </div>
 
         <div class="text-sm text-gray-400">大型專案:</div>
@@ -132,6 +154,14 @@
 <script setup lang="ts">
 
     import { ref, inject, Ref } from 'vue'
+
+    const architectureImages = [
+      { label: '體育-樹狀圖', thumb: '/images/architecture/small_structure2.jpg',    large: '/images/architecture/structure2.png'    },
+      { label: '體育-架構區1', thumb: '/images/architecture/small_structure3_p1.jpg', large: '/images/architecture/structure3_p1.png' },
+      { label: '體育-架構區2', thumb: '/images/architecture/small_structure3_p2.jpg', large: '/images/architecture/structure3_p2.png' },
+      { label: '平台-系統架構', thumb: '/images/architecture/small_platform_p1.jpg',   large: '/images/architecture/platform_p1.png'   },
+      { label: '平台-叢集拓譜', thumb: '/images/architecture/small_platform_p2.jpg',   large: '/images/architecture/platform_p2.png'   },
+    ]
     import type { ImageItem } from '@/types/ImageItem'
     const currentImageName = inject<Ref<string>>('currentImageName')!
     const profile_photos = inject<Ref<ImageItem[]>>('profile_photos')!

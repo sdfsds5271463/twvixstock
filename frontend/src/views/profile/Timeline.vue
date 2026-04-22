@@ -165,6 +165,7 @@
             key_word_big: "Docker Kubenetes ArgoCD GitOps API PHP Laravel Vue Inertia TypeScript MySQL Redis Tailwind",
             key_word_small: "MVC Vuex Sass WebCrawler Python Scrapy Selenium Playwright UnitTest SEO",
             desc1: `
+                <a href='/images/architecture/platform_p1.png' target='_blank'>系統架構圖</a><a href='/images/architecture/platform_p2.png' target='_blank'>叢集拓譜</a>
                 協助將 2017 架構較老舊之系統，實現前端升級 Laravel Blade → Inertia Vue SSR，以及傳統部屬到 ArgoCD GitOps，並引入 Prometheus + Grafana + ELK 實現監控日誌與通知，設計完整 CI/CD 流程 GitHub Action → Unit Test → PR → Deploy。
                 梳理舊系統商業邏輯脈絡、撰寫缺失內部文件，在不影響營運的狀況下，補足單元測試並漸進式重構系統。
                 對接金流 API 及遊戲 API，並撰寫爬蟲批次控制合作遊戲商後台，重構系統的同時仍能保證營運的例行開發案。
@@ -183,6 +184,7 @@
             key_word_big: "Golang gRPC Vue3 TypeScript DevOps GCP Kubernetes K8s Docker CI/CD WebSocket API Redis",
             key_word_small: "Gin Vuex Sass CloudBuild GKE Prometheus Grafana ELK GitHub Linux UnitTest JWT",
             desc1: `
+                <a href='/images/architecture/structure2.png' target='_blank'>樹狀架構圖</a><a href='/images/architecture/structure3_p1.png' target='_blank'>區塊架構圖1</a><a href='/images/architecture/structure3_p2.png' target='_blank'>區塊架構圖2</a>
                 我領導的<b>8人</b>全端技術團隊，負責將舊版 PHP + jQuery 體育系統源碼重新撰寫成 Golang + Vue3 並<b>自動部屬</b>至 GCP，亦包含後續開發維護等全端工作。
                 系統架構包含平台、前端、後端、控端、賽程、訊源、視訊等，由<b>20個</b>以上的 GCP 容器微服務部屬整合運行，具備併發及自動拓展等特性，讓系統可以在超過<b>200人</b>同時在線且每秒更新超過<b>百次</b>賠率的狀況下，穩定運行。
             `,
