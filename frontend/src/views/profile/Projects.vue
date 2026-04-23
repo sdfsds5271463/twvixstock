@@ -98,13 +98,13 @@
         {   
             logoImg:"2022_sb2.jpg",
             title:"體育遊戲系統(2022)",
-            desc:"自動部屬超過20個微服務200人同時在線的高併發系統",
+            desc:"自動部屬超過30個微服務的高併發系統",
             keyword:"Golang Gin gRPC Vue3 Vuex TypeScript Sass DevOps GCP CloudBuild GKE Kubernetes K8s Prometheus Grafana ELK GitHub Docker CI/CD WebSocket API Redis Linux UnitTest JWT",
             content:`
                 我領導的<b>8人</b>全端技術團隊，負責將舊版 PHP 體育系統源碼重新撰寫成 Golang <b>自動部屬</b>至 GCP，包含後續開發維護等全端工作。
                 核心技術 Golang、Gin、TypeScript、Vue、DevOps、GCP、Kubernetes、Docker、CI/CD、WebSocket。
-                我們負責改寫專案 PHP→Go、jQuery→Vue，維運全端、API等所有服務，並全部整合進行 CI/CD。專案由<b>20個</b>以上的 GCP 容器微服務整合運行，通過 GitHub 觸發進行自動部屬，並使用 Prometheus + Grafana + ELK 監控。
-                架構包含平台、前端、後端、控端、賽程、訊源、視訊等，使用 Go Channel 集中狀態併發 gRPC 給自拓展 pod 運算服務，以應付同時<b>200人</b>在線及每秒達<b>百次</b>以上的賠率運算。
+                我們負責改寫專案 PHP→Go、jQuery→Vue，維運全端、API等所有服務，並全部整合進行 CI/CD。
+                系統架構包含平台、前端、後端、控端、賽程、訊源、視訊等，由30個以上的 GCP 容器微服務部屬整合運行，具備併發及自動拓展等特性，並確保整個系統具備高可用、高可靠、及可觀測。
             `,
             links:["", ""],
             photoNames: ["2022_sb4.jpg","2022_sb2.jpg","2022_sb1.jpg"],
@@ -112,12 +112,12 @@
         {   
             logoImg:"2018_lo3.jpg",
             title:"彩票遊戲平台(2018)",
-            desc:"註冊超過27萬人的概率精算遊戲",
+            desc:"從零到一開發的概率精算遊戲",
             keyword:"RESTful API PHP Laravel MVC Twig jQuery Javascript WebCrawler API Ajax RWD MySQL Redis Bootstrap UnitTest Nginx Git",
             content:`
                 我領導的<b>5人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為基於彩票規則的爬蟲獎號概率精算遊戲，專案主架構為前端、後端、API、排程。
                 核心技術 PHP、Laravel、WebCrawler、jQuery、Bootstrap、Nginx、Git。
-                本專案累計註冊會員超過<b>27萬人</b>，專案核心為排程開獎以及計算賠率，獎號的來源有官網爬蟲、獎源、我們合作遊戲商的前後台等。
+                專案核心為排程開獎以及計算賠率，獎號的來源有官網爬蟲、獎源、我們合作遊戲商的前後台等。
                 完整專案包含前台、後台建置、排程設計、撰寫 API 並發送文件給合作商對接，以及後續維運。
             `,
             links:["http://lottsample.ddns.net:9527/index.php?m=common&c=trygame&a=trygame&type=0", "彩票遊戲試玩"],
@@ -126,12 +126,12 @@
         {   
             logoImg:"2020_eg3.jpg",
             title:"電子遊戲(2020)",
-            desc:"每日注單遠超上萬張的動畫遊戲",
+            desc:"從零到一開發的電子動畫遊戲",
             keyword:"PHP Laravel MVC Spine PixiJS jQuery Javascript API Ajax MySQL Redis Bootstrap UnitTest Nginx Photoshop",
             content:`
                 我領導的<b>6人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為精美的動畫與機率計算，專案主架構為前端、後端、API。
                 核心技術 PHP、Laravel、jQuery、Spine、PixiJS、Nginx、Git。
-                使用 Spine 編輯成動畫，至前端使用 PixiJS 動畫引擎呈現，內崁入合作商捕魚遊戲，整個平台日注單可遠超<b>上萬張</b>。
+                使用 Spine 編輯成動畫，至前端使用 PixiJS 動畫引擎呈現，內崁入合作商捕魚遊戲。
                 完整專案包含前台、後台建置、撰寫 API 並發送文件給合作商對接，以及後續維運。
             `,
             links:["http://lottsample.ddns.net:9527/egames/public/trygame", "電子遊戲試玩"],
@@ -140,12 +140,12 @@
         {   
             logoImg:"2019_li3.jpg",
             title:"區塊鏈百家樂(2019)",
-            desc:"超過120子代理的hash加密紙牌遊戲",
+            desc:"從零到一開發的hash加密紙牌遊戲",
             keyword:"PHP Laravel MVC jQuery Javascript Canvas API Ajax MySQL Redis Bootstrap UnitTest Nginx Git Photoshop",
             content:`
-                我領導的<b>5人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為 SHA512 預加密可驗證的公平紙牌機率遊戲，專案主架構為前端、後端、API、排程。
+                我領導的<b>6人</b>全端技術團隊，從零開始獨立開發整套遊戲系統，遊戲主體為 SHA512 預加密可驗證的公平紙牌機率遊戲，專案主架構為前端、後端、API、排程。
                 核心技術 PHP、Laravel、jQuery、Canvas、Bootstrap、Nginx、Git。
-                使用 jQuery 與畫布 Canvas 呈現生動的牌桌畫面，並通過排程預 hash 以及開獎；本遊戲崁入合作商的遊戲平台，創建了超過<b>120個</b>子代理。
+                使用 jQuery 與畫布 Canvas 呈現生動的牌桌畫面，並通過排程預 hash 以及開獎。
                 完整專案包含前台、後台建置、排程設計、撰寫 API 並發送文件給合作商對接，以及後續維運。
             `,
             links:["http://livesample.ddns.net:9527/game/trygame", "區塊鏈百家樂試玩"],
@@ -153,14 +153,14 @@
         },
         {   
             logoImg:"2017_bos1.jpg",
-            title:"遊戲後台API對接(2017)",
-            desc:"技術對接40個以上合作商接口",
+            title:"平台金流系統(2017)",
+            desc:"平台金流系統合作30個以上金流商",
             keyword:"RESTful API Json PHP Laravel MVC MySQL Redis Git",
             content:`
-                項目成立初期加入該團隊，專精負責 API 對接的業務，本專案我總計對接了<b>30個</b>以上金流 API、<b>10個</b>以上遊戲 API。
+                項目成立初期加入該團隊，從頭建置平台金流系統，包含排程掃表、MQ設計(ACK、DLQ、RECOVER、融斷)。本專案對接了<b>30個</b>以上金流合作金流商。
                 核心技術 PHP、Laravel、API、RESTful API、Json、Git。
                 主要工作流程為接洽合作商、開設代理加白並索取對接文件，經過測試環境正式環境到對接完成上線。
-                遊戲 API 有創建會員、無縫或轉帳、啟動遊戲、報表等固定接口；金流 API 有代付代收、請求、回調、查詢等固定接口。我的任務就是完善這個流程。
+                金流 API 有代付代收、請求、回調、查詢等固定接口。我的系統就是完善這個流程；亦有對接遊戲 API 含有創建會員、無縫或轉帳、啟動遊戲、報表等固定接口。
             `,
             links:["", ""],
             photoNames: ["2017_bos3.jpg","2017_bos2.jpg","2017_bos1.jpg"],
